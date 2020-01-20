@@ -65,3 +65,4 @@ src/assets/fonts/Matter*
 package-lock.json
 
 .DS_Store
+config.yaml
