@@ -60,5 +60,8 @@ typings/
 .cache/
 public
 yarn-error.log
+src/assets/fonts/Matter*
 
 package-lock.json
+
+.DS_Store
