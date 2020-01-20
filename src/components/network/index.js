@@ -1,21 +1,32 @@
 import React, { useEffect, useLayoutEffect } from "react";
 import * as PIXI from "pixi.js";
+
 import { useSharedCanvas } from "../../SharedCanvas.context";
 
-const Network = () => {
+const Network = ({ data }) => {
   const { stage } = useSharedCanvas();
+  const container = new PIXI.Container();
+
   useEffect(() => {
-    const container = new PIXI.Container();
     stage.addChild(container);
-    const g = new PIXI.Graphics();
-    g.beginFill(0xff00ff);
-    g.drawCircle(0, 20, 50);
-    g.position.x = 400;
-    g.endFill();
-    g.zIndex = 1000;
-    container.addChild(g);
+  }, []);
+
+  useEffect(() => {
     console.log("hello", container.children);
-  }, [stage]);
+
+    const { vectors } = data;
+    vectors.forEach(p => {
+      const g = new PIXI.Graphics();
+      g.beginFill(0xff00ff);
+      g.drawCircle(
+        p.vector[0] * window.innerWidth,
+        p.vector[1] * window.innerHeight,
+        (p.paper.citations + 1) * 2
+      );
+      g.endFill();
+      container.addChild(g);
+    });
+  }, [stage, data]);
   return null;
 };
 

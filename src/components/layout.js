@@ -21,3 +21,22 @@ export const PageLayout = ({ children }) => (
     {children}
   </Wrapper>
 );
+
+export const FullPageLayout = ({ children }) => (
+  <main
+    css={css`
+      width: 100vw;
+      height: 100vh;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden; /* @TODO figure out why this is necessary to prevent scroll (vh units??) */
+
+      & > * {
+        animation: 2s fadeIn;
+      }
+    `}
+  >
+    {children}
+  </main>
+);
