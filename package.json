@@ -22,9 +22,13 @@
     "gatsby-plugin-typescript": "^2.1.26",
     "gatsby-source-graphql": "^2.1.29",
     "isomorphic-fetch": "^2.2.1",
+    "pixi-viewport": "^4.5.0",
     "pixi.js": "^4.8.9",
     "prop-types": "^15.7.2",
     "react": "^16.12",
     "react-dom": "^16.12"
+  },
+  "devDependencies": {
+    "babel-preset-gatsby": "^0.2.27"
   }
 }

@@ -6,8 +6,8 @@ import { ARTICLE_VECTORS } from "../queries";
 import { FullPageLayout } from "../components/layout";
 import { SharedCanvasProvider } from "../SharedCanvas.context";
 
-const Explore = ({}) => {
-  const { loading, error, data } = useQuery(ARTICLE_VECTORS);
+const Explore = () => {
+  const { data } = useQuery(ARTICLE_VECTORS);
   useEffect(() => {
     console.log(data);
   }, [data]);

@@ -4,6 +4,7 @@
  */
 import * as PIXI from "pixi.js";
 import styled from "@emotion/styled";
+import { SmartViewport } from "../../utils/camera";
 
 export const AbsoluteCanvas = styled.canvas`
   position: absolute;
@@ -39,6 +40,20 @@ export const initAppFromCanvasElm = ({ canvasRef, appConfig }) => {
 
   return {
     app,
+    enablePanZoom: extents => {
+      const viewport = new SmartViewport({
+        screenWidth: canvasRef.getBoundingClientRect().width,
+        screenHeight: canvasRef.getBoundingClientRect().height,
+        worldWidth: Math.abs(extents.x0) + Math.abs(extents.x1),
+        worldHeight: Math.abs(extents.y0) + Math.abs(extents.y1)
+      });
+
+      app.stage.addChild(viewport);
+
+      viewport.fit();
+
+      return viewport;
+    },
     stage
   };
 };
