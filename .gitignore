@@ -60,7 +60,7 @@ typings/
 .cache/
 public
 yarn-error.log
-src/assets/fonts/Matter*
+# src/assets/fonts/Matter*
 
 package-lock.json
 
