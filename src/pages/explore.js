@@ -1,44 +1,24 @@
-import React, { useRef, useEffect, useLayoutEffect } from "react";
-import { css } from "@emotion/core";
+import React, { useEffect } from "react";
+import { useQuery } from "@apollo/react-hooks";
 
-import { AbsoluteCanvas, initAppFromCanvasElm } from "../components/renderer";
 import Network from "../components/network";
+import { ARTICLE_VECTORS } from "../queries";
+import { FullPageLayout } from "../components/layout";
 import { SharedCanvasProvider } from "../SharedCanvas.context";
 
-const Explore = ({}) => {
-  const canvasRef = useRef(null);
-  const stageRef = useRef(null);
-
+const Explore = () => {
+  const { data } = useQuery(ARTICLE_VECTORS);
   useEffect(() => {
-    if (!canvasRef.current) return;
-    const { app, stage } = initAppFromCanvasElm({
-      canvasRef: canvasRef.current
-    });
-    stageRef.current = stage;
-  }, []);
+    console.log(data);
+  }, [data]);
 
   return (
-    <main
-      css={css`
-        width: 100vw;
-        height: 100vh;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden; /* @TODO figure out why this is necessary to prevent scroll (vh units??) */
-
-        & > * {
-          animation: 2s fadeIn;
-        }
-      `}
-    >
+    <FullPageLayout>
       <SharedCanvasProvider>
-        <Network stage={stageRef.current} />
+        {data && <Network data={data} />}
       </SharedCanvasProvider>
-    </main>
+    </FullPageLayout>
   );
 };
-
-// Explore.propTypes = {};
 
 export default Explore;

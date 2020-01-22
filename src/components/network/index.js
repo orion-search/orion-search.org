@@ -1,21 +1,63 @@
-import React, { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import * as PIXI from "pixi.js";
+import { extent, scaleLinear } from "d3";
+import { largestDimension } from "../../utils";
+
 import { useSharedCanvas } from "../../SharedCanvas.context";
 
-const Network = () => {
-  const { stage } = useSharedCanvas();
+const Network = ({ data }) => {
+  const { stage, enablePanZoom } = useSharedCanvas();
+  // const container = new PIXI.Container();
+
   useEffect(() => {
-    const container = new PIXI.Container();
-    stage.addChild(container);
-    const g = new PIXI.Graphics();
-    g.beginFill(0xff00ff);
-    g.drawCircle(0, 20, 50);
-    g.position.x = 400;
-    g.endFill();
-    g.zIndex = 1000;
-    container.addChild(g);
-    console.log("hello", container.children);
-  }, [stage]);
+    // stage.addChild(container);
+  }, []);
+
+  useEffect(() => {
+    const { vectors } = data;
+
+    const x = scaleLinear()
+      .domain(extent(vectors, d => d.vector[0]))
+      .range([0, 1]);
+
+    const y = scaleLinear()
+      .domain(extent(vectors, d => d.vector[1]))
+      .range([0, 1]);
+
+    const r = scaleLinear()
+      .domain(extent(vectors, d => d.paper.citations))
+      .range([20, 100]);
+
+    const SCALE_FACTOR = 8 * largestDimension();
+
+    const viewport = enablePanZoom({
+      x0: 0,
+      x1: SCALE_FACTOR,
+      y0: 0,
+      y1: SCALE_FACTOR
+    })
+      .drag()
+      .pinch()
+      .wheel()
+      .resumeInteractionListeners();
+
+    vectors.forEach(p => {
+      const g = new PIXI.Graphics();
+      g.beginFill(0x000000);
+      g.drawCircle(
+        x(p.vector[0]) * SCALE_FACTOR,
+        y(p.vector[1]) * SCALE_FACTOR,
+        r(p.paper.citations)
+      );
+      g.alpha = 0.8;
+      g.endFill();
+      viewport.addChild(g);
+    });
+
+    return function cleanup() {
+      viewport.destroy();
+    };
+  }, [stage, data, enablePanZoom]);
   return null;
 };
 

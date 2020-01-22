@@ -20,7 +20,7 @@ export const SharedCanvasProvider = ({ children }) => {
   useLayoutEffect(() => {
     if (!canvasRef.current) return;
     if (!pixi.current) {
-      const { app, stage } = initAppFromCanvasElm({
+      const { app, enablePanZoom, stage } = initAppFromCanvasElm({
         canvasRef: canvasRef.current,
         appConfig: {
           antialias: true,
@@ -35,11 +35,12 @@ export const SharedCanvasProvider = ({ children }) => {
 
       pixi.current = {
         app,
+        enablePanZoom,
         stage
       };
     }
     if (pixi.current) {
-      const { app } = pixi.current;
+      // const { app } = pixi.current;
 
       // window.addEventListener("resize", () => {
       //   container.resize(window.innerWidth, window.innerHeight);
@@ -55,7 +56,7 @@ export const SharedCanvasProvider = ({ children }) => {
       };
       setRender(true);
     }
-  }, [canvasRef.current]);
+  }, []);
 
   return (
     <SharedCanvasContext.Provider value={pixi.current}>
