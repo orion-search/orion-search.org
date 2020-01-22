@@ -49,7 +49,7 @@ const Network = ({ data }) => {
         y(p.vector[1]) * SCALE_FACTOR,
         r(p.paper.citations)
       );
-      g.alpha = 0.8;
+      g.alpha = 0.3;
       g.endFill();
       viewport.addChild(g);
     });
