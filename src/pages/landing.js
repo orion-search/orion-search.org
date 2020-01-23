@@ -21,7 +21,7 @@ const GET_ARTICLES = gql`
   }
 `;
 
-const Index = () => {
+const Landing = () => {
   const { loading, error, data } = useQuery(GET_ARTICLES);
   if (loading) return "loading...";
   if (error) return `error: ${error.message}`;
@@ -36,4 +36,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default Landing;

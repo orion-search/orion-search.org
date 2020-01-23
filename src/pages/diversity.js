@@ -1,5 +1,6 @@
 import React from "react";
 
-export default function diversity() {
+const Diversity = () => {
   return <h1>Diversity</h1>;
-}
+};
+export default Diversity;
