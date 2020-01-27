@@ -25,6 +25,7 @@
     "graphql": "^14.5.8",
     "history": "^4.10.1",
     "isomorphic-fetch": "^2.2.1",
+    "lodash-es": "^4.17.15",
     "pixi-viewport": "^4.5.0",
     "pixi.js": "^4.8.9",
     "prop-types": "^15.7.2",
