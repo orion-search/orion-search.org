@@ -12,7 +12,7 @@ export const PageLayoutWrapper = styled("main")`
   width: 100vw;
   position: relative;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   padding: 5vmin;
   box-sizing: border-box;
 

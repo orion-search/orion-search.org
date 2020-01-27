@@ -7,8 +7,12 @@ import styled from "@emotion/styled";
 import { css, jsx } from "@emotion/core";
 
 const BrushContainer = styled("div")`
+  display: flex;
+
   width: 100%;
   height: 100px;
+
+  margin-bottom: ${props => props.theme.spacing.large};
 `;
 
 const Timeline = () => {
@@ -18,8 +22,6 @@ const Timeline = () => {
   function onBrushEnd(e) {
     console.log("hello", e, event.selection);
   }
-
-  function filter() {}
 
   const brush = brushX()
     .extent([
@@ -35,16 +37,16 @@ const Timeline = () => {
 
   return (
     <BrushContainer ref={chartRef}>
-      <h1>
+      <p>
         {chartSize.width}/{chartSize.height}
-      </h1>
+      </p>
       {chartSize.width && (
         <svg
           height={chartSize.height}
           width={chartSize.width}
           css={css`
             rect.overlay {
-              fill: white;
+              stroke: white;
             }
           `}
         >
