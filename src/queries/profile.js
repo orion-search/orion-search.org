@@ -6,7 +6,7 @@ export const COUNTRY_OUTPUT_TOPIC = gql`
       where: { country: { _eq: $country }, total_citations: { _gte: 50 } }
     ) {
       topic_name: name
-      month
+      date: month
       total_papers: count
       total_citations
     }

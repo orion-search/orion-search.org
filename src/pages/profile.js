@@ -5,6 +5,7 @@ import { groupBy } from "lodash-es";
 import { PageLayout } from "../components/layout";
 import Breadcrumbs from "../components/breadcrumbs";
 import Timeline from "../components/visualizations/timeline";
+import Histogram from "../components/visualizations/histogram";
 import Dropdown from "../components/dropdown";
 import List from "../components/list";
 import Header from "../components/header";
@@ -38,6 +39,7 @@ const Profile = () => {
 
   useEffect(() => {
     if (!data) return;
+    console.log(country, data);
 
     // output by topic
     const output = groupBy(data.view_country_output_topic, d => d.topic_name);
@@ -55,7 +57,9 @@ const Profile = () => {
       <Breadcrumbs values={["Explore Entity", "Country", `${country}`]} />
       <Header title={`Diversity of Research / Entity Profile`} />
       <Header title={`${country}`} />
-      <Timeline />
+      <Timeline>
+        {data && <Histogram data={data.view_country_output_topic} />}
+      </Timeline>
       <Dropdown values={countries} onChange={e => setCountry(e.target.value)} />
       <List
         title={"Top Authors"}

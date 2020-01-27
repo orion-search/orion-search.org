@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, cloneElement } from "react";
 import { brushX } from "d3-brush";
 import { select, event } from "d3-selection";
 import useDimensions from "react-use-dimensions";
@@ -15,9 +15,11 @@ const BrushContainer = styled("div")`
   margin-bottom: ${props => props.theme.spacing.large};
 `;
 
-const Timeline = () => {
-  const [chartRef, chartSize] = useDimensions();
+const Timeline = ({ children }) => {
+  const [containerRef, chartSize] = useDimensions();
   const brushRef = useRef(null);
+  const svgRef = useRef(null);
+  const chartRef = useRef(null);
 
   function onBrushEnd(e) {
     console.log("hello", e, event.selection);
@@ -36,20 +38,32 @@ const Timeline = () => {
   }, [chartSize]);
 
   return (
-    <BrushContainer ref={chartRef}>
+    <BrushContainer ref={containerRef}>
       <p>
         {chartSize.width}/{chartSize.height}
       </p>
       {chartSize.width && (
         <svg
+          ref={svgRef}
           height={chartSize.height}
           width={chartSize.width}
           css={css`
             rect.overlay {
-              stroke: white;
+              // stroke: white;
             }
           `}
         >
+          <g ref={chartRef}>
+            {children &&
+              svgRef &&
+              chartRef &&
+              cloneElement(children, {
+                svg: svgRef.current,
+                g: chartRef.current,
+                width: chartSize.width,
+                height: chartSize.height
+              })}
+          </g>
           <g ref={brushRef} />
         </svg>
       )}
