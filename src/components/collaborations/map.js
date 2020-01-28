@@ -2,9 +2,6 @@ import React, { useRef, useState } from "react";
 import DeckGL, { GeoJsonLayer, ArcLayer } from "deck.gl";
 import { StaticMap } from "react-map-gl";
 
-const MAPBOX_TOKEN =
-  "pk.eyJ1IjoiemFjaSIsImEiOiJjajY2Z3B2b3EyYzZtMzNwOGs1MTNweWl2In0.J8h6Xn9wflm4bC7yuBI_Ag"; // Set your mapbox token here
-
 const AIR_PORTS =
   "https://d2ad6b4ur7yvpq.cloudfront.net/naturalearth-3.3.0/ne_10m_airports.geojson";
 
@@ -51,7 +48,7 @@ const Map = () => {
       layers={layers}
     >
       <StaticMap
-        mapboxApiAccessToken={MAPBOX_TOKEN}
+        mapboxApiAccessToken={process.env.REACT_APP_MAPBOX_TOKEN}
         mapStyle="mapbox://styles/zaci/ck5uwwdmy0m841ilo6cymmqyw"
       />
     </DeckGL>
