@@ -63,7 +63,7 @@ const Histogram = ({
     return function cleanup() {
       select(g).html("");
     };
-  }, [data]);
+  }, [data, width, height]);
   return null;
 };
 

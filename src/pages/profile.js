@@ -61,10 +61,6 @@ const Profile = () => {
         {data && <Histogram data={data.view_country_output_topic} />}
       </Timeline>
       <Dropdown values={countries} onChange={e => setCountry(e.target.value)} />
-      <List
-        title={"Top Authors"}
-        values={["Zac Ioannidis", "Clement Rames", "Nick Kyrgios"]}
-      />
       {!loading && <List title={"Most Popular Topics"} values={topics} />}
     </PageLayout>
   );
