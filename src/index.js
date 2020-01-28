@@ -9,6 +9,7 @@ import { ThemeProvider } from "emotion-theming";
 import { Global } from "@emotion/core";
 
 import theme from "./styles";
+import "./styles/global";
 import App from "./App";
 
 export const history = createBrowserHistory();

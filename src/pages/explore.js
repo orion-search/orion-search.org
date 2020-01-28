@@ -3,7 +3,7 @@ import { useQuery } from "@apollo/react-hooks";
 
 import Network from "../components/network";
 import { ARTICLE_VECTORS } from "../queries";
-import { FullPageLayout } from "../components/layout";
+import { PageLayout } from "../components/layout";
 import { SharedCanvasProvider } from "../SharedCanvas.context";
 
 const Explore = () => {
@@ -13,11 +13,11 @@ const Explore = () => {
   }, [data]);
 
   return (
-    <FullPageLayout>
+    <PageLayout>
       <SharedCanvasProvider>
         {data && <Network data={data} />}
       </SharedCanvasProvider>
-    </FullPageLayout>
+    </PageLayout>
   );
 };
 

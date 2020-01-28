@@ -8,35 +8,33 @@ const Wrapper = styled("div")`
   padding: 10px;
 `;
 
+export const PageLayoutWrapper = styled("main")`
+  width: 100vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 5vmin;
+  box-sizing: border-box;
+
+  & > * {
+    animation: 2s fadeIn;
+  }
+`;
+
+// export const PageLayout = ({ children }) => (
+//   <Wrapper>
+//     <Global
+//       styles={css`
+//         div {
+//           background: red;
+//           color: white;
+//         }
+//       `}
+//     />
+//     {children}
+//   </Wrapper>
+// );
+
 export const PageLayout = ({ children }) => (
-  <Wrapper>
-    <Global
-      styles={css`
-        div {
-          background: red;
-          color: white;
-        }
-      `}
-    />
-    {children}
-  </Wrapper>
-);
-
-export const FullPageLayout = ({ children }) => (
-  <main
-    css={css`
-      width: 100vw;
-      height: 100vh;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden; /* @TODO figure out why this is necessary to prevent scroll (vh units??) */
-
-      & > * {
-        animation: 2s fadeIn;
-      }
-    `}
-  >
-    {children}
-  </main>
+  <PageLayoutWrapper>{children}</PageLayoutWrapper>
 );
