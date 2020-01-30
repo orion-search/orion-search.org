@@ -3,17 +3,21 @@ import { Route, Switch } from "react-router-dom";
 // import { Landing, Explore, Diversity } from "./pages";
 import Diversity from "./pages/diversity";
 import Explore from "./pages/explore";
+import Hierarchy from "./pages/hierarchy";
 import Landing from "./pages/landing";
 import Network from "./pages/network";
+import Output from "./pages/output";
 import Profile from "./pages/profile";
 
 function App() {
   return (
     <Switch>
       <Route exact path={["/"]} component={Landing} />
-      <Route exact path={["/explore"]} component={Explore} />
       <Route exact path={["/diversity"]} component={Diversity} />
+      <Route exact path={["/explore"]} component={Explore} />
+      <Route exact path={["/hierarchy"]} component={Hierarchy} />
       <Route exact path={["/network"]} component={Network} />
+      <Route exact path={["/output"]} component={Output} />
       <Route exact path={["/profile"]} component={Profile} />
     </Switch>
   );
