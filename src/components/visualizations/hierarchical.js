@@ -6,6 +6,7 @@ import countryOutputData from "../../data/country_output.csv";
 import fieldsOfStudyData from "../../data/field_of_study.csv";
 
 import { AbsoluteCanvas } from "../renderer";
+import Dropdown from "../dropdown";
 import ParticleContainer, { FieldOfStudyParticles } from "./ParticleContainer";
 
 const HierarchicalViz = () => {
@@ -14,6 +15,8 @@ const HierarchicalViz = () => {
 
   const [output, setOutput] = useState(null);
   const [fieldsOfStudy, setFieldsOfStudy] = useState(null);
+
+  const [country, setCountry] = useState("United Kingdom");
 
   const stats = new Stats();
 
@@ -56,8 +59,20 @@ const HierarchicalViz = () => {
 
   return (
     <>
-      <div ref={statsRef} />
-      <AbsoluteCanvas ref={canvasRef} />
+      <div css={{ zIndex: -100 }}>
+        <div ref={statsRef} />
+        <AbsoluteCanvas ref={canvasRef} />
+      </div>
+      {output && (
+        <Dropdown
+          selected={country}
+          onChange={e => {
+            setCountry(e.target.value);
+            console.log(e.target.value);
+          }}
+          values={[...new Set(output.map(o => o.country))]}
+        />
+      )}
     </>
   );
 };
