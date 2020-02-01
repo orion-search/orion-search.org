@@ -7,9 +7,9 @@ const Dropdown = ({
 }) => {
   return (
     <div>
-      <select onChange={onChange}>
+      <select onChange={onChange} defaultValue={selected}>
         {values.map(o => (
-          <option key={`dropdown-option-${o}`} default={o === selected}>
+          <option key={`dropdown-option-${o}`} value={o}>
             {o}
           </option>
         ))}

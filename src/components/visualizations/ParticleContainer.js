@@ -170,11 +170,13 @@ export default class ParticleContainer {
 }
 
 export class FieldOfStudyParticles extends ParticleContainer {
-  constructor({ canvas, stats, data, topics, country = "United States" }) {
+  constructor({ canvas, stats, data, topics, country }) {
     super({ canvas, stats });
-    this.data = data;
     this.topics = topics;
     this.country = country;
+
+    this.data = data;
+    this.filteredData = this.data.filter(d => d.country === this.country);
 
     this.setScale();
     this.init();
@@ -185,8 +187,11 @@ export class FieldOfStudyParticles extends ParticleContainer {
     this.animate();
   }
 
-  updateCountry() {
-    // updates positions
+  updateCountry(country) {
+    this.country = country;
+    this.filteredData = this.data.filter(d => d.country === this.country);
+    this.scene.remove(this.mesh);
+    this.createGeometry();
   }
 
   setScale() {
@@ -226,7 +231,7 @@ export class FieldOfStudyParticles extends ParticleContainer {
   }
 
   createGeometry() {
-    const points = this.data.length;
+    const points = this.filteredData.length;
     this.geometry = new THREE.SphereBufferGeometry(0.5, 20, 20);
 
     this.material = new THREE.MeshPhongMaterial({
@@ -245,14 +250,15 @@ export class FieldOfStudyParticles extends ParticleContainer {
     var transform = new THREE.Object3D();
     transform.castShadow = true;
 
-    for (var i = 0; i < this.data.length; i++) {
+    for (var i = 0; i < this.filteredData.length; i++) {
       const coords = this.topicScale(
-        `${this.data[i].level}_${this.data[i].name}`
+        `${this.filteredData[i].level}_${this.filteredData[i].name}`
       );
 
       transform.position.set(coords.x, coords.y, coords.z);
 
-      const size = this.sizeScale(this.data[i].total_papers);
+      const size = this.sizeScale(this.filteredData[i].total_papers);
+
       transform.scale.set(size, size, size);
 
       transform.updateMatrix();

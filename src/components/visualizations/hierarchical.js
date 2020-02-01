@@ -7,7 +7,7 @@ import fieldsOfStudyData from "../../data/field_of_study.csv";
 
 import { AbsoluteCanvas } from "../renderer";
 import Dropdown from "../dropdown";
-import ParticleContainer, { FieldOfStudyParticles } from "./ParticleContainer";
+import { FieldOfStudyParticles } from "./ParticleContainer";
 
 const HierarchicalViz = () => {
   const canvasRef = useRef(null);
@@ -19,6 +19,8 @@ const HierarchicalViz = () => {
   const [country, setCountry] = useState("United Kingdom");
 
   const stats = new Stats();
+
+  const viz = useRef(null);
 
   useLayoutEffect(() => {
     Promise.all([
@@ -37,21 +39,21 @@ const HierarchicalViz = () => {
   }, []);
 
   useEffect(() => {
-    if (!canvasRef.current || !statsRef.current) return;
-
+    if (!output || !fieldsOfStudy || !canvasRef.current) return;
     statsRef.current.appendChild(stats.dom);
-  }, [canvasRef, stats.dom]);
-
-  useEffect(() => {
-    if (!output || !fieldsOfStudy || !canvasRef.current || !statsRef.current)
-      return;
-    new FieldOfStudyParticles({
+    viz.current = new FieldOfStudyParticles({
       canvas: canvasRef.current,
-      stats,
+      country,
       data: output,
+      stats,
       topics: fieldsOfStudy
     });
-  }, [output, fieldsOfStudy, stats, canvasRef]);
+  }, [output, fieldsOfStudy, canvasRef]);
+
+  useEffect(() => {
+    console.log("country changed", country);
+    viz.current && viz.current.updateCountry(country);
+  }, [country]);
 
   useLayoutEffect(() => {
     // new ParticleContainer({ canvas: canvasRef.current, stats });
@@ -68,7 +70,6 @@ const HierarchicalViz = () => {
           selected={country}
           onChange={e => {
             setCountry(e.target.value);
-            console.log(e.target.value);
           }}
           values={[...new Set(output.map(o => o.country))]}
         />
