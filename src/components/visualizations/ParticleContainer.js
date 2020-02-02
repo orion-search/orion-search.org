@@ -192,6 +192,7 @@ export class FieldOfStudyParticles extends ParticleContainer {
     this.filteredData = this.data.filter(d => d.country === this.country);
     this.scene.remove(this.mesh);
     this.createGeometry();
+    // this.updateGeometry();
   }
 
   setScale() {
@@ -230,23 +231,8 @@ export class FieldOfStudyParticles extends ParticleContainer {
       .range([2, 40]);
   }
 
-  createGeometry() {
-    const points = this.filteredData.length;
-    this.geometry = new THREE.SphereBufferGeometry(0.5, 20, 20);
-
-    this.material = new THREE.MeshPhongMaterial({
-      depthWrite: true,
-      depthTest: true,
-      side: THREE.DoubleSide,
-      shininess: 100,
-      emissive: 0x0,
-      color: 0xff00ff,
-      specular: 0x111111
-    });
-
-    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, points);
-    this.mesh.castShadow = true;
-
+  // @todo: need to remove un-needed attributes for this to work correctly
+  updateGeometry() {
     var transform = new THREE.Object3D();
     transform.castShadow = true;
 
@@ -265,6 +251,34 @@ export class FieldOfStudyParticles extends ParticleContainer {
 
       this.mesh.setMatrixAt(i, transform.matrix);
     }
+    this.mesh.instanceMatrix.needsUpdate = true;
+    // this.mesh.updateMatrix();
+    // this.mesh.applyMatrix();
+    this.geometry.computeBoundingSphere();
+  }
+
+  createGeometry() {
+    const points = this.filteredData.length;
+    this.geometry = new THREE.SphereBufferGeometry(0.5, 20, 20);
+
+    this.geometry.attributes.position.array.needsUpdate = true;
+
+    this.material = new THREE.MeshPhongMaterial({
+      depthWrite: true,
+      depthTest: true,
+      side: THREE.DoubleSide,
+      shininess: 100,
+      emissive: 0x0,
+      color: 0xff00ff,
+      specular: 0x111111
+    });
+
+    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, points);
+    // this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
+    // this.mesh.matrixAutoUpdate = true;
+    this.mesh.castShadow = true;
+
+    this.updateGeometry();
 
     this.scene.add(this.mesh);
   }
