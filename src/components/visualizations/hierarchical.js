@@ -1,3 +1,4 @@
+// eslint-disable-line import/no-webpack-loader-syntax
 import Stats from "three/examples/jsm/libs/stats.module";
 import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { csv } from "d3";
@@ -5,6 +6,7 @@ import { csv } from "d3";
 import countryOutputData from "../../data/country_output.csv";
 import fieldsOfStudyData from "../../data/field_of_study.csv";
 
+import ForceLayout from "../../force-layout";
 import { AbsoluteCanvas } from "../renderer";
 import Dropdown from "../dropdown";
 import { FieldOfStudyParticles } from "./ParticleContainer";
@@ -55,8 +57,9 @@ const HierarchicalViz = () => {
     viz.current && viz.current.updateCountry(country);
   }, [country]);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     // new ParticleContainer({ canvas: canvasRef.current, stats });
+    const fl = new ForceLayout({});
   }, []);
 
   return (
