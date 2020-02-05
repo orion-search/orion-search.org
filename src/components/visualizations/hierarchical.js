@@ -9,6 +9,8 @@ import fieldsOfStudyData from "../../data/field_of_study.csv";
 import { AbsoluteCanvas } from "../renderer";
 import Dropdown from "../dropdown";
 import { FieldOfStudyParticles } from "./ParticleContainer";
+import OutputNetworkLayoutManager from "./LayoutManager";
+import { ParticleContainerForce } from "./ParticleContainerForce";
 // import { ParticleContainerForce } from "./ParticleContainerForce";
 
 const HierarchicalViz = () => {
@@ -23,6 +25,7 @@ const HierarchicalViz = () => {
   const stats = new Stats();
 
   const viz = useRef(null);
+  const layout = useRef(null);
 
   useLayoutEffect(() => {
     Promise.all([
@@ -43,13 +46,24 @@ const HierarchicalViz = () => {
   useEffect(() => {
     if (!output || !fieldsOfStudy || !canvasRef.current) return;
     statsRef.current.appendChild(stats.dom);
-    viz.current = new FieldOfStudyParticles({
-      // viz.current = new ParticleContainerForce({
-      canvas: canvasRef.current,
-      country,
-      data: output,
+
+    layout.current = new OutputNetworkLayoutManager({
+      output,
       stats,
       topics: fieldsOfStudy
+    });
+
+    // viz.current = new FieldOfStudyParticles({
+    //   // viz.current = new ParticleContainerForce({
+    //   canvas: canvasRef.current,
+    //   country,
+    //   data: output,
+    //   stats,
+    //   topics: fieldsOfStudy
+    // });
+    viz.current = new ParticleContainerForce({
+      canvas: canvasRef.current,
+      layout: layout.current
     });
   }, [output, fieldsOfStudy, canvasRef]);
 
