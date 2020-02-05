@@ -6,10 +6,10 @@ import { csv } from "d3";
 import countryOutputData from "../../data/country_output.csv";
 import fieldsOfStudyData from "../../data/field_of_study.csv";
 
-import ForceLayout from "../../force-layout";
 import { AbsoluteCanvas } from "../renderer";
 import Dropdown from "../dropdown";
 import { FieldOfStudyParticles } from "./ParticleContainer";
+// import { ParticleContainerForce } from "./ParticleContainerForce";
 
 const HierarchicalViz = () => {
   const canvasRef = useRef(null);
@@ -44,6 +44,7 @@ const HierarchicalViz = () => {
     if (!output || !fieldsOfStudy || !canvasRef.current) return;
     statsRef.current.appendChild(stats.dom);
     viz.current = new FieldOfStudyParticles({
+      // viz.current = new ParticleContainerForce({
       canvas: canvasRef.current,
       country,
       data: output,
@@ -56,11 +57,6 @@ const HierarchicalViz = () => {
     console.log("country changed", country);
     viz.current && viz.current.updateCountry(country);
   }, [country]);
-
-  useEffect(() => {
-    // new ParticleContainer({ canvas: canvasRef.current, stats });
-    const fl = new ForceLayout({});
-  }, []);
 
   return (
     <>

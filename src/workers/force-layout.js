@@ -1,12 +1,6 @@
 /* eslint-env worker */
 /* eslint no-restricted-globals: 0 */
-import {
-  forceSimulation,
-  forceCollide,
-  forceX,
-  forceY,
-  forceManyBody
-} from "d3";
+import { forceSimulation, forceCollide, forceX, forceY } from "d3";
 
 const simulation = forceSimulation().on("tick", () => {
   postMessage({
@@ -69,25 +63,6 @@ self.addEventListener("message", ({ data }) => {
 
       case "nodes":
         self.postMessage({ type: "nodes", nodes: simulation.nodes() });
-        break;
-
-      case "set":
-        if (typeof simulation[key] === "function") {
-          try {
-            simulation[key](val);
-            self.postMessage({ type: "set", setting: [key, val] });
-          } catch (e) {
-            self.postMessage({
-              type: "set",
-              error: new Error("Invalid setting")
-            });
-          }
-        } else {
-          self.postMessage({
-            type: "set",
-            error: new Error("Invalid setting")
-          });
-        }
         break;
       default:
     }
