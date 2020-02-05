@@ -15,7 +15,7 @@ export class ParticleContainerForce extends Renderer3D {
     this.animate();
   }
 
-  updateGeometry(nodes) {
+  updateGeometry({ nodes, links }) {
     // var transform = new THREE.Object3D();
     this.transform.castShadow = true;
 
@@ -24,21 +24,56 @@ export class ParticleContainerForce extends Renderer3D {
 
       // transform.scale.set()
       this.transform.updateMatrix();
-      this.mesh.setMatrixAt(i, this.transform.matrix);
+      this.meshNodes.setMatrixAt(i, this.transform.matrix);
     });
 
-    this.mesh.instanceMatrix.needsUpdate = true;
-    this.mesh.updateMatrix();
+    const p = this.meshLinks.geometry.attributes.position.array;
+    links.forEach((link, i) => {
+      let i6 = i * 3 * 2;
+      p[i6++] = link.source.x;
+      p[i6++] = link.source.y;
+      p[i6++] = 0;
+      p[i6++] = link.target.x;
+      p[i6++] = link.target.y;
+      p[i6] = 0;
+    });
+    this.meshLinks.geometry.attributes.position.needsUpdate = true;
+    this.meshLinks.updateMatrix();
+    this.links.computeBoundingBox();
 
-    this.geometry.computeBoundingSphere();
+    this.meshNodes.instanceMatrix.needsUpdate = true;
+    this.meshNodes.updateMatrix();
+
+    this.nodes.computeBoundingSphere();
+  }
+
+  createLinkGeometry() {
+    var geometry = new THREE.BufferGeometry();
+    var vertices = [];
+
+    var vertex = new THREE.Vector3();
+
+    for (var i = 0; i < this.layout.links().length; i++) {
+      vertex.x = 0;
+      vertex.y = 0;
+      vertex.z = 0;
+
+      vertices.push(vertex.x, vertex.y, vertex.z);
+      vertices.push(vertex.x + 1, vertex.y + 1, vertex.z + 1);
+    }
+
+    geometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(vertices, 3)
+    );
+
+    return geometry;
   }
 
   createGeometry() {
     const points = this.layout.nodes().length;
-    console.log(points);
-    this.geometry = new THREE.SphereBufferGeometry(0.5, 20, 20);
-
-    this.geometry.attributes.position.array.needsUpdate = true;
+    this.nodes = new THREE.SphereBufferGeometry(2, 20, 20);
+    this.nodes.attributes.position.array.needsUpdate = true;
 
     this.material = new THREE.MeshPhongMaterial({
       depthWrite: true,
@@ -50,14 +85,26 @@ export class ParticleContainerForce extends Renderer3D {
       specular: 0x111111
     });
 
-    this.mesh = new THREE.InstancedMesh(this.geometry, this.material, points);
-    // this.mesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);
-    // this.mesh.matrixAutoUpdate = true;
-    this.mesh.castShadow = true;
+    this.links = new THREE.BufferGeometry();
+    this.linkMaterial = new THREE.LineBasicMaterial({
+      color: 0xff00ff
+    });
+    this.linkGeometry = this.createLinkGeometry();
+    this.meshLinks = new THREE.LineSegments(
+      this.linkGeometry,
+      this.linkMaterial
+    );
+    this.meshLinks.updateMatrix();
+    this.meshLinks.geometry.attributes.position.needsUpdate = true;
+    this.scene.add(this.meshLinks);
+
+    this.meshNodes = new THREE.InstancedMesh(this.nodes, this.material, points);
+
+    this.meshNodes.castShadow = true;
 
     // this.updateGeometry();
 
-    this.scene.add(this.mesh);
+    this.scene.add(this.meshNodes);
   }
 
   animate() {
@@ -65,9 +112,9 @@ export class ParticleContainerForce extends Renderer3D {
     // this.layout.nodes();
     this.layout
       .forceLayout()
-      .nodes()
-      .then(({ nodes }) => {
-        this.updateGeometry(nodes);
+      .tick()
+      .then(({ nodes, links }) => {
+        this.updateGeometry({ nodes, links });
       });
     // console.log(this.layout.nodes()[10]);
     this.render();

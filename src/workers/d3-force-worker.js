@@ -55,7 +55,7 @@ self.addEventListener("message", ({ data }) => {
               forceManyBody()
                 .strength(-100)
                 .distanceMin(30)
-                .distanceMax(150)
+                .distanceMax(80)
             )
             // .force("center", forceCenter(width / 2, height / 2))
             .velocityDecay(0.4)

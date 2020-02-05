@@ -48,10 +48,6 @@ export function OutputNetworkLayoutManager({ output, topics }) {
       : 1
   }));
 
-  // let links = topics.map(t => ({
-  //   source: t.id,
-  //   target: t.parent
-  // }));
   let links = [];
   topics.forEach(t => {
     // if parent exists in nodes
@@ -64,7 +60,6 @@ export function OutputNetworkLayoutManager({ output, topics }) {
       });
     }
   });
-  console.log(nodes, links);
 
   let forceLayout = ForceLayout({
     nodes,
@@ -74,8 +69,8 @@ export function OutputNetworkLayoutManager({ output, topics }) {
     height: window.innerHeight,
     minWeight: 0.9
   });
-  forceLayout.tick(1000);
-  // forceLayout.start();
+  // forceLayout.tick(1000);
+  forceLayout.start();
 
   function layout() {
     return {
@@ -88,8 +83,11 @@ export function OutputNetworkLayoutManager({ output, topics }) {
   };
 
   layout.nodes = function() {
-    // console.log("HELLOO", nodes);
     return nodes;
+  };
+
+  layout.links = function() {
+    return links;
   };
 
   // layout.data = function() {};
