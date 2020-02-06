@@ -1,13 +1,14 @@
 import React from "react";
 import { Route, Switch } from "react-router-dom";
-// import { Landing, Explore, Diversity } from "./pages";
+
 import Diversity from "./pages/diversity";
 import Explore from "./pages/explore";
 import Hierarchy from "./pages/hierarchy";
-import Landing from "./pages/landing";
 import Network from "./pages/network";
+import Landing from "./pages/landing";
 import Output from "./pages/output";
 import Profile from "./pages/profile";
+import Topics from "./pages/topics";
 
 function App() {
   return (
@@ -19,9 +20,9 @@ function App() {
       <Route exact path={["/network"]} component={Network} />
       <Route exact path={["/output"]} component={Output} />
       <Route exact path={["/profile"]} component={Profile} />
+      <Route exact path={["/topics"]} component={Topics} />
     </Switch>
   );
-  // return <h1>Hi</h1>;
 }
 
 export default App;
