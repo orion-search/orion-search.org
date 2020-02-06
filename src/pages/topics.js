@@ -8,8 +8,11 @@ const Topics = () => {
   return (
     <PageLayout>
       <Breadcrumbs values={["Explore", "Topics"]} />
-
-      <LinkButton to={"/"}>Home</LinkButton>
+      <div>
+        <LinkButton to={"/"}>Home</LinkButton>
+        <LinkButton to={"/"}>Search</LinkButton>
+        <LinkButton to={"/"}>Buy Now</LinkButton>
+      </div>
     </PageLayout>
   );
 };
