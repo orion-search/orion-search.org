@@ -12,6 +12,7 @@ export const AbsoluteCanvas = styled.canvas`
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: -100;
 `;
 
 PIXI.utils.skipHello();

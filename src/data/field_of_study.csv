@@ -1,0 +1,153 @@
+id,name,level,parent,parent_name
+7466232,Biomarker (medicine),3,555293320,Diabetes mellitus
+8891405,Immune system,2,142724271,Pathology
+8891405,Immune system,2,159047783,Virology
+8891405,Immune system,2,203014093,Immunology
+11413529,Algorithm,1,33923547,Mathematics
+11413529,Algorithm,1,41008148,Computer science
+12554922,Biophysics,1,86803240,Biology
+15151743,Metagenomics,3,104317684,Gene
+15151743,Metagenomics,3,523546767,Bacteria
+18903297,Ecology,1,86803240,Biology
+24432333,Whole genome sequencing,4,141231307,Genome
+24998067,Stimulation,3,555293320,Diabetes mellitus
+26760741,Perception,2,111472728,Epistemology
+26760741,Perception,2,169760540,Neuroscience
+28328180,Stem cell,3,555293320,Diabetes mellitus
+29537977,Cell cycle,4,121608353,Cancer
+29537977,Cell cycle,4,190283241,Apoptosis
+30481170,Chromosome,3,104317684,Gene
+34601148,Transcription (biology),3,104317684,Gene
+41091548,Epigenetics,3,104317684,Gene
+50644808,Artificial neural network,2,11413529,Algorithm
+50644808,Artificial neural network,2,119857082,Machine learning
+50644808,Artificial neural network,2,154945302,Artificial intelligence
+51679486,DNA sequencing,3,104317684,Gene
+51679486,DNA sequencing,3,552990157,DNA
+54355233,Genetics,1,86803240,Biology
+55493867,Biochemistry,1,86803240,Biology
+55493867,Biochemistry,1,185592680,Chemistry
+59822182,Botany,1,86803240,Biology
+60644358,Bioinformatics,1,86803240,Biology
+62478195,Signal transduction,2,54355233,Genetics
+62478195,Signal transduction,2,55493867,Biochemistry
+62478195,Signal transduction,2,95444343,Cell biology
+67705224,RNA,3,104317684,Gene
+68873052,Genetic variation,3,104317684,Gene
+68873052,Genetic variation,3,2908647359,Population
+70721500,Computational biology,1,86803240,Biology
+73555534,Cluster analysis,2,11413529,Algorithm
+73555534,Cluster analysis,2,119857082,Machine learning
+73555534,Cluster analysis,2,124101348,Data mining
+78458016,Evolutionary biology,1,86803240,Biology
+79879829,Intracellular,2,55493867,Biochemistry
+79879829,Intracellular,2,95444343,Cell biology
+79879829,Intracellular,2,153911025,Molecular biology
+81941488,Quantitative trait locus,4,30481170,Chromosome
+81941488,Quantitative trait locus,4,84597430,Locus (genetics)
+81941488,Quantitative trait locus,4,127716648,Phenotype
+83640560,Chromatin,3,104317684,Gene
+83640560,Chromatin,3,552990157,DNA
+84597430,Locus (genetics),3,104317684,Gene
+86339819,Transcription factor,3,104317684,Gene
+89423630,Microbiology,1,86803240,Biology
+90132467,Phylogenetics,3,104317684,Gene
+90856448,Zoology,1,86803240,Biology
+94487597,Sensory system,2,31903555,Food science
+94487597,Sensory system,2,105702510,Anatomy
+94487597,Sensory system,2,169760540,Neuroscience
+95444343,Cell biology,1,86803240,Biology
+96232424,Cancer cell,4,121608353,Cancer
+98108389,CRISPR,3,104317684,Gene
+104317684,Gene,2,54355233,Genetics
+104317684,Gene,2,55493867,Biochemistry
+104317684,Gene,2,153911025,Molecular biology
+105580179,Messenger RNA,3,104317684,Gene
+105580179,Messenger RNA,3,555293320,Diabetes mellitus
+105702510,Anatomy,1,71924100,Medicine
+105702510,Anatomy,1,86803240,Biology
+105795698,Statistics,1,33923547,Mathematics
+106208931,Genome-wide association study,5,153209595,Single-nucleotide polymorphism
+106934330,Trait,2,54355233,Genetics
+106934330,Trait,2,199360897,Programming language
+111936080,Enhancer,3,104317684,Gene
+119857082,Machine learning,1,41008148,Computer science
+121608353,Cancer,3,555293320,Diabetes mellitus
+124101348,Data mining,1,41008148,Computer science
+126322002,Internal medicine,1,71924100,Medicine
+127716648,Phenotype,3,104317684,Gene
+134018914,Endocrinology,1,71924100,Medicine
+134018914,Endocrinology,1,86803240,Biology
+135763542,Genotype,3,104317684,Gene
+141231307,Genome,3,104317684,Gene
+143065580,Mutant,3,104317684,Gene
+143121216,Microbiome,3,169260993,Composition (visual arts)
+143121216,Microbiome,3,523546767,Bacteria
+147004232,Stimulus (physiology),2,169760540,Neuroscience
+150194340,Gene expression,3,104317684,Gene
+152662350,Systems biology,4,121608353,Cancer
+153209595,Single-nucleotide polymorphism,4,135763542,Genotype
+153911025,Molecular biology,1,86803240,Biology
+154945302,Artificial intelligence,1,41008148,Computer science
+159047783,Virology,1,71924100,Medicine
+159047783,Virology,1,86803240,Biology
+162317418,Transcriptome,4,150194340,Gene expression
+165864922,Regulation of gene expression,4,150194340,Gene expression
+169760540,Neuroscience,1,15744967,Psychology
+169760540,Neuroscience,1,86803240,Biology
+169900460,Cognition,2,77805123,Social psychology
+169900460,Cognition,2,118552586,Psychiatry
+169900460,Cognition,2,138496976,Developmental psychology
+170493617,Receptor,3,555293320,Diabetes mellitus
+178980831,Pattern recognition,1,41008148,Computer science
+180747234,Cognitive psychology,1,15744967,Psychology
+180754005,Allele,3,104317684,Gene
+180754005,Allele,3,555293320,Diabetes mellitus
+181199279,Enzyme,2,55493867,Biochemistry
+181199279,Enzyme,2,153911025,Molecular biology
+181199279,Enzyme,2,178790620,Organic chemistry
+184235292,Kinase,2,54355233,Genetics
+184235292,Kinase,2,55493867,Biochemistry
+184235292,Kinase,2,153911025,Molecular biology
+186060115,Biological system,1,86803240,Biology
+186413461,Genetic association,4,84597430,Locus (genetics)
+186413461,Genetic association,4,135763542,Genotype
+186413461,Genetic association,4,180754005,Allele
+186413461,Genetic association,4,2779134260,Disease
+189014844,Cell type,3,1491633281,Cell
+189206191,Genomics,3,104317684,Gene
+190727270,DNA methylation,4,121608353,Cancer
+190727270,DNA methylation,4,150194340,Gene expression
+193252679,Phylogenetic tree,3,104317684,Gene
+203014093,Immunology,1,71924100,Medicine
+203014093,Immunology,1,86803240,Biology
+207001950,In vivo,2,55493867,Biochemistry
+207001950,In vivo,2,153911025,Molecular biology
+207001950,In vivo,2,203014093,Immunology
+501734568,Mutation,3,104317684,Gene
+502942594,Cancer research,1,71924100,Medicine
+502942594,Cancer research,1,86803240,Biology
+522805319,Electroencephalography,2,42219234,Anesthesia
+522805319,Electroencephalography,2,138496976,Developmental psychology
+522805319,Electroencephalography,2,169760540,Neuroscience
+523546767,Bacteria,2,54355233,Genetics
+523546767,Bacteria,2,55493867,Biochemistry
+523546767,Bacteria,2,89423630,Microbiology
+552990157,DNA,2,54355233,Genetics
+552990157,DNA,2,55493867,Biochemistry
+552990157,DNA,2,153911025,Molecular biology
+1491633281,Cell,2,54355233,Genetics
+1491633281,Cell,2,55493867,Biochemistry
+2522874641,Virus,2,153911025,Molecular biology
+2522874641,Virus,2,159047783,Virology
+2522874641,Virus,2,203014093,Immunology
+2776214188,Inference,2,11413529,Algorithm
+2776214188,Inference,2,105795698,Statistics
+2776214188,Inference,2,119857082,Machine learning
+2776460866,Pathogen,4,2779134260,Disease
+2776878037,Zebrafish,3,104317684,Gene
+2777904410,Software,2,111919701,Operating system
+2777904410,Software,2,199360897,Programming language
+2779134260,Disease,3,555293320,Diabetes mellitus
+2779345533,Visual cortex,3,147004232,Stimulus (physiology)
+2780104201,Drosophila melanogaster,3,104317684,Gene
