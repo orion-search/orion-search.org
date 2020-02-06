@@ -48,6 +48,7 @@ const HierarchicalViz = () => {
     statsRef.current.appendChild(stats.dom);
 
     layout.current = new OutputNetworkLayoutManager({
+      country,
       output,
       stats,
       topics: fieldsOfStudy
@@ -69,7 +70,8 @@ const HierarchicalViz = () => {
 
   useEffect(() => {
     console.log("country changed", country);
-    viz.current && viz.current.updateCountry(country);
+    // viz.current && viz.current.updateCountry(country);
+    layout.current && layout.current.country(country);
   }, [country]);
 
   return (

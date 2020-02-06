@@ -8,7 +8,7 @@ import Worker from "workerize-loader!./workers/d3-force-worker";
  * and initialize a Force Layout Simulation
  */
 function ForceLayout(props) {
-  let { nodes, links, construct, minWeight = 1 } = props;
+  let { nodes, links, minWeight = 1 } = props;
 
   const worker = new Worker();
   const worker$ = fromEvent(worker, "message");
@@ -22,8 +22,6 @@ function ForceLayout(props) {
     nodes = newNodes;
   });
 
-  let lastAddedNodeIdx = 0;
-
   // Initialise worker
   worker.postMessage({
     type: "populate",
@@ -31,24 +29,10 @@ function ForceLayout(props) {
     nodes,
     minWeight,
     width: window.innerWidth,
-    height: window.innerHeight,
-    construct,
-    lastAddedNodeIdx
+    height: window.innerHeight
   });
 
   return {
-    addNode: () => {
-      const nodeToPush = nodes[++lastAddedNodeIdx];
-      nodeToPush.x = Math.random() * window.innerWidth;
-      nodeToPush.y = 0;
-      nodeToPush.vx = 0.03;
-      nodeToPush.vy = 0.03;
-      worker.postMessage({
-        type: "add-node",
-        newNode: nodeToPush,
-        lastAddedNodeIdx
-      });
-    },
     start: () => worker.postMessage("start"),
     stop: () => worker.postMessage("stop"),
     tick: async (iterations = 1) =>

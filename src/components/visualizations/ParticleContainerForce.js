@@ -13,6 +13,11 @@ export class ParticleContainerForce extends Renderer3D {
 
     this.animate = this.animate.bind(this);
     this.animate();
+
+    /* @todo this doesn't work for some reason */
+    // this.layout.forceLayout().tick$.subscribe(({ data: { nodes, links } }) => {
+    //   this.updateGeometry({ nodes, links });
+    // });
   }
 
   updateGeometry({ nodes, links }) {
@@ -22,7 +27,7 @@ export class ParticleContainerForce extends Renderer3D {
     nodes.forEach((node, i) => {
       this.transform.position.set(node.x, node.y, 0);
 
-      // transform.scale.set()
+      this.transform.scale.set(node.r, node.r, node.r);
       this.transform.updateMatrix();
       this.meshNodes.setMatrixAt(i, this.transform.matrix);
     });
@@ -81,13 +86,13 @@ export class ParticleContainerForce extends Renderer3D {
       side: THREE.DoubleSide,
       shininess: 100,
       emissive: 0x0,
-      color: 0xff00ff,
+      color: 0xffffff,
       specular: 0x111111
     });
 
     this.links = new THREE.BufferGeometry();
     this.linkMaterial = new THREE.LineBasicMaterial({
-      color: 0xff00ff
+      color: 0xffffff
     });
     this.linkGeometry = this.createLinkGeometry();
     this.meshLinks = new THREE.LineSegments(
@@ -101,8 +106,7 @@ export class ParticleContainerForce extends Renderer3D {
     this.meshNodes = new THREE.InstancedMesh(this.nodes, this.material, points);
 
     this.meshNodes.castShadow = true;
-
-    // this.updateGeometry();
+    this.meshNodes.receiveShadow = true;
 
     this.scene.add(this.meshNodes);
   }
@@ -116,7 +120,7 @@ export class ParticleContainerForce extends Renderer3D {
       .then(({ nodes, links }) => {
         this.updateGeometry({ nodes, links });
       });
-    // console.log(this.layout.nodes()[10]);
+
     this.render();
     this.stats && this.stats.update();
   }

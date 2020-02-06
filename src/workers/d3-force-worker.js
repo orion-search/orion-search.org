@@ -1,6 +1,6 @@
 /* eslint-env worker */
 /* eslint no-restricted-globals: 0 */
-import { forceSimulation, forceLink, forceManyBody } from "d3";
+import { forceSimulation, forceLink, forceCollide, forceManyBody } from "d3";
 
 const link = forceLink();
 const simulation = forceSimulation().on("tick", () => {
@@ -14,28 +14,13 @@ let active;
 
 self.addEventListener("message", ({ data }) => {
   if (data) {
-    const {
-      nodes,
-      links,
-      newNode,
-      minWeight,
-      width,
-      height,
-      construct,
-      lastAddedNodeIdx,
-      type
-    } = data;
+    const { nodes, links, minWeight, width, height, type } = data;
 
     // const [key, val] = setting;
 
     switch (type) {
       case "populate":
-        active = construct
-          ? {
-              links: [],
-              nodes: nodes.slice(lastAddedNodeIdx, 1)
-            }
-          : { links, nodes };
+        active = { links, nodes };
         if (active.nodes && active.links && minWeight && width && height) {
           link.links(
             active.links.filter(l => {
@@ -54,8 +39,14 @@ self.addEventListener("message", ({ data }) => {
               "charge",
               forceManyBody()
                 .strength(-100)
-                .distanceMin(30)
-                .distanceMax(80)
+                .distanceMin(40)
+                .distanceMax(130)
+            )
+            .force(
+              "collide",
+              forceCollide()
+                .radius(({ r }) => r * 2)
+                .iterations(2)
             )
             // .force("center", forceCenter(width / 2, height / 2))
             .velocityDecay(0.4)
@@ -74,32 +65,6 @@ self.addEventListener("message", ({ data }) => {
           nodes: simulation.nodes(),
           links: link.links()
         });
-        break;
-
-      case "add-node":
-        active.nodes.push(newNode);
-        for (let i = 0; i < lastAddedNodeIdx; i++) {
-          active.links = [
-            ...active.links,
-            ...(links.filter(
-              l => l.source === i && l.target === lastAddedNodeIdx
-            ) || []),
-            ...(links.filter(
-              l => l.target === i && l.source === lastAddedNodeIdx
-            ) || [])
-          ];
-        }
-        simulation
-          .nodes(active.nodes)
-          .force("link", forceLink(active.links))
-          .velocityDecay(0.4)
-          .alphaTarget(0.1);
-
-        self.postMessage({
-          type: "nodes",
-          nodes: simulation.nodes()
-        });
-
         break;
 
       case "stop":
