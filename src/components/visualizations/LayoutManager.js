@@ -11,18 +11,31 @@ import { takeWhile } from "rxjs/operators";
 export function OutputNetworkLayoutManager({
   country = "United Kingdom",
   output,
+  size = "total_papers",
   topics
 }) {
   let data, nodes, scales, links, forceLayout;
 
   // our global scale remains consistent between countries
-  scales = {
-    r: scaleLinear()
-      .domain([0, max(output, d => d.total_citations)])
-      .range([1, 20])
-  };
 
   const country$ = new BehaviorSubject(country);
+  const size$ = new BehaviorSubject(size);
+
+  size$.pipe(takeWhile((value, index) => value !== null || index === 0));
+
+  size$.subscribe(
+    sizeValue => {
+      scales = {
+        r: scaleLinear()
+          .domain([0, max(output, d => d[sizeValue])])
+          .range([1, 20])
+      };
+      console.log(scales.r.domain());
+    },
+    undefined,
+    () => console.log("completed; changed back to null")
+  );
+
   country$.pipe(takeWhile((value, index) => value !== null || index === 0));
 
   country$.subscribe(
@@ -32,7 +45,7 @@ export function OutputNetworkLayoutManager({
       // construct graph
       nodes = topics.map(t => {
         const value = data.find(d => d.topic === t.id)
-          ? data.find(d => d.topic === t.id).total_citations
+          ? data.find(d => d.topic === t.id)[size$.value]
           : 1;
         return {
           id: t.id,
@@ -93,6 +106,17 @@ export function OutputNetworkLayoutManager({
   layout.country = function(c) {
     country$.next(c);
     return layout;
+  };
+
+  layout.size = function(field) {
+    size$.next(field);
+    country$.next(country);
+    return layout;
+  };
+
+  layout.unsubscribe = function() {
+    country$.unsubscribe();
+    size$.unsubsribe();
   };
 
   return layout;

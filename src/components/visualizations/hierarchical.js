@@ -1,5 +1,4 @@
 // eslint-disable-line import/no-webpack-loader-syntax
-import Stats from "three/examples/jsm/libs/stats.module";
 import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { csv } from "d3";
 
@@ -8,21 +7,18 @@ import fieldsOfStudyData from "../../data/field_of_study.csv";
 
 import { AbsoluteCanvas } from "../renderer";
 import Dropdown from "../dropdown";
-import { FieldOfStudyParticles } from "./ParticleContainer";
 import OutputNetworkLayoutManager from "./LayoutManager";
 import { ParticleContainerForce } from "./ParticleContainerForce";
-// import { ParticleContainerForce } from "./ParticleContainerForce";
 
 const HierarchicalViz = () => {
   const canvasRef = useRef(null);
-  const statsRef = useRef(null);
 
   const [output, setOutput] = useState(null);
   const [fieldsOfStudy, setFieldsOfStudy] = useState(null);
 
   const [country, setCountry] = useState("United Kingdom");
 
-  const stats = new Stats();
+  const [sizeVariable, setSizeVariable] = useState("total_citations");
 
   const viz = useRef(null);
   const layout = useRef(null);
@@ -41,16 +37,19 @@ const HierarchicalViz = () => {
       setOutput(output);
       setFieldsOfStudy(fieldsOfStudy);
     });
+
+    return function cleanup() {
+      layout.current && layout.current.unsubscribe();
+    };
   }, []);
 
   useEffect(() => {
     if (!output || !fieldsOfStudy || !canvasRef.current) return;
-    statsRef.current.appendChild(stats.dom);
 
     layout.current = new OutputNetworkLayoutManager({
       country,
       output,
-      stats,
+      size: sizeVariable,
       topics: fieldsOfStudy
     });
 
@@ -59,7 +58,6 @@ const HierarchicalViz = () => {
     //   canvas: canvasRef.current,
     //   country,
     //   data: output,
-    //   stats,
     //   topics: fieldsOfStudy
     // });
     viz.current = new ParticleContainerForce({
@@ -70,14 +68,17 @@ const HierarchicalViz = () => {
 
   useEffect(() => {
     console.log("country changed", country);
-    // viz.current && viz.current.updateCountry(country);
     layout.current && layout.current.country(country);
   }, [country]);
+
+  useEffect(() => {
+    console.log("size variable changed");
+    layout.current && layout.current.size(sizeVariable);
+  }, [sizeVariable]);
 
   return (
     <>
       <div css={{ zIndex: -100 }}>
-        <div ref={statsRef} />
         <AbsoluteCanvas ref={canvasRef} />
       </div>
       {output && (
@@ -89,6 +90,13 @@ const HierarchicalViz = () => {
           values={[...new Set(output.map(o => o.country))]}
         />
       )}
+      <Dropdown
+        selected={sizeVariable}
+        onChange={e => {
+          setSizeVariable(e.target.value);
+        }}
+        values={["total_papers", "total_citations"]}
+      />
     </>
   );
 };
