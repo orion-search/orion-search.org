@@ -23,6 +23,7 @@ export function OutputNetworkLayoutManager({
 
   size$.pipe(takeWhile((value, index) => value !== null || index === 0));
 
+  /* @todo: update force layout when size changes */
   size$.subscribe(
     sizeValue => {
       scales = {
@@ -79,6 +80,16 @@ export function OutputNetworkLayoutManager({
         height: window.innerHeight,
         minWeight: 0.9
       });
+
+      // forceLayout = ForceLayout({
+      //   nodes,
+      //   links,
+      //   construct: false,
+      //   width: window.innerWidth,
+      //   height: window.innerHeight,
+      //   minWeight: 0.9
+      // });
+      // forceLayout.start();
     },
     undefined,
     () => console.log("completed; changed back to null")

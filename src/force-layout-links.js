@@ -1,3 +1,6 @@
+/** 
+@todo tick$.subscribe doesn't work for some reason in the build
+*/
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -37,9 +40,9 @@ function ForceLayout(props) {
     stop: () => worker.postMessage("stop"),
     tick: async (iterations = 1) =>
       new Promise(resolve => {
-        tick$.subscribe(({ data: { links, nodes } }) => {
-          resolve({ links, nodes });
-        });
+        // tick$.subscribe(({ data: { links, nodes } }) => {
+        //   resolve({ links, nodes });
+        // });
         worker.postMessage({ type: "tick", ticks: iterations });
       }),
     nodes: async () =>
