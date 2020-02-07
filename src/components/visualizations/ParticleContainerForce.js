@@ -1,5 +1,9 @@
+/**
+ * @todo we should be accessing the nodes and links
+ * after ticking the web worker
+ */
+
 import * as THREE from "three";
-// import { FieldOfStudyParticles } from "./ParticleContainer";
 import Renderer3D from "./Renderer3D";
 
 export class ParticleContainerForce extends Renderer3D {
@@ -13,6 +17,8 @@ export class ParticleContainerForce extends Renderer3D {
 
     this.animate = this.animate.bind(this);
     this.animate();
+
+    this.tick$ = this.layout.forceLayout().tick$;
 
     /* @todo this doesn't work for some reason */
     // this.layout.forceLayout().tick$.subscribe(({ data: { nodes, links } }) => {
@@ -113,13 +119,16 @@ export class ParticleContainerForce extends Renderer3D {
 
   animate() {
     requestAnimationFrame(this.animate);
-    // this.layout.nodes();
-    this.layout
-      .forceLayout()
-      .tick()
-      .then(({ nodes, links }) => {
-        this.updateGeometry({ nodes, links });
-      });
+    this.layout.forceLayout().tick();
+    // .then(({ nodes, links }) => {
+    //   this.updateGeometry({ nodes, links });
+    // });
+    Promise.all([
+      this.layout.forceLayout().nodes(),
+      this.layout.forceLayout().links()
+    ]).then(data => {
+      this.updateGeometry({ nodes: data[0].nodes, links: data[1].links });
+    });
 
     this.render();
     this.stats && this.stats.update();

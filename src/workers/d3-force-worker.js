@@ -14,9 +14,7 @@ let active;
 
 self.addEventListener("message", ({ data }) => {
   if (data) {
-    const { nodes, links, minWeight, width, height, type } = data;
-
-    // const [key, val] = setting;
+    const { nodes, links, minWeight, width, height, type, setting } = data;
 
     switch (type) {
       case "populate":
@@ -89,6 +87,25 @@ self.addEventListener("message", ({ data }) => {
         self.postMessage({ type: "links", links: link.links() });
         break;
 
+      case "set":
+        const [key, val] = setting;
+        if (typeof simulation[key] === "function") {
+          try {
+            simulation[key](val);
+            self.postMessage({ type: "set", setting: [key, val] });
+          } catch (e) {
+            self.postMessage({
+              type: "set",
+              error: new Error("Invalid setting")
+            });
+          }
+        } else {
+          self.postMessage({
+            type: "set",
+            error: new Error("Invalid setting")
+          });
+        }
+        break;
       default:
     }
   }

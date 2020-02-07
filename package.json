@@ -41,6 +41,9 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "devDependencies": {
+    "workerize-loader": "^1.1.0"
+  },
   "browserslist": {
     "production": [
       ">0.2%",
@@ -52,8 +55,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "workerize-loader": "^1.1.0"
   }
 }
