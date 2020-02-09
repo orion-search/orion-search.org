@@ -33,7 +33,8 @@ const typeStyle = {
 };
 
 const colors = {
-  black: `#0c0c0c`
+  black: `#0c0c0c`,
+  white: `#ffffff`
 };
 
 export default {

@@ -26,5 +26,10 @@ body {
   // font-weight: lighter;
 }
 
+p {
+  font-size: ${theme.type.sizes.normal};
+  line-height: 1.35rem;
+}
+
 
 `;
