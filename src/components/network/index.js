@@ -17,11 +17,11 @@ const Network = ({ data }) => {
     const { vectors } = data;
 
     const x = scaleLinear()
-      .domain(extent(vectors, d => d.vector[0]))
+      .domain(extent(vectors, d => d.vector_2d[0]))
       .range([0, 1]);
 
     const y = scaleLinear()
-      .domain(extent(vectors, d => d.vector[1]))
+      .domain(extent(vectors, d => d.vector_2d[1]))
       .range([0, 1]);
 
     const r = scaleLinear()
@@ -45,8 +45,8 @@ const Network = ({ data }) => {
       const g = new PIXI.Graphics();
       g.beginFill(0x000000);
       g.drawCircle(
-        x(p.vector[0]) * SCALE_FACTOR,
-        y(p.vector[1]) * SCALE_FACTOR,
+        x(p.vector_2d[0]) * SCALE_FACTOR,
+        y(p.vector_2d[1]) * SCALE_FACTOR,
         r(p.paper.citations)
       );
       g.alpha = 0.8;
