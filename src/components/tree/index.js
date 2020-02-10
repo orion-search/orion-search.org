@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "@emotion/styled";
 
 const defaultItems = [
@@ -48,7 +48,16 @@ const defaultItems = [
         children: [
           {
             id: "B20",
-            children: []
+            children: [
+              {
+                id: "B200",
+                children: []
+              },
+              {
+                id: "B201",
+                children: []
+              }
+            ]
           },
           {
             id: "B21",
@@ -79,6 +88,7 @@ const Boo = styled("div")`
   margin-left: 1em;
   font-weight: bold;
   color: red;
+  cursor: pointer;
 `;
 
 const Item = ({ value }) => {
@@ -90,16 +100,24 @@ const Item = ({ value }) => {
 };
 
 // receives an array of arrays with objects as values
-const Tree = ({ items = defaultItems }) => {
+const Tree = ({ items = defaultItems, isVisible = true }) => {
+  const ui = new Map();
+  items.forEach(c => ui.set(c.id, true));
+  const [visible, setVisible] = useState(ui);
+  console.log(visible);
   return items.map(item => {
-    console.log(item);
-    // if (!item.children.length) return null;
     return (
-      <Root>
+      <Root key={`item-${item.id}`}>
         <Item value={item} />
         {item.children.length > 0 && (
-          <Boo>
-            <Tree items={item.children} />
+          <Boo
+            onClick={() =>
+              setVisible(new Map(visible.set(item.id, !visible.get(item.id))))
+            }
+          >
+            {isVisible && (
+              <Tree items={item.children} isVisible={visible.get(item.id)} />
+            )}
           </Boo>
         )}
       </Root>
