@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
 
 import documentVectors from "../data/doc_vectors.csv";
-import Breadcrumbs from "../components/breadcrumbs";
 import Tree from "../components/tree";
 
 // import Network from "../components/network";
@@ -33,7 +32,6 @@ const Explore = () => {
 
   return (
     <PageLayout>
-      <Breadcrumbs values={["Explore Entity", "Papers"]} />
       {/* <SharedCanvasProvider>
         {data && <Network data={data} />}
       </SharedCanvasProvider> */}

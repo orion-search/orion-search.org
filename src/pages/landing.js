@@ -48,7 +48,7 @@ const Landing = () => {
         </Column>
         <Column>
           <Title>Search By</Title>
-          <LinkButton to={"/search"}>Paper</LinkButton>
+          <LinkButton to={"/explore"}>Paper</LinkButton>
           <LinkButton to={"/search"}>Abstract</LinkButton>
         </Column>
       </Row>

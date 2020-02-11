@@ -3,11 +3,11 @@ import styled from "@emotion/styled";
 
 const Wrapper = styled("div")`
   display: flex;
-
-  width: 100%;
+  text-transform: uppercase;
+  // width: 100%;
   font-size: ${props => props.theme.type.sizes.small};
 `;
 
-export default ({ values }) => {
-  return <Wrapper>{values.join(" > ")}</Wrapper>;
+export default ({ values, ...props }) => {
+  return <Wrapper css={props.css}>{values.join(" _ ")}</Wrapper>;
 };
