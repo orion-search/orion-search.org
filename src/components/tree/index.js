@@ -79,7 +79,7 @@ const Root = styled("div")`
   //position: relative;
   //padding-left: 1em;
   //font-weight: bold;
-  //color: red;
+  //color: purple;
   width: fit-content;
 `;
 
@@ -91,33 +91,35 @@ const Boo = styled("div")`
   cursor: pointer;
 `;
 
-const Item = ({ value }) => {
+const Item = ({ value, onClick }) => {
   return value.children.length === 0 ? (
     <Leaf>{`${value.id}`}</Leaf>
   ) : (
-    <Root>{`${value.id}`}</Root>
+    <Root onClick={onClick}>{`${value.id}`}</Root>
   );
 };
 
 // receives an array of arrays with objects as values
-const Tree = ({ items = defaultItems, isVisible = true }) => {
+const Tree = ({ items = defaultItems }) => {
   const ui = new Map();
-  items.forEach(c => ui.set(c.id, true));
+  items.forEach(c => ui.set(c.id, false));
   const [visible, setVisible] = useState(ui);
-  console.log(visible);
   return items.map(item => {
     return (
       <Root key={`item-${item.id}`}>
-        <Item value={item} />
-        {item.children.length > 0 && (
-          <Boo
-            onClick={() =>
-              setVisible(new Map(visible.set(item.id, !visible.get(item.id))))
-            }
-          >
-            {isVisible && (
-              <Tree items={item.children} isVisible={visible.get(item.id)} />
-            )}
+        {
+          <Item
+            value={item}
+            onClick={e => {
+              console.log(item.id);
+              e.stopPropagation();
+              setVisible(new Map(visible.set(item.id, !visible.get(item.id))));
+            }}
+          />
+        }
+        {visible.get(item.id) && (
+          <Boo>
+            <Tree items={item.children} />
           </Boo>
         )}
       </Root>
