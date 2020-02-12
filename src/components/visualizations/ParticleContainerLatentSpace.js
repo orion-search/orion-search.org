@@ -110,6 +110,31 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.meshNodes = this.scene.add(this.meshNodes);
   }
 
+  // filters papers by IDs
+  // @todo: this could be done in a web worker
+  filterPapers(ids) {
+    const attributes = this.geometry.attributes.opacity.array;
+    const nodes = this.layout.nodes.map(d => d.id);
+
+    // console.log("gkdsa", ids);
+
+    if (!ids) {
+      for (var i = 0; i < attributes.length; i++) {
+        attributes[i] = 1;
+      }
+    } else {
+      for (var i = 0; i < attributes.length; i++) {
+        attributes[i] = 0;
+      }
+      ids.forEach(id => {
+        var idx = nodes.indexOf(id);
+        attributes[idx] = 1;
+      });
+    }
+
+    this.geometry.attributes.opacity.needsUpdate = true;
+  }
+
   // updateGeometry({ nodes }) {
   //   nodes.forEach((node, i) => {
   //     this.transform.position.set(node.x, node.y, node.z);

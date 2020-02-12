@@ -23,7 +23,7 @@ const Explore = () => {
       csv(documentVectors, d => ({
         vector_3d: d.vector_3d.split("|").map(v => +v),
         vector_2d: d.vector_2d.split("|").map(v => +v),
-        title: d.title
+        id: +d.id
       }))
     ]).then(([vectors], error) => {
       setData(vectors);

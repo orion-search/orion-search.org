@@ -15,6 +15,15 @@ export const FIELDS_OF_STUDY = gql`
   }
 `;
 
+export const FIELDS_OF_STUDY_BY_PARENT = gql`
+  query fieldOfStudyByParent($id: Int!) {
+    topics: mag_field_of_study_hierarchy(where: { id: { _eq: $id } }) {
+      id
+      children: child_id
+    }
+  }
+`;
+
 export const OUTPUT_PER_COUNTRY = gql`
   query outputPerCountry($country: String!) {
     output: view_country_output_topic_top100(

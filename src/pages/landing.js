@@ -3,7 +3,6 @@ import React from "react";
 import { PageLayout, Row, Column } from "../components/layout";
 import { Title } from "../components/layout/text";
 
-// import Breadcrumbs from "../components/breadcrumbs";
 import { LinkButton } from "../components/button";
 
 const Landing = () => {
