@@ -17,6 +17,7 @@
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
     "apollo-boost": "^0.4.7",
+    "apollo-cache-inmemory": "^1.6.5",
     "d3": "^5.15.0",
     "d3-brush": "^1.1.5",
     "deck.gl": "^8.0.11",

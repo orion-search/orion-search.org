@@ -4,12 +4,15 @@ import { useQuery } from "@apollo/react-hooks";
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
 import { PAPER_CITATIONS } from "../../queries";
+import { useOrionData } from "../../OrionData.context";
 
 const LatentSpace = ({ data }) => {
   const canvasRef = useRef(null);
   const particles = useRef(null);
 
   const [citationFilter, setCitationFilter] = useState(0);
+
+  console.log(useOrionData());
 
   const filters = {
     citations: useQuery(PAPER_CITATIONS, {

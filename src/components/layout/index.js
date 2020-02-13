@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React from "react";
+// import React from "react";
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { useLocation } from "react-router";
@@ -38,7 +38,6 @@ export const NavBarWrapper = styled("div")`
   align-self: center;
 
   backdrop-filter: blur(2px) brightness(20%);
-  // backdrop-filter: opacity: 0.8;
 
   border-bottom: ${props => `1px solid ${props.theme.colors.white}`};
 
