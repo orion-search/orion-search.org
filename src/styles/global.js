@@ -31,5 +31,14 @@ p {
   line-height: 1.35rem;
 }
 
+ @keyframes fadeIn {
+    0% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+
 
 `;

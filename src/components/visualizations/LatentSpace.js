@@ -1,5 +1,8 @@
 import React, { useRef, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
+import { Row, Column } from "../layout";
+
+import Search from "../search";
 
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
@@ -14,13 +17,13 @@ const LatentSpace = ({ data }) => {
 
   console.log(useOrionData());
 
-  const filters = {
-    citations: useQuery(PAPER_CITATIONS, {
-      variables: {
-        citations: citationFilter
-      }
-    })
-  };
+  // const filters = {
+  //   citations: useQuery(PAPER_CITATIONS, {
+  //     variables: {
+  //       citations: citationFilter
+  //     }
+  //   })
+  // };
 
   const layout = useRef({
     nodes: data.map(item => {
@@ -37,29 +40,30 @@ const LatentSpace = ({ data }) => {
   //   console.log(`Filtering for articles with over ${citationFilter} citations`);
   // }, [citationFilter]);
 
-  useEffect(() => {
-    // first time round
-    if (!filters.citations.data) return;
-    if (!particles.current) return;
+  // useEffect(() => {
+  //   // first time round
+  //   if (!filters.citations.data) return;
+  //   if (!particles.current) return;
 
-    // @todo need to debounce this
-    // @todo multiple effects and set union here
+  //   // @todo need to debounce this
+  //   // @todo multiple effects and set union here
 
-    if (citationFilter === 0) {
-      particles.current.filterPapers();
-    } else {
-      const paperIDs = filters.citations.data.papers.map(p => p.id);
+  //   if (citationFilter === 0) {
+  //     particles.current.filterPapers();
+  //   } else {
+  //     const paperIDs = filters.citations.data.papers.map(p => p.id);
 
-      particles.current.filterPapers(paperIDs);
-    }
-  }, [filters.citations.data, citationFilter]);
+  //     particles.current.filterPapers(paperIDs);
+  //   }
+  // }, [filters.citations.data, citationFilter]);
 
-  useEffect(() => {
-    particles.current = new ParticleContainerLatentSpace({
-      canvas: canvasRef.current,
-      layout: layout.current
-    });
-  }, [canvasRef]);
+  // useEffect(() => {
+  //   particles.current = new ParticleContainerLatentSpace({
+  //     canvas: canvasRef.current,
+  //     layout: layout.current
+  //   });
+  // }, [canvasRef]);
+
   return (
     <div>
       <AbsoluteCanvas ref={canvasRef} />
@@ -70,6 +74,20 @@ const LatentSpace = ({ data }) => {
         max={100}
         onChange={e => setCitationFilter(e.target.value)}
       />
+      <Row width={2 / 4}>
+        <Column width={2 / 4}>
+          <Search
+            dataset={useOrionData().papers.byCountry.map(p => p.country)}
+            placeholder={"Search by country..."}
+          />
+        </Column>
+        <Column width={2 / 4}>
+          <Search
+            dataset={useOrionData().papers.byTopic.map(p => p.name)}
+            placeholder={"Search by topic..."}
+          />
+        </Column>
+      </Row>
     </div>
   );
 };

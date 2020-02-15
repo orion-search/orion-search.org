@@ -36,7 +36,7 @@ const Explore = () => {
         {data && <Network data={data} />}
       </SharedCanvasProvider> */}
       {data && <LatentSpace data={data} />}
-      <Tree />
+      {/* <Tree /> */}
     </PageLayout>
   );
 };
