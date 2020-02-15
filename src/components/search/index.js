@@ -2,18 +2,22 @@ import { hot } from "react-hot-loader/root";
 import React, { useState, useRef } from "react";
 import styled from "@emotion/styled";
 
+import { DarkenBounds } from "../layout";
 import Suggestions from "./Suggestions";
 import Selections from "./Selections";
 
 const Wrapper = styled("div")`
   display: flex;
-  background-color: ${props => props.theme.colors.black};
+  flex-direction: column;
   width: 100%;
 `;
 
 const Input = styled("input")`
-  background-color: ${props => props.theme.colors.black};
+  background: transparent;
   border: 2px solid ${props => props.theme.colors.white};
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
 
   color: ${props => props.theme.colors.white};
   outline-width: 0;
@@ -41,8 +45,8 @@ const Search = ({
     <Wrapper>
       <form>
         <Input placeholder={placeholder} ref={searchRef} onChange={onChange} />
-        {children}
       </form>
+      {children}
     </Wrapper>
   );
 };
@@ -90,11 +94,13 @@ const MultiItemSearch = ({ placeholder, dataset }) => {
         <Selections values={selections} onClick={onSelectionClick} />
       )}
       {suggestions && search !== "" && (
+        // <DarkenBounds>
         <Suggestions
           values={suggestions}
           selected={selections}
           onClick={onSuggestionClick}
         />
+        // </DarkenBounds>
       )}
     </Search>
   );

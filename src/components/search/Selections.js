@@ -6,7 +6,7 @@ import closeIcon from "../../assets/img/cross.svg";
 const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
-  width: 80%;
+  width: 100%;
   margin: ${props => props.theme.spacing.large} 0;
 `;
 

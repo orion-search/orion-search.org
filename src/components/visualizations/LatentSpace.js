@@ -57,12 +57,12 @@ const LatentSpace = ({ data }) => {
   //   }
   // }, [filters.citations.data, citationFilter]);
 
-  // useEffect(() => {
-  //   particles.current = new ParticleContainerLatentSpace({
-  //     canvas: canvasRef.current,
-  //     layout: layout.current
-  //   });
-  // }, [canvasRef]);
+  useEffect(() => {
+    particles.current = new ParticleContainerLatentSpace({
+      canvas: canvasRef.current,
+      layout: layout.current
+    });
+  }, [canvasRef]);
 
   return (
     <div>
