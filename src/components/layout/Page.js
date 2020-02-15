@@ -8,16 +8,12 @@ import logo from "../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
 
 export const PageLayoutWrapper = styled("main")`
-  width: 100vw;
+  width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
   padding: 0 5vmin 5vmin 5vmin;
   box-sizing: border-box;
-
-  & > * {
-    animation: 2s fadeIn;
-  }
 `;
 
 export const NavBarWrapper = styled("div")`

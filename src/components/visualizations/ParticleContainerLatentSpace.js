@@ -21,7 +21,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     console.log(nearClippingPlane, farClippingPlane);
     // this.camera.near = nearClippingPlane;
     this.camera.far = farClippingPlane * 20;
-    this.camera.position.z = 100;
+    this.camera.position.z = 4000;
     this.camera.updateProjectionMatrix();
 
     this.createGeometry();
@@ -43,6 +43,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
 
+    this.meshNodes.rotation.y = time * 0.05;
+
     this.render();
   }
 
@@ -60,7 +62,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     for (let i = 0; i < this.layout.nodes.length; i++) {
       const { x, y, z } = this.layout.nodes[i];
-      color.setRGB(Math.random(), Math.random(), Math.random());
+      color.setRGB(1, 1, 1);
 
       this.attributes.position.push(x, y, z);
       this.attributes.color.push(color.r, color.g, color.b);
@@ -119,15 +121,15 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     // console.log("gkdsa", ids);
 
     if (!ids) {
-      for (var i = 0; i < attributes.length; i++) {
+      for (let i = 0; i < attributes.length; i++) {
         attributes[i] = 1;
       }
     } else {
-      for (var i = 0; i < attributes.length; i++) {
+      for (let i = 0; i < attributes.length; i++) {
         attributes[i] = 0;
       }
       ids.forEach(id => {
-        var idx = nodes.indexOf(id);
+        let idx = nodes.indexOf(id);
         attributes[idx] = 1;
       });
     }

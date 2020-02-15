@@ -21,7 +21,7 @@ export default injectGlobal`
 body {
   margin: 0;
   background-color: ${theme.colors.black};
-  color: white;
+  color: ${theme.colors.white};
   font-family: "Matter",
   // font-weight: lighter;
 }

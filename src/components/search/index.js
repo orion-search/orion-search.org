@@ -1,8 +1,8 @@
 import { hot } from "react-hot-loader/root";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styled from "@emotion/styled";
 
-import { DarkenBounds } from "../layout";
+import { Subheader } from "../layout";
 import Suggestions from "./Suggestions";
 import Selections from "./Selections";
 
@@ -19,9 +19,11 @@ const Input = styled("input")`
   width: 100%;
   box-sizing: border-box;
 
+  font-size: ${props => props.theme.type.sizes.small};
+
   color: ${props => props.theme.colors.white};
   outline-width: 0;
-  border-width: 2px 0;
+  border-width: 0 0 2px 0;
   padding: ${props => `calc(${props.theme.spacing.normal} / 2)`}
     ${props => props.theme.spacing.small}
     ${props => `calc(${props.theme.spacing.normal} / 2)`} 0;
@@ -29,9 +31,10 @@ const Input = styled("input")`
 
 const Search = ({
   broadcastChange = () => {},
-  placeholder,
   dataset,
-  children
+  children,
+  placeholder,
+  title
 }) => {
   const searchRef = useRef(null);
   const [query, setQuery] = useState("");
@@ -43,6 +46,7 @@ const Search = ({
 
   return (
     <Wrapper>
+      <Subheader>{title}</Subheader>
       <form>
         <Input placeholder={placeholder} ref={searchRef} onChange={onChange} />
       </form>
@@ -52,7 +56,12 @@ const Search = ({
 };
 
 // A search component that features multi-item selection
-const MultiItemSearch = ({ placeholder, dataset }) => {
+export const MultiItemSearch = ({
+  placeholder,
+  dataset,
+  title,
+  onChange = () => {}
+}) => {
   const [suggestions, setSuggestions] = useState(null);
   const [selections, setSelections] = useState([]);
   const [search, setSearch] = useState("");
@@ -84,13 +93,18 @@ const MultiItemSearch = ({ placeholder, dataset }) => {
     setSelections(s);
   };
 
+  useEffect(() => {
+    onChange(selections);
+  }, [selections]);
+
   return (
     <Search
       broadcastChange={onSearchInputChange}
       dataset={dataset}
       placeholder={placeholder}
+      title={title}
     >
-      {selections && (
+      {selections.length > 0 && (
         <Selections values={selections} onClick={onSelectionClick} />
       )}
       {suggestions && search !== "" && (
@@ -106,4 +120,4 @@ const MultiItemSearch = ({ placeholder, dataset }) => {
   );
 };
 
-export default hot(MultiItemSearch);
+export default hot(Search);

@@ -2,7 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { Row, Column } from "../layout";
 
-import Search from "../search";
+import { MultiItemSearch } from "../search";
 
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
@@ -14,6 +14,13 @@ const LatentSpace = ({ data }) => {
   const particles = useRef(null);
 
   const [citationFilter, setCitationFilter] = useState(0);
+  const [filters, setFilters] = useState({
+    citations: 0,
+    countries: useOrionData().papers.byCountry.map(p => p.country),
+    topics: useOrionData().papers.byTopic.map(p => p.name)
+  });
+
+  const { papers } = useOrionData();
 
   console.log(useOrionData());
 
@@ -35,6 +42,31 @@ const LatentSpace = ({ data }) => {
       };
     })
   });
+
+  useEffect(() => {
+    console.log("filters", filters);
+    const filteredByCountry = new Set(
+      p(papers.byCountry, filters.countries, d => d.country)
+    );
+    const filteredByTopic = new Set(
+      p(papers.byTopic, filters.topics, d => d.name)
+    );
+
+    var intersect = new Set();
+    for (var x of filteredByCountry)
+      if (filteredByTopic.has(x)) intersect.add(x);
+
+    particles.current && particles.current.filterPapers([...intersect]);
+  }, [filters]);
+
+  // return ids
+  function p(data = [], include = [], accessor = id => id) {
+    if (include.length === 0) return [...new Set(data.flatMap(d => d.ids))];
+
+    return [
+      ...new Set(include.flatMap(i => data.find(d => accessor(d) === i).ids))
+    ];
+  }
 
   // useEffect(() => {
   //   console.log(`Filtering for articles with over ${citationFilter} citations`);
@@ -67,27 +99,43 @@ const LatentSpace = ({ data }) => {
   return (
     <div>
       <AbsoluteCanvas ref={canvasRef} />
-      <input
+      {/* <input
         type="range"
         value={citationFilter}
         min={1}
         max={100}
         onChange={e => setCitationFilter(e.target.value)}
-      />
-      <Row width={2 / 4}>
-        <Column width={2 / 4}>
-          <Search
+      /> */}
+      <Column width={1 / 8}>
+        <Row width={4 / 4}>
+          <MultiItemSearch
             dataset={useOrionData().papers.byCountry.map(p => p.country)}
+            onChange={countries =>
+              setFilters({
+                ...filters,
+                countries
+              })
+            }
+            // onChange={c => console.log(c)}
             placeholder={"Search by country..."}
+            title={"Country"}
           />
-        </Column>
-        <Column width={2 / 4}>
-          <Search
+        </Row>
+        <Row width={4 / 4}>
+          <MultiItemSearch
             dataset={useOrionData().papers.byTopic.map(p => p.name)}
+            onChange={topics =>
+              setFilters({
+                ...filters,
+                topics
+              })
+            }
+            // onChange={topics => console.log("topics", topics)}
+            title={"Topic"}
             placeholder={"Search by topic..."}
           />
-        </Column>
-      </Row>
+        </Row>
+      </Column>
     </div>
   );
 };

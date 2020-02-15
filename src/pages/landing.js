@@ -1,7 +1,7 @@
 import React from "react";
 
 import { PageLayout, Row, Column } from "../components/layout";
-import { Title } from "../components/layout/text";
+import { Title } from "../components/layout";
 
 import { LinkButton } from "../components/button";
 

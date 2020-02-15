@@ -7,7 +7,7 @@ const Wrapper = styled("div")`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin: ${props => props.theme.spacing.large} 0;
+  margin: ${props => props.theme.spacing.small} 0;
 `;
 
 const Item = styled("div")`
@@ -21,8 +21,8 @@ const Item = styled("div")`
 const CloseIcon = styled("img")`
   cursor: pointer;
   fill: ${props => props.theme.colors.white};
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   margin-right: ${props => props.theme.spacing.small};
 `;
 

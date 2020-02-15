@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import { css, jsx } from "@emotion/core";
+// import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
 export const Row = styled("div")`
@@ -16,8 +16,6 @@ export const Column = styled("div")`
   align-self: ${props => (props.alignSelf ? props.alignSelf : "auto")};
   display: flex;
   flex-direction: column;
-
-  margin: 0 ${props => props.theme.spacing.normal};
 
   width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
 `;

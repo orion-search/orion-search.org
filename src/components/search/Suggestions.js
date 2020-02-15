@@ -4,7 +4,10 @@ import styled from "@emotion/styled";
 const Wrapper = styled("div")`
   max-height: 10vh;
   overflow-y: auto;
+  overflow-x: hidden;
   padding: 2% 0;
+
+  margin: ${props => props.theme.spacing.small} 0;
   mask-image: ${props => `
     linear-gradient(
     to bottom,
@@ -17,17 +20,19 @@ const Wrapper = styled("div")`
 
   &::-webkit-scrollbar {
     width: 5px;
-    border-radius: 3px;
+    border-radius: 4px;
   }
 
-  &::-webkit-scrollbar-track {
-    box-shadow: inset 0 0 10px white;
-    border-radius: 3px;
-  }
+  // &::-webkit-scrollbar-track {
+  //   box-shadow: inset 0 0 10px red;
+  //   border: 1px solid white;
+  //   border-radius: 3px;
+  // }
 
   &::-webkit-scrollbar-thumb {
     background-color: white;
-    outline: 1px solid white;
+    border-radius: 10px;
+    // outline: 1px solid red;
   }
 `;
 
@@ -36,7 +41,10 @@ const Item = styled("div")`
   margin-bottom: ${props => props.theme.spacing.tiny};
 
   padding: ${props => props.theme.spacing.small};
+  margin-right: ${props => props.theme.spacing.small};
   padding-left: 0;
+
+  cursor: pointer;
 
   opacity: ${props => (props.selected ? 1 : 0.4)};
   border-bottom: ${props => `1px solid ${props.theme.colors.white}`};
