@@ -26,14 +26,29 @@ const CloseIcon = styled("img")`
   margin-right: ${props => props.theme.spacing.small};
 `;
 
-const Selections = ({ values, onClick }) => {
+const Selections = ({
+  values,
+  onClick,
+  onMouseOver,
+  onMouseOut,
+  focused = null
+}) => {
   return (
     values && (
       <Wrapper>
         {values.map(v => (
-          <Item key={`selection-value-${v}`}>
+          <Item
+            key={`selection-value-${v}`}
+            focused={focused ? (focused === v ? true : false) : true}
+          >
             <CloseIcon onClick={() => onClick(v)} src={closeIcon} />
-            <div>{v}</div>
+            <div
+              data-value={v}
+              onMouseOver={onMouseOver}
+              onMouseOut={onMouseOut}
+            >
+              {v}
+            </div>
           </Item>
         ))}
       </Wrapper>

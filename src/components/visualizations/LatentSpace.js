@@ -22,8 +22,6 @@ const LatentSpace = ({ data }) => {
 
   const { papers } = useOrionData();
 
-  console.log(useOrionData());
-
   // const filters = {
   //   citations: useQuery(PAPER_CITATIONS, {
   //     variables: {
@@ -44,7 +42,6 @@ const LatentSpace = ({ data }) => {
   });
 
   useEffect(() => {
-    console.log("filters", filters);
     const filteredByCountry = new Set(
       p(papers.byCountry, filters.countries, d => d.country)
     );

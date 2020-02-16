@@ -60,8 +60,10 @@ export const MultiItemSearch = ({
   placeholder,
   dataset,
   title,
-  onChange = () => {}
+  onChange = () => {},
+  onHover = () => {}
 }) => {
+  const [focusedSelection, setFocusedSelection] = useState(null);
   const [suggestions, setSuggestions] = useState(null);
   const [selections, setSelections] = useState([]);
   const [search, setSearch] = useState("");
@@ -81,21 +83,30 @@ export const MultiItemSearch = ({
   };
 
   const onSuggestionClick = e => {
-    console.log([...new Set([...selections, e])]);
     setSelections([...new Set([...selections, e])]);
   };
 
+  const onSelectionMouseOver = e => {
+    setFocusedSelection(e.target.dataset.value);
+  };
+
+  const onSelectionMouseOut = e => {
+    setFocusedSelection(null);
+  };
+
   const onSelectionClick = e => {
-    console.log(e);
     const s = [...selections];
     s.splice(selections.indexOf(e), 1);
-    console.log(s);
     setSelections(s);
   };
 
   useEffect(() => {
-    onChange(selections);
-  }, [selections]);
+    if (focusedSelection) {
+      onChange([focusedSelection]);
+    } else {
+      onChange(selections);
+    }
+  }, [selections, focusedSelection]);
 
   return (
     <Search
@@ -105,7 +116,13 @@ export const MultiItemSearch = ({
       title={title}
     >
       {selections.length > 0 && (
-        <Selections values={selections} onClick={onSelectionClick} />
+        <Selections
+          focused={focusedSelection}
+          onClick={onSelectionClick}
+          onMouseOver={onSelectionMouseOver}
+          onMouseOut={onSelectionMouseOut}
+          values={selections}
+        />
       )}
       {suggestions && search !== "" && (
         // <DarkenBounds>
