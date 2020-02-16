@@ -1,39 +1,16 @@
 import React from "react";
 import styled from "@emotion/styled";
 
+import { blurEdges, yOverflow } from "../layout";
+
 const Wrapper = styled("div")`
+  margin: ${props => props.theme.spacing.small} 0;
+
   max-height: 10vh;
-  overflow-y: auto;
-  overflow-x: hidden;
   padding: 2% 0;
 
-  margin: ${props => props.theme.spacing.small} 0;
-  mask-image: ${props => `
-    linear-gradient(
-    to bottom,
-    ${props.theme.colors.black}00,
-    ${props.theme.colors.black}FF 8%,
-    ${props.theme.colors.black}FF 92%,
-    ${props.theme.colors.black}00 100%
-  )
-  `};
-
-  &::-webkit-scrollbar {
-    width: 5px;
-    border-radius: 4px;
-  }
-
-  // &::-webkit-scrollbar-track {
-  //   box-shadow: inset 0 0 10px red;
-  //   border: 1px solid white;
-  //   border-radius: 3px;
-  // }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: white;
-    border-radius: 10px;
-    // outline: 1px solid red;
-  }
+  ${yOverflow}
+  ${blurEdges};
 `;
 
 const Item = styled("div")`

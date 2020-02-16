@@ -4,10 +4,8 @@ import styled from "@emotion/styled";
 import closeIcon from "../../assets/img/cross.svg";
 
 const Wrapper = styled("div")`
-  display: flex;
-  flex-direction: column;
-  width: 100%;
   margin: ${props => props.theme.spacing.small} 0;
+  padding: 2% 0;
 `;
 
 const Item = styled("div")`
@@ -16,6 +14,7 @@ const Item = styled("div")`
   display: flex;
   font-size: ${props => props.theme.type.sizes.small};
   margin: ${props => props.theme.spacing.tiny} 0;
+  opacity: ${props => (props.focused ? 1 : 0.6)};
 `;
 
 const CloseIcon = styled("img")`
