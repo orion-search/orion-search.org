@@ -27,6 +27,7 @@ export const OrionDataProvider = ({ children }) => {
 
   switch (process.env.NODE_ENV) {
     case "development":
+    case "production":
       Promise.all([
         csv(papersByCountry, d => ({
           country: d.country,
@@ -47,8 +48,6 @@ export const OrionDataProvider = ({ children }) => {
         };
         setReady(true);
       });
-      break;
-    case "production":
       break;
     default:
       break;
