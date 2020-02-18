@@ -4,7 +4,7 @@ import styled from "@emotion/styled";
 const Wrapper = styled("div")`
   display: flex;
   text-transform: uppercase;
-  // width: 100%;
+  width: 100%;
   font-size: ${props => props.theme.type.sizes.small};
 `;
 

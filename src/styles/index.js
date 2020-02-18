@@ -52,6 +52,7 @@ export default {
 
   spacing: {
     none: 0,
+    tiny: `${spacingBaseSize * 0.25}${spacingUnit}`,
     small: `${spacingBaseSize * 0.5}${spacingUnit}`,
     normal: `${spacingBaseSize}${spacingUnit}`,
     large: `${spacingBaseSize * 1.5}${spacingUnit}`,
