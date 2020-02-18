@@ -21,7 +21,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     console.log(nearClippingPlane, farClippingPlane);
     // this.camera.near = nearClippingPlane;
     this.camera.far = farClippingPlane * 20;
-    this.camera.position.z = 100;
+    this.camera.position.z = 4000;
     this.camera.updateProjectionMatrix();
 
     this.createGeometry();
@@ -43,6 +43,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
 
+    this.meshNodes.rotation.y = time * 0.005;
+
     this.render();
   }
 
@@ -60,11 +62,11 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     for (let i = 0; i < this.layout.nodes.length; i++) {
       const { x, y, z } = this.layout.nodes[i];
-      color.setRGB(Math.random(), Math.random(), Math.random());
+      color.setRGB(1, 1, 1);
 
       this.attributes.position.push(x, y, z);
       this.attributes.color.push(color.r, color.g, color.b);
-      this.attributes.size.push(Math.random() * 20);
+      this.attributes.size.push(50 + Math.random() * 50);
       this.attributes.opacity.push(Math.random());
     }
 
@@ -113,26 +115,47 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   // filters papers by IDs
   // @todo: this could be done in a web worker
   filterPapers(ids) {
-    const attributes = this.geometry.attributes.opacity.array;
+    console.time("Updating opacity attributes");
+    const opacities = this.geometry.attributes.opacity.array;
+
     const nodes = this.layout.nodes.map(d => d.id);
 
     // console.log("gkdsa", ids);
 
     if (!ids) {
-      for (var i = 0; i < attributes.length; i++) {
-        attributes[i] = 1;
+      for (let i = 0; i < opacities.length; i++) {
+        opacities[i] = Math.random() * 0.5 + 0.5;
       }
     } else {
-      for (var i = 0; i < attributes.length; i++) {
-        attributes[i] = 0;
+      for (let i = 0; i < opacities.length; i++) {
+        opacities[i] = 0;
       }
       ids.forEach(id => {
-        var idx = nodes.indexOf(id);
-        attributes[idx] = 1;
+        let idx = nodes.indexOf(id);
+        opacities[idx] = Math.random() * 0.5 + 0.5;
       });
     }
 
+    console.timeEnd("Updating opacity attributes");
     this.geometry.attributes.opacity.needsUpdate = true;
+  }
+
+  colorPapers(papers) {
+    const colors = this.geometry.attributes.customColor.array;
+
+    const color = new THREE.Color();
+
+    const nodes = this.layout.nodes.map(d => d.id);
+
+    papers.forEach(p => {
+      let idx3 = nodes.indexOf(p.id) * 3;
+      color.set(p.color);
+      colors[idx3] = color.r;
+      colors[idx3 + 1] = color.g;
+      colors[idx3 + 2] = color.b;
+    });
+
+    this.geometry.attributes.customColor.needsUpdate = true;
   }
 
   // updateGeometry({ nodes }) {

@@ -27,20 +27,20 @@ export const OrionDataProvider = ({ children }) => {
 
   switch (process.env.NODE_ENV) {
     case "development":
+    case "production":
       Promise.all([
         csv(papersByCountry, d => ({
           country: d.country,
           count: +d.count,
           ids: d.ids.split("|").map(i => +i)
         })),
-        csv(papersByTopic),
-        d => ({
+        csv(papersByTopic, d => ({
           topic_id: d.id,
           name: d.name,
           level: +d.level,
           frequency: +d.frequency,
-          ids: d.paper_ids.split("|").map(i => i)
-        })
+          ids: d.paper_ids.split("|").map(i => +i)
+        }))
       ]).then(([byCountry, byTopic], error) => {
         data.current.papers = {
           byCountry,
@@ -48,8 +48,6 @@ export const OrionDataProvider = ({ children }) => {
         };
         setReady(true);
       });
-      break;
-    case "production":
       break;
     default:
       break;

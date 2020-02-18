@@ -1,5 +1,13 @@
-import React, { useRef, useEffect, useState } from "react";
+import { cold } from "react-hot-loader";
+import React, { useRef, useEffect, useState, useMemo } from "react";
 import { useQuery } from "@apollo/react-hooks";
+
+import { Row, Column } from "../layout";
+import { formatThousands } from "../../utils";
+
+import { MultiItemSearch } from "../search";
+
+import { schemeCategory10 } from "d3";
 
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
@@ -10,68 +18,157 @@ const LatentSpace = ({ data }) => {
   const canvasRef = useRef(null);
   const particles = useRef(null);
 
-  const [citationFilter, setCitationFilter] = useState(0);
+  // const [citationFilter, setCitationFilter] = useState(0);
+  const [filters, setFilters] = useState({
+    citations: 0,
+    countries: useOrionData().papers.byCountry.map(p => p.country),
+    topics: useOrionData().papers.byTopic.map(p => p.name)
+  });
 
-  console.log(useOrionData());
+  const { papers } = useOrionData();
 
-  const filters = {
-    citations: useQuery(PAPER_CITATIONS, {
-      variables: {
-        citations: citationFilter
-      }
-    })
-  };
+  // const filters = {
+  //   citations: useQuery(PAPER_CITATIONS, {
+  //     variables: {
+  //       citations: citationFilter
+  //     }
+  //   })
+  // };
 
   const layout = useRef({
     nodes: data.map(item => {
       return {
-        x: item.vector_3d[0] * 100,
-        y: item.vector_3d[1] * 100,
-        z: item.vector_3d[2] * 100,
+        x: item.vector_3d[0] * 1000,
+        y: item.vector_3d[1] * 1000,
+        z: item.vector_3d[2] * 1000,
         id: item.id
       };
     })
   });
 
-  // useEffect(() => {
-  //   console.log(`Filtering for articles with over ${citationFilter} citations`);
-  // }, [citationFilter]);
+  // @todo memoization is not working for some reason
+  const filteredPapers = useMemo(() => {
+    console.time("Filtering ID");
+    const filteredByCountry = new Set(
+      p(papers.byCountry, filters.countries, d => d.country)
+    );
+    const filteredByTopic = new Set(
+      p(papers.byTopic, filters.topics, d => d.name)
+    );
+
+    var intersect = new Set();
+    for (var x of filteredByCountry)
+      if (filteredByTopic.has(x)) intersect.add(x);
+    console.timeEnd("Filtering ID");
+
+    return {
+      ids: [...intersect],
+      colors: c(papers.byCountry, filters.countries, d => d.country)
+    };
+    // return [...intersect];
+  }, [filters.countries, filters.topics]);
 
   useEffect(() => {
-    // first time round
-    if (!filters.citations.data) return;
-    if (!particles.current) return;
+    particles.current && particles.current.filterPapers(filteredPapers.ids);
+    particles.current && particles.current.colorPapers(filteredPapers.colors);
+  }, [filters.countries, filters.topics]);
 
-    // @todo need to debounce this
-    // @todo multiple effects and set union here
+  // return ids
+  function p(data = [], include = [], accessor = id => id) {
+    filters.countries.map(d => ({}));
 
-    if (citationFilter === 0) {
-      particles.current.filterPapers();
-    } else {
-      const paperIDs = filters.citations.data.papers.map(p => p.id);
+    if (include.length === 0) return [...new Set(data.flatMap(d => d.ids))];
 
-      particles.current.filterPapers(paperIDs);
+    return [
+      ...new Set(include.flatMap(i => data.find(d => accessor(d) === i).ids))
+    ];
+  }
+
+  // return ids paired with colors
+  function c(data = [], include = [], accessor = id => id) {
+    if (include.length === 0) {
+      console.log("include length === 0");
+      return [
+        data
+          .flatMap(d => d.ids)
+          .map(id => ({
+            id,
+            color: "#ffffff"
+          }))
+      ];
     }
-  }, [filters.citations.data, citationFilter]);
+    const colors = schemeCategory10;
+
+    return include.flatMap((i, idx) => {
+      // console.log(data.find(d => accessor(d) === i).ids);
+      return data
+        .find(d => accessor(d) === i)
+        .ids.map(id => ({
+          id,
+          color: colors[idx % colors.length]
+        }));
+    });
+  }
 
   useEffect(() => {
+    console.log("new particle container");
     particles.current = new ParticleContainerLatentSpace({
       canvas: canvasRef.current,
       layout: layout.current
     });
   }, [canvasRef]);
+
   return (
     <div>
       <AbsoluteCanvas ref={canvasRef} />
-      <input
+      {/* <input
         type="range"
         value={citationFilter}
         min={1}
         max={100}
         onChange={e => setCitationFilter(e.target.value)}
-      />
+      /> */}
+      <Column width={1 / 8}>
+        <Row width={4 / 4}>
+          <MultiItemSearch
+            colorScheme={schemeCategory10}
+            dataset={useOrionData().papers.byCountry.map(p => p.country)}
+            onChange={countries =>
+              setFilters({
+                ...filters,
+                countries
+              })
+            }
+            placeholder={"Search by country..."}
+            title={"Country"}
+          />
+        </Row>
+        <Row width={4 / 4}>
+          <MultiItemSearch
+            dataset={useOrionData().papers.byTopic.map(p => p.name)}
+            onChange={topics =>
+              setFilters({
+                ...filters,
+                topics
+              })
+            }
+            title={"Topic"}
+            placeholder={"Search by topic..."}
+          />
+        </Row>
+        <Row>
+          <Summary paperIDs={filteredPapers.ids} filters={filters} />
+        </Row>
+      </Column>
     </div>
   );
 };
 
-export default LatentSpace;
+const Summary = ({ paperIDs, filters = [] }) => {
+  const p = formatThousands(paperIDs.length);
+  const c = filters.countries.length ? filters.countries.length : `All`;
+  const t = filters.topics.length ? filters.topics.length : `All`;
+  return <div>{`Showing ${p} papers from ${c} countries and ${t} topics`}</div>;
+};
+
+export default cold(LatentSpace);
