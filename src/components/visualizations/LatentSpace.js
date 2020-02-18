@@ -139,7 +139,6 @@ const LatentSpace = ({ data }) => {
                 countries
               })
             }
-            // onChange={c => console.log(c)}
             placeholder={"Search by country..."}
             title={"Country"}
           />
@@ -153,7 +152,6 @@ const LatentSpace = ({ data }) => {
                 topics
               })
             }
-            // onChange={topics => console.log("topics", topics)}
             title={"Topic"}
             placeholder={"Search by topic..."}
           />

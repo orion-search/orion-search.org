@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import { jsx, css } from "@emotion/core";
 
-export const darken = props => css`
+export const blurEdges = props => css`
   max-height: 10vh;
   overflow-y: auto;
   overflow-x: hidden;
