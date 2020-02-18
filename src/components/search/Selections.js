@@ -25,17 +25,28 @@ const CloseIcon = styled("img")`
   margin-right: ${props => props.theme.spacing.small};
 `;
 
+// Used to indicate color selection
+const Dot = styled("div")`
+  background-color: ${props => props.color};
+  border: 1px solid ${props => props.theme.colors.white};
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin: 0 ${props => props.theme.spacing.small};
+`;
+
 const Selections = ({
-  values,
+  colorScheme,
+  focused = null,
   onClick,
   onMouseOver,
   onMouseOut,
-  focused = null
+  values
 }) => {
   return (
     values && (
       <Wrapper>
-        {values.map(v => (
+        {values.map((v, idx) => (
           <Item
             key={`selection-value-${v}`}
             focused={focused ? (focused === v ? true : false) : true}
@@ -48,6 +59,9 @@ const Selections = ({
             >
               {v}
             </div>
+            {colorScheme && (
+              <Dot color={colorScheme[idx % colorScheme.length]} />
+            )}
           </Item>
         ))}
       </Wrapper>

@@ -57,11 +57,12 @@ const Search = ({
 
 // A search component that features multi-item selection
 export const MultiItemSearch = ({
-  placeholder,
+  colorScheme = null,
   dataset,
-  title,
   onChange = () => {},
-  onHover = () => {}
+  onHover = () => {},
+  placeholder,
+  title
 }) => {
   const [focusedSelection, setFocusedSelection] = useState(null);
   const [suggestions, setSuggestions] = useState(null);
@@ -117,6 +118,7 @@ export const MultiItemSearch = ({
     >
       {selections.length > 0 && (
         <Selections
+          colorScheme={colorScheme}
           focused={focusedSelection}
           onClick={onSelectionClick}
           onMouseOver={onSelectionMouseOver}
