@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { stratify, pack, select } from "d3";
 
 import { PageLayout } from "../components/layout";
-import Breadcrumbs from "../components/breadcrumbs";
 
 import { FIELDS_OF_STUDY } from "../queries/topics";
 
@@ -121,7 +120,6 @@ const Hierarchy = () => {
 
   return (
     <PageLayout>
-      <Breadcrumbs values={["Explore", "Topics"]} />
       <svg ref={chartRef} width={1500} height={1500} />
     </PageLayout>
   );

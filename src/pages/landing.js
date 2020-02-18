@@ -1,9 +1,8 @@
 import React from "react";
 
 import { PageLayout, Row, Column } from "../components/layout";
-import { Title } from "../components/layout/text";
+import { Title } from "../components/layout";
 
-// import Breadcrumbs from "../components/breadcrumbs";
 import { LinkButton } from "../components/button";
 
 const Landing = () => {
@@ -48,7 +47,7 @@ const Landing = () => {
         </Column>
         <Column>
           <Title>Search By</Title>
-          <LinkButton to={"/search"}>Paper</LinkButton>
+          <LinkButton to={"/explore"}>Paper</LinkButton>
           <LinkButton to={"/search"}>Abstract</LinkButton>
         </Column>
       </Row>

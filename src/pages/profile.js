@@ -3,7 +3,6 @@ import { useQuery } from "@apollo/react-hooks";
 import { groupBy } from "lodash-es";
 
 import { PageLayout } from "../components/layout";
-import Breadcrumbs from "../components/breadcrumbs";
 import Timeline from "../components/visualizations/timeline";
 import Histogram from "../components/visualizations/histogram";
 import Dropdown from "../components/dropdown";
@@ -54,7 +53,6 @@ const Profile = () => {
 
   return (
     <PageLayout>
-      <Breadcrumbs values={["Explore Entity", "Country", `${country}`]} />
       <Header title={`Diversity of Research / Entity Profile`} />
       <Header title={`${country}`} />
       <Timeline>
