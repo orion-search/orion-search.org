@@ -1,6 +1,6 @@
 import { cold } from "react-hot-loader";
 import React, { useRef, useEffect, useState, useMemo } from "react";
-import { useQuery } from "@apollo/react-hooks";
+// import { useQuery } from "@apollo/react-hooks";
 
 import { Row, Column } from "../layout";
 import { formatThousands } from "../../utils";
@@ -11,7 +11,7 @@ import { schemeCategory10 } from "d3";
 
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
-import { PAPER_CITATIONS } from "../../queries";
+// import { PAPER_CITATIONS } from "../../queries";
 import { useOrionData } from "../../OrionData.context";
 
 const LatentSpace = ({ data }) => {

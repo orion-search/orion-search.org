@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import DeckGL, { GeoJsonLayer, ArcLayer } from "deck.gl";
 import { StaticMap } from "react-map-gl";
 

@@ -1,12 +1,5 @@
 import React, { useEffect, useRef } from "react";
-import {
-  scaleLinear,
-  extent,
-  select,
-  axisRight,
-  axisBottom,
-  axisLeft
-} from "d3";
+import { scaleLinear, extent, select, axisBottom, axisLeft } from "d3";
 import styled from "@emotion/styled";
 import useDimensions from "react-use-dimensions";
 
@@ -32,8 +25,6 @@ const Scatterplot = ({ data, x, y }) => {
     y: null
   });
 
-  // const scales = ;
-
   const margins = {
     side: 40,
     top: 20
@@ -44,8 +35,6 @@ const Scatterplot = ({ data, x, y }) => {
     if (!gRef.current || !chartRef.current) return;
     if (!chartSize.width || !chartSize.height) return;
 
-    console.log("updating");
-
     scales.current.x = scaleLinear()
       .domain(extent(data, x))
       .range([margins.side, chartSize.width - margins.side]);
@@ -55,17 +44,15 @@ const Scatterplot = ({ data, x, y }) => {
       .domain([0, 1])
       .range([chartSize.height - margins.top, margins.top]);
 
-    select(axisLeftRef.current).call(axisRight(scales.current.y));
+    select(axisLeftRef.current)
+      .call(axisLeft(scales.current.y))
+      .attr("transform", `translate(${margins.side}, 0)`);
     select(axisBottomRef.current)
       .call(axisBottom(scales.current.x))
       .attr("transform", `translate(0, ${chartSize.height - margins.top})`);
 
-    console.log(scales.current.x.domain());
-    console.log(scales.current.y.domain());
-
-    // const g = select(gRef.current);
     const svg = chartRef.current;
-    // const g = select(chartRef.current).append("g");
+
     const t = select(svg)
       .transition()
       .duration(750);
@@ -114,28 +101,12 @@ const Scatterplot = ({ data, x, y }) => {
   return (
     <Wrapper ref={containerRef}>
       <svg ref={chartRef} height={chartSize.height} width={chartSize.width}>
-        {/* {scales.current.y && (
-          <Axis axisType={axisRight} scale={scales.current.y} />
-        )} */}
         <g ref={axisLeftRef} />
         <g ref={gRef} />
         <g ref={axisBottomRef} />
-        {/* {scales.current.x && (
-          <Axis axisType={axisBottom} scale={scales.current.y} />
-        )} */}
       </svg>
     </Wrapper>
   );
 };
-
-// const Axis = ({ axisType, scale }) => {
-//   const gRef = useRef(null);
-//   if (!scale) return null;
-
-//   const axis = axisType(scale);
-//   select(gRef.current).call(axis);
-
-//   return <g ref={gRef} />;
-// };
 
 export default Scatterplot;

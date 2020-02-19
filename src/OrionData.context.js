@@ -1,15 +1,9 @@
-import React, {
-  useEffect,
-  useRef,
-  useState,
-  useContext,
-  createContext
-} from "react";
-import { useQuery } from "@apollo/react-hooks";
+import React, { useRef, useState, useContext, createContext } from "react";
+// import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
 
 import LoadingBar from "./components/loading-bar";
-import { SEED_PAPER_COUNTRY, SEED_PAPER_TOPICS } from "./queries";
+// import { SEED_PAPER_COUNTRY, SEED_PAPER_TOPICS } from "./queries";
 import papersByCountry from "./data/paper_country.csv";
 import papersByTopic from "./data/paper_topics.csv";
 
