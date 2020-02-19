@@ -5,61 +5,56 @@ import { groupBy } from "lodash-es";
 import { PageLayout } from "../components/layout";
 import Timeline from "../components/visualizations/timeline";
 import Histogram from "../components/visualizations/histogram";
+
 import Dropdown from "../components/dropdown";
 import List from "../components/list";
 import Header from "../components/header";
 import { COUNTRY_OUTPUT_TOPIC } from "../queries/profile";
-
-const countries = [
-  "Argentina",
-  "Brazil",
-  "Mexico",
-  "China",
-  "Germany",
-  "United Kingdom",
-  "United States",
-  "Greece",
-  "Norway",
-  "Sweden",
-  "Finland",
-  "Denmark",
-  "France",
-  "Italy",
-  "Canada"
-].sort();
+import { useOrionData } from "../OrionData.context";
+import { DIVERSITY_BY_COUNTRY } from "../queries";
+import Scatterplot from "../components/visualizations/Scatterplot";
 
 const Profile = () => {
-  const [topics, setTopics] = useState([]);
-  const [country, setCountry] = useState(countries[0]);
+  const countries = useOrionData().papers.byCountry.map(p => p.country);
+  const [country, setCountry] = useState("United States");
+  // const [topics, setTopics] = useState([]);
 
-  let { error, loading, data } = useQuery(COUNTRY_OUTPUT_TOPIC, {
+  let { error, loading, data } = useQuery(DIVERSITY_BY_COUNTRY, {
     variables: { country }
   });
 
   useEffect(() => {
     if (!data) return;
-    console.log(country, data);
+    console.log(data);
+    //   // console.log(country, data);
 
-    // output by topic
-    const output = groupBy(data.view_country_output_topic, d => d.topic_name);
+    //   // output by topic
+    //   // const output = groupBy(data.view_country_output_topic, d => d.topic_name);
 
-    // most popular topics
-    const topics = Object.keys(output)
-      .sort((k1, k2) => output[k2].length - output[k1].length)
-      .slice(0, 20);
+    //   // most popular topics
+    //   const topics = Object.keys(output)
+    //     .sort((k1, k2) => output[k2].length - output[k1].length)
+    //     .slice(0, 20);
 
-    setTopics(topics);
+    //   // setTopics(topics);
   }, [error, data]);
 
   return (
     <PageLayout>
-      <Header title={`Diversity of Research / Entity Profile`} />
+      <Header title={`Country Research Profile`} />
       <Header title={`${country}`} />
-      <Timeline>
+      {/* <Timeline>
         {data && <Histogram data={data.view_country_output_topic} />}
-      </Timeline>
+      </Timeline> */}
       <Dropdown values={countries} onChange={e => setCountry(e.target.value)} />
-      {!loading && <List title={"Most Popular Topics"} values={topics} />}
+      {data && (
+        <Scatterplot
+          data={data.view_diversity_by_country}
+          y={d => d.female_share}
+          x={d => d.diversity}
+        />
+      )}
+      {/* {!loading && <List title={"Most Popular Topics"} values={topics} />} */}
     </PageLayout>
   );
 };

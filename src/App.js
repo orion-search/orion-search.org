@@ -20,7 +20,17 @@ function App() {
       <Route exact path={["/hierarchy"]} component={Hierarchy} />
       <Route exact path={["/network"]} component={Network} />
       <Route exact path={["/output"]} component={Output} />
-      <Route exact path={["/profile"]} component={Profile} />
+      <Route
+        exact
+        path={["/profile/:countryCode?"]}
+        render={({ match }) => {
+          const {
+            params = { countryCode: match.params.countryCode || "USA" }
+          } = match;
+
+          return <Profile country={params.country} match={match} />;
+        }}
+      />
       <Route exact path={["/topics"]} component={Topics} />
     </Switch>
   );
