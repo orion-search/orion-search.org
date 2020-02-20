@@ -10,6 +10,7 @@ export const Flex = styled("div")`
 export const Row = styled("div")`
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
 
   margin: ${props => props.theme.spacing.small} 0;

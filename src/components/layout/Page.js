@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 
 import logo from "../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
+import { Column } from "../layout";
+import { Row } from "./Flex";
 
 export const PageLayoutWrapper = styled("main")`
   width: 100%;
@@ -31,40 +33,76 @@ export const NavBarWrapper = styled("div")`
 
   display: flex;
   position: relative;
-
-  & > * {
-    animation: 2s fadeIn;
-  }
 `;
 
-export const PageLayout = ({ children }) => (
-  <PageLayoutWrapper>
-    <NavBarWrapper>
-      <div
-        css={css`
-          height: 40px;
-          margin-right: 1rem;
-        `}
-      >
-        <Link to={"/"}>
-          <img
-            css={css`
-              height: 100%;
-            `}
-            src={logo}
-            alt="orion-search-logo"
-          />
-        </Link>
-      </div>
-      <div
-        css={css`
-          margin-right: 1rem;
-        `}
-      >
-        Orion Search v0.0.1
-      </div>
-      <Breadcrumbs values={useLocation().pathname.split("/")} />
-    </NavBarWrapper>
-    {children}
-  </PageLayoutWrapper>
-);
+export const NavItem = styled(({ highlighted, ...props }) => (
+  <Link {...props} />
+))`
+  text-decoration: ${props => (props.highlighted ? `underline` : `none`)};
+  color: ${props => props.theme.colors.white};
+`;
+
+const navURLs = [
+  {
+    to: "/profile/country",
+    name: "Country"
+  },
+  {
+    to: "/profile/topic",
+    name: "Topic"
+  },
+  {
+    to: "/explore",
+    name: "Papers"
+  }
+];
+
+export const PageLayout = ({ children, match, ...props }) => {
+  const location = useLocation().pathname;
+  return (
+    <PageLayoutWrapper>
+      <NavBarWrapper>
+        <div
+          css={css`
+            height: 40px;
+            margin-right: 1rem;
+          `}
+        >
+          <Link to={"/"}>
+            <img
+              css={css`
+                height: 100%;
+              `}
+              src={logo}
+              alt="orion-search-logo"
+            />
+          </Link>
+        </div>
+        <div
+          css={css`
+            margin-right: 1rem;
+          `}
+        >
+          Orion Search Engine v0.0.1
+        </div>
+        {console.log(useLocation())}
+
+        {/* @todo Breadcrumbs is just a dummy value for correct flex alignment  */}
+        <Breadcrumbs values={[]} />
+
+        <Row width={1 / 4}>
+          {navURLs.map(u => (
+            <NavItem
+              key={`nav-item-to-${u.to}`}
+              to={u.to}
+              highlighted={location === u.to}
+            >
+              {u.name}
+            </NavItem>
+          ))}
+        </Row>
+      </NavBarWrapper>
+      {children}
+    </PageLayoutWrapper>
+  );
+};
