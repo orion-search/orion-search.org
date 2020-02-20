@@ -2,12 +2,17 @@
 // import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
+export const Flex = styled("div")`
+  display: flex;
+  justify-content: ${props => props.justifyContent || null};
+`;
+
 export const Row = styled("div")`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
 
-  margin: ${props => props.theme.spacing.normal} 0;
+  margin: ${props => props.theme.spacing.small} 0;
 
   width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
 `;

@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useEffect, useRef, cloneElement } from "react";
+import { useEffect, useRef, cloneElement } from "react";
 import { brushX } from "d3-brush";
 import { select, event } from "d3-selection";
 import useDimensions from "react-use-dimensions";
@@ -35,7 +35,7 @@ const Timeline = ({ children }) => {
   useEffect(() => {
     // if (!chartSize.width) return;
     select(brushRef.current).call(brush);
-  }, [chartSize]);
+  }, [chartSize, brush]);
 
   return (
     <BrushContainer ref={containerRef}>

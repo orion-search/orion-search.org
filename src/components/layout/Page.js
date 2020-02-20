@@ -19,8 +19,8 @@ export const PageLayoutWrapper = styled("main")`
 export const NavBarWrapper = styled("div")`
   width: 100vw;
   height: 60px;
-  margin-bottom: 5vmin;
-  padding: 10px 5vmin;
+  margin-bottom: ${props => props.theme.spacing.medium};
+  padding: ${props => props.theme.spacing.small} 5vmin;
   box-sizing: border-box;
   align-items: center;
   align-self: center;

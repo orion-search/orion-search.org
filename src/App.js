@@ -20,7 +20,28 @@ function App() {
       <Route exact path={["/hierarchy"]} component={Hierarchy} />
       <Route exact path={["/network"]} component={Network} />
       <Route exact path={["/output"]} component={Output} />
-      <Route exact path={["/profile"]} component={Profile} />
+      <Route
+        exact
+        path={["/profile/country/:countryCode?"]}
+        render={({ match }) => {
+          const {
+            params = { countryCode: match.params.countryCode || "USA" }
+          } = match;
+
+          return <Profile country={params.country} match={match} />;
+        }}
+      />
+      <Route
+        exact
+        path={["/profile/topic/:topic"]}
+        render={({ match }) => {
+          const { params = { topic: match.params.topic } } = match;
+
+          return params.topic ? (
+            <Profile topic={params.topic} match={match} />
+          ) : null;
+        }}
+      />
       <Route exact path={["/topics"]} component={Topics} />
     </Switch>
   );

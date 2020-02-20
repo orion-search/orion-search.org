@@ -1,7 +1,6 @@
 import React from "react";
 
 import { PageLayout } from "../components/layout";
-import Map from "../components/collaborations/map";
 // import { SharedCanvasProvider } from "../SharedCanvas.context";
 
 const Network = () => {
@@ -13,7 +12,6 @@ const Network = () => {
   return (
     <PageLayout>
       {/* <SharedCanvasProvider> */}
-      <Map />
       {/* </SharedCanvasProvider> */}
     </PageLayout>
   );

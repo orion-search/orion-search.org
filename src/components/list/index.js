@@ -1,13 +1,19 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-const ListItem = styled("a")`
+const ListItem = styled("li")`
   ${props => props.theme.type.style.small}
 
   display: flex;
 
-  flex-grow: 1;
-  align-items: left;
+  // flex-grow: 1;
+  // align-items: left;
+
+  &:hover {
+    text-decoration: underline;
+  }
+
+  cursor: pointer;
 
   margin-bottom: ${props => props.theme.spacing.small};
 `;
@@ -20,8 +26,7 @@ const Title = styled("div")`
 `;
 
 const Wrapper = styled("div")`
-  display: flex;
-  flex-direction: column;
+  // display: flex;
 `;
 
 export const List = styled("ul")`
@@ -30,13 +35,13 @@ export const List = styled("ul")`
 
   margin-bottom: ${props => props.theme.spacing.normal};
   padding: 0;
-  list-style-type: none;
+  // list-style-type: none;
 `;
 
 export default ({ title, values }) => {
   return (
     <Wrapper>
-      <Title>{title}</Title>
+      {title && <Title>{title}</Title>}
       <List>
         {values.map(v => (
           <ListItem key={`list-item-${v}`}>{v}</ListItem>
