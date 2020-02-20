@@ -3,6 +3,8 @@ import { scaleLinear, extent, select, axisBottom, axisLeft } from "d3";
 import styled from "@emotion/styled";
 import useDimensions from "react-use-dimensions";
 
+import { formatPercentage } from "../../utils";
+
 const Wrapper = styled("div")`
   display: flex;
   width: 100%;
@@ -11,7 +13,7 @@ const Wrapper = styled("div")`
   margin: ${props => props.theme.spacing.large} 0;
 `;
 
-const Scatterplot = ({ data, x, y }) => {
+const Scatterplot = ({ data, x, y, nodeFunc }) => {
   const [containerRef, chartSize] = useDimensions();
 
   const chartRef = useRef(null);
@@ -45,8 +47,9 @@ const Scatterplot = ({ data, x, y }) => {
       .range([chartSize.height - margins.top, margins.top]);
 
     select(axisLeftRef.current)
-      .call(axisLeft(scales.current.y))
+      .call(axisLeft(scales.current.y).tickFormat(formatPercentage))
       .attr("transform", `translate(${margins.side}, 0)`);
+
     select(axisBottomRef.current)
       .call(axisBottom(scales.current.x))
       .attr("transform", `translate(0, ${chartSize.height - margins.top})`);
@@ -59,7 +62,7 @@ const Scatterplot = ({ data, x, y }) => {
 
     select(gRef.current)
       .selectAll("circle")
-      .data(data)
+      .data(data, nodeFunc)
       .join(
         enter =>
           enter
@@ -96,7 +99,7 @@ const Scatterplot = ({ data, x, y }) => {
     // return function cleanup() {
     //   svg.removeChild(g);
     // };
-  }, [data, x, y, chartSize, scales, margins]);
+  }, [data, x, y, chartSize, scales, margins, nodeFunc]);
 
   return (
     <Wrapper ref={containerRef}>
