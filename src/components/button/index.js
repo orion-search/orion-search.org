@@ -7,6 +7,8 @@ const Wrapper = styled("div")`
   & > a {
     text-decoration: none;
   }
+
+  pointer-events: ${props => (props.inactive ? `none` : `all`)};
 `;
 
 const Button = styled("button")`
@@ -41,8 +43,8 @@ const Button = styled("button")`
   }
 `;
 
-export const LinkButton = ({ children, to, onMouseDown }) => (
-  <Wrapper>
+export const LinkButton = ({ children, to, onMouseDown, inactive }) => (
+  <Wrapper inactive={inactive}>
     <Link to={to} onMouseDown={onMouseDown}>
       <Button>{children}</Button>
     </Link>

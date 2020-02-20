@@ -12,9 +12,9 @@ const Landing = () => {
         <Title>Orion Search Engine</Title>
       </Row>
       <Row>
-        <Column alignSelf={"normal"}>
+        <Column alignSelf={"normal"} width={1 / 2}>
           <p>
-            Orion is an open-source tool to monitor and measure progress in
+            Orion is an odiven-source tool to monitor and measure progress in
             science. Orion depends on a flexible data collection, enrichment,
             and analysis system that enables users to create and explore
             research databases.
@@ -25,8 +25,6 @@ const Landing = () => {
             they created. Users can query Orion with anything between one or two
             words (for example, gene editing) and a blogpost they read online.
           </p>
-        </Column>
-        <Column alignSelf={"normal"}>
           <p>
             Orion uses state-of-the-art machine learning methods to find a
             numerical representation of the users’ query and search for its
@@ -39,17 +37,16 @@ const Landing = () => {
           </p>
         </Column>
       </Row>
-      <Row>
-        <Column>
-          <Title>Explore</Title>
-          <LinkButton to={"/output"}>Country Profile Page</LinkButton>
-          <LinkButton to={"/topics"}>Topics</LinkButton>
-        </Column>
-        <Column>
-          <Title>Search By</Title>
-          <LinkButton to={"/explore"}>Paper</LinkButton>
-          <LinkButton to={"/search"}>Abstract</LinkButton>
-        </Column>
+      <Row width={2 / 3}>
+        <LinkButton to={"/profile/country"}>Explore Country</LinkButton>
+        <LinkButton to={"/explore"}>Explore all Papers</LinkButton>
+        <LinkButton inactive to={"/profile/topic"}>
+          Explore Topic
+        </LinkButton>
+
+        <LinkButton inactive to={"/search"}>
+          Search by Abstract
+        </LinkButton>
       </Row>
     </PageLayout>
   );
