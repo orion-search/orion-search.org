@@ -9,7 +9,7 @@ const Landing = () => {
   return (
     <PageLayout>
       <Row>
-        <Title>Orion Search</Title>
+        <Title>Orion Search Engine</Title>
       </Row>
       <Row>
         <Column alignSelf={"normal"}>
