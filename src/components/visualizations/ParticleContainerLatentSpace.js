@@ -115,12 +115,11 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   // filters papers by IDs
   // @todo: this could be done in a web worker
   filterPapers(ids) {
+    console.groupCollapsed("Updating attributes for filterPapers");
     console.time("Updating opacity attributes");
     const opacities = this.geometry.attributes.opacity.array;
 
     const nodes = this.layout.nodes.map(d => d.id);
-
-    // console.log("gkdsa", ids);
 
     if (!ids) {
       for (let i = 0; i < opacities.length; i++) {
@@ -137,10 +136,13 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     }
 
     console.timeEnd("Updating opacity attributes");
+    console.groupEnd("Updating attributes for filterPapers");
     this.geometry.attributes.opacity.needsUpdate = true;
   }
 
   colorPapers(papers) {
+    console.groupCollapsed("Updating color attributes");
+    console.time("Updating color attributes");
     const colors = this.geometry.attributes.customColor.array;
 
     const color = new THREE.Color();
@@ -154,7 +156,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       colors[idx3 + 1] = color.g;
       colors[idx3 + 2] = color.b;
     });
-
+    console.timeEnd("Updating color attributes");
+    console.groupEnd("Updating attributes for filterPapers");
     this.geometry.attributes.customColor.needsUpdate = true;
   }
 

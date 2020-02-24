@@ -2,7 +2,7 @@
 // and communicates their position.
 
 // import { extent } from "d3";
-import ForceLayout from "../../force-layout-links";
+import ForceLayout from "../../workers/subscribers/force-layout-links";
 import { scaleLinear, max } from "d3";
 import { BehaviorSubject } from "rxjs";
 import { takeWhile } from "rxjs/operators";
