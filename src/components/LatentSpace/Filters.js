@@ -8,6 +8,8 @@ import { Row } from "../layout";
 import { from, forkJoin } from "rxjs";
 import { filter, merge, scan, distinct, reduce, map } from "rxjs/operators";
 
+import CrossFilter from "../../workers/subscribers/crossfilter";
+
 /**
  takes different data frames, filters the intersection and gives back the node indices
 
@@ -19,6 +21,19 @@ import { filter, merge, scan, distinct, reduce, map } from "rxjs/operators";
 const Filters = ({ filters, ids, papers, dimensions }) => {
   const [filterState, setFilterState] = useState(filters);
   const prevFiltersRef = useRef();
+
+  const crossFilterSubscriber = useRef(
+    new CrossFilter({
+      dimensions: dimensions.map((d, i) => ({
+        accessorName: i === 0 ? "country" : "name",
+        data: d.data,
+        filter: i === 0 ? filters.countries : filters.topics
+      }))
+    })
+  );
+  crossFilterSubscriber.current.compute().then(d => {
+    console.log("web worker done", d);
+  });
 
   console.log(filters);
   // this hook keeps track of previous state

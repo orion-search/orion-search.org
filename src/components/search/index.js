@@ -116,6 +116,15 @@ export const MultiItemSearch = ({
       placeholder={placeholder}
       title={title}
     >
+      {suggestions && search !== "" && (
+        // <DarkenBounds>
+        <Suggestions
+          values={suggestions}
+          selected={selections}
+          onClick={onSuggestionClick}
+        />
+        // </DarkenBounds>
+      )}
       {selections.length > 0 && (
         <Selections
           colorScheme={colorScheme}
@@ -125,15 +134,6 @@ export const MultiItemSearch = ({
           onMouseOut={onSelectionMouseOut}
           values={selections}
         />
-      )}
-      {suggestions && search !== "" && (
-        // <DarkenBounds>
-        <Suggestions
-          values={suggestions}
-          selected={selections}
-          onClick={onSuggestionClick}
-        />
-        // </DarkenBounds>
       )}
     </Search>
   );

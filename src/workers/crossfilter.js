@@ -1,21 +1,41 @@
 /* eslint-env worker */
 /* eslint no-restricted-globals: 0 */
-let nodes;
+import { from, forkJoin } from "rxjs";
+import { reduce } from "rxjs/operators";
+
+// store our reducers
+let idsByDimension;
 
 self.addEventListener("message", ({ data }) => {
   if (data) {
-    const { type, nodes } = data;
+    const { type, dimensions } = data;
 
     switch (type) {
       case "init":
+        idsByDimension = dimensions.map((d, i) =>
+          from(d.filter).pipe(
+            reduce(
+              (acc, dimValue) => [
+                ...acc,
+                d.data.find(n => n[d.accessorName] === dimValue).ids
+              ],
+              []
+            )
+          )
+        );
         self.postMessage({
           type: "init"
         });
-        nodes = nodes;
+
         break;
-      case "filter":
-        self.postMessage({
-          type: "filter"
+      case "compute":
+        console.log("web worker: computing");
+        forkJoin(...idsByDimension).subscribe(paperIdArrays => {
+          // console.log("done", paperIdArrays);
+          self.postMessage({
+            type: "compute",
+            data: paperIdArrays
+          });
         });
         break;
       default:
