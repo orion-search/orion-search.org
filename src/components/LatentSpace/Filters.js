@@ -12,8 +12,11 @@ import { filter, merge, scan, distinct, reduce, map } from "rxjs/operators";
  takes different data frames, filters the intersection and gives back the node indices
 
  compute the filter stack for enter/hover interactions
+
+ @todo debounce hover interactions
+ @todo compute ID intersections on web-worker
 */
-const Filters = ({ filters, ids, papers }) => {
+const Filters = ({ filters, ids, papers, dimensions }) => {
   const [filterState, setFilterState] = useState(filters);
   const prevFiltersRef = useRef();
 
@@ -63,20 +66,18 @@ const Filters = ({ filters, ids, papers }) => {
 
   return (
     <>
-      <Row>
-        <MultiItemSearch
-          dataset={useOrionData().papers.byCountry.map(p => p.country)}
-          placeholder={"Search by country..."}
-          title={"Country"}
-        />
-      </Row>
-      <Row>
-        <MultiItemSearch
-          dataset={useOrionData().papers.byTopic.map(p => p.name)}
-          title={"Topic"}
-          placeholder={"Search by topic..."}
-        />
-      </Row>
+      {dimensions.map(d => {
+        const TagName = d.component;
+        return (
+          <Row key={`${d.title}-row`}>
+            <TagName
+              dataset={d.data.map(p => d.accessor(p))}
+              placeholder={d.placeholder}
+              title={d.title}
+            />
+          </Row>
+        );
+      })}
     </>
   );
 };

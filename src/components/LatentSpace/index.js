@@ -130,11 +130,27 @@ const LatentSpace = ({ data, papers }) => {
         onChange={e => setCitationFilter(e.target.value)}
       /> */}
       <Column width={1 / 8}>
-        {/* <Filters
+        <Filters
           filters={filters}
           papers={papers}
           ids={layout.current.nodes.map(o => o.id)}
-        /> */}
+          dimensions={[
+            {
+              accessor: d => d.country,
+              component: MultiItemSearch,
+              data: papers.byCountry,
+              placeholder: "Search by Country...",
+              title: "Country"
+            },
+            {
+              accessor: d => d.name,
+              component: MultiItemSearch,
+              data: papers.byTopic,
+              placeholder: "Search by Topic...",
+              title: "Topic"
+            }
+          ]}
+        />
         <Row>
           <MultiItemSearch
             colorScheme={schemeCategory10}
