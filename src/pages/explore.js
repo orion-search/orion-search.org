@@ -9,6 +9,7 @@ import documentVectors from "../data/doc_vectors.csv";
 // import { ARTICLE_VECTORS } from "../queries";
 import { PageLayout } from "../components/layout";
 import LatentSpace from "../components/LatentSpace/";
+import { useOrionData } from "../OrionData.context";
 // import { SharedCanvasProvider } from "../SharedCanvas.context";
 
 const Explore = () => {
@@ -17,6 +18,7 @@ const Explore = () => {
   //   console.log(data, error);
   // }, [data, error]);
   const [data, setData] = useState(null);
+  const papers = useOrionData().papers;
 
   useEffect(() => {
     Promise.all([
@@ -35,7 +37,7 @@ const Explore = () => {
       {/* <SharedCanvasProvider>
         {data && <Network data={data} />}
       </SharedCanvasProvider> */}
-      {data && <LatentSpace data={data} />}
+      {data && <LatentSpace data={data} papers={papers} />}
       {/* <Tree /> */}
     </PageLayout>
   );

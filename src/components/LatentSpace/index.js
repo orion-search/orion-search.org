@@ -13,19 +13,17 @@ import { schemeCategory10 } from "d3";
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
 // import { PAPER_CITATIONS } from "../../queries";
-import { useOrionData } from "../../OrionData.context";
+// import { useOrionData } from "../../OrionData.context";
 
-const LatentSpace = ({ data }) => {
+const LatentSpace = ({ data, papers }) => {
   const canvasRef = useRef(null);
   const particles = useRef(null);
 
   const [filters, setFilters] = useState({
     citations: 0,
-    countries: useOrionData().papers.byCountry.map(p => p.country),
-    topics: useOrionData().papers.byTopic.map(p => p.name)
+    countries: papers.byCountry.map(p => p.country),
+    topics: papers.byTopic.map(p => p.name)
   });
-
-  const { papers } = useOrionData();
 
   const layout = useRef({
     nodes: data.map(item => {
@@ -40,6 +38,7 @@ const LatentSpace = ({ data }) => {
 
   // @todo memoization is not working for some reason
   const filteredPapers = useMemo(() => {
+    if (!particles.current) return;
     console.groupCollapsed("Filtering");
     console.time("Filtering ID");
     console.time("filteredByCountry");
@@ -66,17 +65,16 @@ const LatentSpace = ({ data }) => {
       colors: c(papers.byCountry, filters.countries, d => d.country)
     };
     // return [...intersect];
-  }, [filters.countries, filters.topics]);
+  }, [filters, papers.byCountry, papers.byTopic]);
 
   useEffect(() => {
+    console.groupCollapsed("Particle Viz Attribute Update");
+    console.time("updating particle viz attributes");
     particles.current && particles.current.filterPapers(filteredPapers.ids);
     particles.current && particles.current.colorPapers(filteredPapers.colors);
-  }, [
-    filters.countries,
-    filters.topics,
-    filteredPapers.colors,
-    filteredPapers.ids
-  ]);
+    console.timeEnd("updating particle viz attributes");
+    console.groupEnd("Particle Viz Attribute Update");
+  }, [filters, filteredPapers]);
 
   // return ids
   function p(data = [], include = [], accessor = id => id) {
@@ -132,15 +130,15 @@ const LatentSpace = ({ data }) => {
         onChange={e => setCitationFilter(e.target.value)}
       /> */}
       <Column width={1 / 8}>
-        <Filters
+        {/* <Filters
           filters={filters}
-          papers={useOrionData().papers}
+          papers={papers}
           ids={layout.current.nodes.map(o => o.id)}
-        />
+        /> */}
         <Row>
           <MultiItemSearch
             colorScheme={schemeCategory10}
-            dataset={useOrionData().papers.byCountry.map(p => p.country)}
+            dataset={papers.byCountry.map(p => p.country)}
             onChange={countries =>
               setFilters({
                 ...filters,
@@ -153,7 +151,7 @@ const LatentSpace = ({ data }) => {
         </Row>
         <Row>
           <MultiItemSearch
-            dataset={useOrionData().papers.byTopic.map(p => p.name)}
+            dataset={papers.byTopic.map(p => p.name)}
             onChange={topics =>
               setFilters({
                 ...filters,
@@ -165,7 +163,7 @@ const LatentSpace = ({ data }) => {
           />
         </Row>
         <Row>
-          <Summary paperIDs={filteredPapers.ids} filters={filters} />
+          {/* <Summary paperIDs={filteredPapers.ids} filters={filters} /> */}
         </Row>
       </Column>
     </div>
