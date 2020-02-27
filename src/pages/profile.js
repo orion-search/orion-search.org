@@ -20,9 +20,9 @@ import {
   Column,
   Flex
 } from "../components/layout";
-// import { COUNTRY_OUTPUT_TOPIC } from "../queries/profile";
 import { useOrionData } from "../OrionData.context";
-import { DIVERSITY_BY_COUNTRY } from "../queries";
+import { DIVERSITY_BY_COUNTRY, OUTPUT_TOPIC_COUNTRY } from "../queries";
+import { formatThousands } from "../utils";
 import Scatterplot from "../components/visualizations/Scatterplot";
 
 const Profile = () => {
@@ -73,16 +73,22 @@ const Profile = () => {
           <Row></Row>
           <div>
             <Header>Top Research Areas by Output</Header>
-            {data && (
-              <List
-                values={data.view_diversity_by_country
-                  .map(
-                    t =>
-                      `${t.topic} (${Math.floor(Math.random() * 1000)} papers)`
-                  )
-                  .slice(0, 10)}
-              />
-            )}
+            <Query query={OUTPUT_TOPIC_COUNTRY} variables={{ year, country }}>
+              {({ loading, error, data }) => {
+                if (loading) return null;
+                if (error) return `Error! ${error}`;
+                if (data) console.log(data);
+                const topTopics = data.output_topic_country.slice(0, 10);
+                return (
+                  <List
+                    values={topTopics.map(
+                      t =>
+                        `${t.topic} (${formatThousands(t.total_papers)} papers)`
+                    )}
+                  />
+                );
+              }}
+            </Query>
           </div>
           <div>
             <Header>Related Countries by Research Profile</Header>
@@ -97,6 +103,7 @@ const Profile = () => {
         {data && <Histogram data={data.view_country_output_topic} />}
       </Timeline> */}
         <Column width={1 / 2}>
+          <Header>Diversity of research</Header>
           {data && (
             <Scatterplot
               data={data.view_diversity_by_country}
