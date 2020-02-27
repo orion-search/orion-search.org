@@ -113,6 +113,8 @@ const LatentSpace = ({ data, papers }) => {
   const updateVizAttributes = ({ ids, colors }) => {
     ids.length && particles.current && particles.current.filterPapers(ids);
 
+    if (!colors) return;
+
     if (colors.length) {
       particles.current && particles.current.colorPapers(colors);
     } else {
