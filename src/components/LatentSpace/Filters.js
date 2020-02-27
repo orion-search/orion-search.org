@@ -31,7 +31,7 @@ import {
 
 import CrossFilter from "../../workers/subscribers/crossfilter";
 
-const Filters = ({ ids, papers, dimensions, onChange }) => {
+const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
   const filtersRef = useRef(dimensions.map(d => d.filter));
   const filters_ = new BehaviorSubject();
 
@@ -58,7 +58,7 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
     )
     .subscribe(filters => {
       console.log(filters);
-      console.group("web worker computations");
+      console.groupCollapsed("web worker computations");
       console.time("web worker computations");
       crossFilterSubscriber.current = CrossFilter({
         dimensions: dimensions.map((d, i) => ({
@@ -71,7 +71,19 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
       crossFilterSubscriber.current.compute().then(ids => {
         console.timeEnd("web worker computations");
         console.groupEnd("web worker computations");
-        onChange({ ids });
+        onChange({
+          ids,
+          colors: filters[0].length
+            ? filters[0].flatMap((d, idx) =>
+                dimensions[0].data
+                  .find(e => e[dimensions[0].accessorName] === d)
+                  .ids.map(id => ({
+                    color: colorScheme[idx % colorScheme.length],
+                    id
+                  }))
+              )
+            : []
+        });
         crossFilterSubscriber.current.terminate();
       });
     });
@@ -83,6 +95,7 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
         return (
           <Row key={`${d.title}-row`}>
             <TagName
+              colorScheme={filterIdx === 0 && colorScheme}
               dataset={d.data.map(p => d.accessor(p))}
               placeholder={d.placeholder}
               title={d.title}

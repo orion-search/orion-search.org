@@ -112,7 +112,12 @@ const LatentSpace = ({ data, papers }) => {
 
   const updateVizAttributes = ({ ids, colors }) => {
     ids.length && particles.current && particles.current.filterPapers(ids);
-    // colors.length && particles.current && particles.current.colorPapers(colors);
+
+    if (colors.length) {
+      particles.current && particles.current.colorPapers(colors);
+    } else {
+      particles.current && particles.current.resetColors();
+    }
   };
 
   useEffect(() => {
@@ -135,11 +140,13 @@ const LatentSpace = ({ data, papers }) => {
       /> */}
       <Column width={1 / 8}>
         <Filters
+          colorScheme={schemeCategory10}
           papers={papers}
           ids={layout.current.nodes.map(o => o.id)}
           dimensions={[
             {
               accessor: d => d.country,
+              accessorName: "country",
               component: MultiItemSearch,
               data: papers.byCountry,
               filter: [],
@@ -148,6 +155,7 @@ const LatentSpace = ({ data, papers }) => {
             },
             {
               accessor: d => d.name,
+              accessorName: "name",
               component: MultiItemSearch,
               data: papers.byTopic,
               filter: [],
