@@ -4,7 +4,7 @@
 import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 // eslint-disable-next-line import/no-webpack-loader-syntax
-import Worker from "workerize-loader!./workers/d3-force-worker";
+import Worker from "workerize-loader!../d3-force-worker";
 
 /**
  * Takes in a, non-hierarchical weighted graph

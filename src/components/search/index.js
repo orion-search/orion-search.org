@@ -67,6 +67,11 @@ export const MultiItemSearch = ({
   const [focusedSelection, setFocusedSelection] = useState(null);
   const [suggestions, setSuggestions] = useState(null);
   const [selections, setSelections] = useState([]);
+
+  // we use this flag so as not to invoke the callback immediately
+  // through the effect
+  const isInitialMount = useRef(true);
+
   const [search, setSearch] = useState("");
 
   const onSearchInputChange = e => {
@@ -103,11 +108,19 @@ export const MultiItemSearch = ({
 
   useEffect(() => {
     if (focusedSelection) {
-      onChange([focusedSelection]);
+      // onChange([focusedSelection]);
+      onHover([focusedSelection]);
     } else {
-      onChange(selections);
+      // console.log("changing");
+
+      // no callback on first useState
+      if (isInitialMount.current) {
+        isInitialMount.current = false;
+      } else {
+        onChange(selections);
+      }
     }
-  }, [selections, focusedSelection]);
+  }, [selections, focusedSelection, onChange]);
 
   return (
     <Search
@@ -116,6 +129,15 @@ export const MultiItemSearch = ({
       placeholder={placeholder}
       title={title}
     >
+      {suggestions && search !== "" && (
+        // <DarkenBounds>
+        <Suggestions
+          values={suggestions}
+          selected={selections}
+          onClick={onSuggestionClick}
+        />
+        // </DarkenBounds>
+      )}
       {selections.length > 0 && (
         <Selections
           colorScheme={colorScheme}
@@ -125,15 +147,6 @@ export const MultiItemSearch = ({
           onMouseOut={onSelectionMouseOut}
           values={selections}
         />
-      )}
-      {suggestions && search !== "" && (
-        // <DarkenBounds>
-        <Suggestions
-          values={suggestions}
-          selected={selections}
-          onClick={onSuggestionClick}
-        />
-        // </DarkenBounds>
       )}
     </Search>
   );

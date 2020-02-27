@@ -85,7 +85,6 @@ export const PageLayout = ({ children, match, ...props }) => {
         >
           Orion Search Engine v0.0.1
         </div>
-        {console.log(useLocation())}
 
         {/* @todo Breadcrumbs is just a dummy value for correct flex alignment  */}
         <Breadcrumbs values={[]} />
