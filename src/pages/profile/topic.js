@@ -51,7 +51,7 @@ const TopicProfile = () => {
           <Row>
             <div>
               <Dropdown
-                values={["2019", "2018", "2017", "2016"]}
+                values={[2019, 2018, 2017, 2016]}
                 selected={year}
                 onChange={e => setYear(e.target.value)}
               />

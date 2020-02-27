@@ -49,7 +49,7 @@ const CountryProfile = () => {
             <div>
               {country} produced <strong>xxx</strong> papers in{" "}
               <Dropdown
-                values={["2019", "2018", "2017", "2016"]}
+                values={[2019, 2018, 2017, 2016]}
                 selected={year}
                 onChange={e => setYear(e.target.value)}
               />
