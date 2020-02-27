@@ -16,6 +16,7 @@
  * @todo compute ID intersections on web-worker
  * @todo investigate the use of https://github.com/LeetCode-OpenSource/rxjs-hooks
  * @todo figure out distinctUntilChanged operators in order to de-dupe operations on identical fukter sets
+ * @todo find way to combine filters_ with filtersHover_
  */
 
 import React, { useRef } from "react";
@@ -31,9 +32,10 @@ import {
 
 import CrossFilter from "../../workers/subscribers/crossfilter";
 
-const Filters = ({ ids, papers, dimensions, onChange }) => {
+const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
   const filtersRef = useRef(dimensions.map(d => d.filter));
   const filters_ = new BehaviorSubject();
+  const filtersHover_ = new BehaviorSubject();
 
   const crossFilterSubscriber = useRef(null);
 
@@ -41,6 +43,35 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
     filtersRef.current[filterIdx] = value;
     filters_.next(filtersRef.current);
   };
+
+  const onFilterComponentHover = ({ filterIdx, _ }) => value => {
+    filtersRef.current[filterIdx] = value;
+    filtersHover_.next(filtersRef.current);
+  };
+
+  const spawnIntersectionWorker = filters => {
+    return CrossFilter({
+      dimensions: dimensions.map((d, i) => ({
+        accessorName: i === 0 ? "country" : "name",
+        data: d.data,
+        filter: filters[i]
+      }))
+    });
+  };
+
+  filtersHover_.pipe(skip(1)).subscribe(filters => {
+    crossFilterSubscriber.current = spawnIntersectionWorker(filters);
+
+    crossFilterSubscriber.current.compute().then(ids => {
+      console.timeEnd("web worker computations");
+      console.groupEnd("web worker computations");
+      onChange({
+        ids,
+        colors: null
+      });
+      crossFilterSubscriber.current.terminate();
+    });
+  });
 
   filters_
     .pipe(
@@ -58,20 +89,27 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
     )
     .subscribe(filters => {
       console.log(filters);
-      console.group("web worker computations");
+      console.groupCollapsed("web worker computations");
       console.time("web worker computations");
-      crossFilterSubscriber.current = CrossFilter({
-        dimensions: dimensions.map((d, i) => ({
-          accessorName: i === 0 ? "country" : "name",
-          data: d.data,
-          filter: filters[i]
-        }))
-      });
+
+      crossFilterSubscriber.current = spawnIntersectionWorker(filters);
 
       crossFilterSubscriber.current.compute().then(ids => {
         console.timeEnd("web worker computations");
         console.groupEnd("web worker computations");
-        onChange({ ids });
+        onChange({
+          ids,
+          colors: filters[0].length
+            ? filters[0].flatMap((d, idx) =>
+                dimensions[0].data
+                  .find(e => e[dimensions[0].accessorName] === d)
+                  .ids.map(id => ({
+                    color: colorScheme[idx % colorScheme.length],
+                    id
+                  }))
+              )
+            : []
+        });
         crossFilterSubscriber.current.terminate();
       });
     });
@@ -83,10 +121,12 @@ const Filters = ({ ids, papers, dimensions, onChange }) => {
         return (
           <Row key={`${d.title}-row`}>
             <TagName
+              colorScheme={filterIdx === 0 && colorScheme}
               dataset={d.data.map(p => d.accessor(p))}
               placeholder={d.placeholder}
               title={d.title}
               onChange={onFilterComponentChange({ filterIdx })}
+              onHover={onFilterComponentHover({ filterIdx })}
             />
           </Row>
         );

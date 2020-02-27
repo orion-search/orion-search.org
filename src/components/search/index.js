@@ -108,7 +108,8 @@ export const MultiItemSearch = ({
 
   useEffect(() => {
     if (focusedSelection) {
-      onChange([focusedSelection]);
+      // onChange([focusedSelection]);
+      onHover([focusedSelection]);
     } else {
       // console.log("changing");
 

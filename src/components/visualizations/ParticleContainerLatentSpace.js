@@ -140,6 +140,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.opacity.needsUpdate = true;
   }
 
+  // takes an array of {color, id}
   colorPapers(papers) {
     console.groupCollapsed("Updating color attributes");
     console.time("Updating color attributes");
@@ -156,9 +157,25 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       colors[idx3 + 1] = color.g;
       colors[idx3 + 2] = color.b;
     });
+
     console.timeEnd("Updating color attributes");
-    console.groupEnd("Updating attributes for filterPapers");
+    console.groupEnd("Updating color attributes");
     this.geometry.attributes.customColor.needsUpdate = true;
+  }
+
+  resetColors() {
+    console.groupCollapsed("Resetting color attributes");
+    console.time("Resetting color attributes");
+    const colors = this.geometry.attributes.customColor.array;
+    const color = new THREE.Color();
+    color.set(0xffffff);
+    for (let i = 0; i < colors.length; i += 3) {
+      colors[i] = color.r;
+      colors[i + 1] = color.g;
+      colors[i + 2] = color.b;
+    }
+    console.timeEnd("Resetting color attributes");
+    console.groupEnd("Resetting color attributes");
   }
 
   // updateGeometry({ nodes }) {
