@@ -12,8 +12,7 @@ import { schemeCategory10 } from "d3";
 
 import { ParticleContainerLatentSpace } from "../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../renderer";
-// import { PAPER_CITATIONS } from "../../queries";
-// import { useOrionData } from "../../OrionData.context";
+import { PAPER_CITATIONS } from "../../queries";
 
 const LatentSpace = ({ data, papers }) => {
   const canvasRef = useRef(null);
@@ -37,44 +36,44 @@ const LatentSpace = ({ data, papers }) => {
   });
 
   // @todo memoization is not working for some reason
-  const filteredPapers = useMemo(() => {
-    if (!particles.current) return;
-    console.groupCollapsed("Filtering");
-    console.time("Filtering ID");
-    console.time("filteredByCountry");
-    const filteredByCountry = new Set(
-      p(papers.byCountry, filters.countries, d => d.country)
-    );
-    console.timeEnd("filteredByCountry");
-    console.time("filteredByTopic");
-    const filteredByTopic = new Set(
-      p(papers.byTopic, filters.topics, d => d.name)
-    );
-    console.timeEnd("filteredByTopic");
+  // const filteredPapers = useMemo(() => {
+  //   if (!particles.current) return;
+  //   console.groupCollapsed("Filtering");
+  //   console.time("Filtering ID");
+  //   console.time("filteredByCountry");
+  //   const filteredByCountry = new Set(
+  //     p(papers.byCountry, filters.countries, d => d.country)
+  //   );
+  //   console.timeEnd("filteredByCountry");
+  //   console.time("filteredByTopic");
+  //   const filteredByTopic = new Set(
+  //     p(papers.byTopic, filters.topics, d => d.name)
+  //   );
+  //   console.timeEnd("filteredByTopic");
 
-    console.time("filteredIntersection");
-    var intersect = new Set();
-    for (var x of filteredByCountry)
-      if (filteredByTopic.has(x)) intersect.add(x);
-    console.timeEnd("filteredIntersection");
-    console.timeEnd("Filtering ID");
-    console.groupEnd("Filtering");
+  //   console.time("filteredIntersection");
+  //   var intersect = new Set();
+  //   for (var x of filteredByCountry)
+  //     if (filteredByTopic.has(x)) intersect.add(x);
+  //   console.timeEnd("filteredIntersection");
+  //   console.timeEnd("Filtering ID");
+  //   console.groupEnd("Filtering");
 
-    return {
-      ids: [...intersect],
-      colors: c(papers.byCountry, filters.countries, d => d.country)
-    };
-    // return [...intersect];
-  }, [filters, papers.byCountry, papers.byTopic]);
+  //   return {
+  //     ids: [...intersect],
+  //     colors: c(papers.byCountry, filters.countries, d => d.country)
+  //   };
+  //   // return [...intersect];
+  // }, [filters, papers.byCountry, papers.byTopic]);
 
-  useEffect(() => {
-    console.groupCollapsed("Particle Viz Attribute Update");
-    console.time("updating particle viz attributes");
-    particles.current && particles.current.filterPapers(filteredPapers.ids);
-    particles.current && particles.current.colorPapers(filteredPapers.colors);
-    console.timeEnd("updating particle viz attributes");
-    console.groupEnd("Particle Viz Attribute Update");
-  }, [filters, filteredPapers]);
+  // useEffect(() => {
+  //   console.groupCollapsed("Particle Viz Attribute Update");
+  //   console.time("updating particle viz attributes");
+  //   particles.current && particles.current.filterPapers(filteredPapers.ids);
+  //   particles.current && particles.current.colorPapers(filteredPapers.colors);
+  //   console.timeEnd("updating particle viz attributes");
+  //   console.groupEnd("Particle Viz Attribute Update");
+  // }, [filters, filteredPapers]);
 
   // return ids
   function p(data = [], include = [], accessor = id => id) {
@@ -111,6 +110,11 @@ const LatentSpace = ({ data, papers }) => {
     });
   }
 
+  const updateVizAttributes = ({ ids, colors }) => {
+    ids.length && particles.current && particles.current.filterPapers(ids);
+    // colors.length && particles.current && particles.current.colorPapers(colors);
+  };
+
   useEffect(() => {
     console.log("new particle container");
     particles.current = new ParticleContainerLatentSpace({
@@ -131,7 +135,6 @@ const LatentSpace = ({ data, papers }) => {
       /> */}
       <Column width={1 / 8}>
         <Filters
-          filters={filters}
           papers={papers}
           ids={layout.current.nodes.map(o => o.id)}
           dimensions={[
@@ -139,6 +142,7 @@ const LatentSpace = ({ data, papers }) => {
               accessor: d => d.country,
               component: MultiItemSearch,
               data: papers.byCountry,
+              filter: [],
               placeholder: "Search by Country...",
               title: "Country"
             },
@@ -146,38 +150,13 @@ const LatentSpace = ({ data, papers }) => {
               accessor: d => d.name,
               component: MultiItemSearch,
               data: papers.byTopic,
+              filter: [],
               placeholder: "Search by Topic...",
               title: "Topic"
             }
           ]}
+          onChange={updateVizAttributes}
         />
-        <Row>
-          <MultiItemSearch
-            colorScheme={schemeCategory10}
-            dataset={papers.byCountry.map(p => p.country)}
-            onChange={countries =>
-              setFilters({
-                ...filters,
-                countries
-              })
-            }
-            placeholder={"Search by country..."}
-            title={"Country"}
-          />
-        </Row>
-        <Row>
-          <MultiItemSearch
-            dataset={papers.byTopic.map(p => p.name)}
-            onChange={topics =>
-              setFilters({
-                ...filters,
-                topics
-              })
-            }
-            title={"Topic"}
-            placeholder={"Search by topic..."}
-          />
-        </Row>
         <Row>
           {/* <Summary paperIDs={filteredPapers.ids} filters={filters} /> */}
         </Row>

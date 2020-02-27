@@ -1,87 +1,84 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
-import { useQuery } from "@apollo/react-hooks";
+/**
+ * This component takes in a data structure of dimensions,
+ * alongside their respective filter arrays and renders
+ * provided components for each filtering type.
+ *
+ * At the moment only MultiItemSearch filter components are supported,
+ * but in the future it would make sense to develop Range-like filtering
+ * for numerical filtering of eg. citations.
+ *
+ * Using rxjs observables, we throttle hover interactions on filters
+ * and, at the end of each emission, the filter stack is passed to
+ * a web wowrker to compute the intersection of paper IDs, so the UI
+ * doesn't freeze
+ *
+ * @todo debounce hover interactions
+ * @todo compute ID intersections on web-worker
+ * @todo investigate the use of https://github.com/LeetCode-OpenSource/rxjs-hooks
+ * @todo figure out distinctUntilChanged operators in order to de-dupe operations on identical fukter sets
+ */
 
-import { useOrionData } from "../../OrionData.context";
-import { MultiItemSearch } from "../search";
+import React, { useRef } from "react";
+
 import { Row } from "../layout";
 
-import { from, forkJoin } from "rxjs";
-import { filter, merge, scan, distinct, reduce, map } from "rxjs/operators";
+import { BehaviorSubject } from "rxjs";
+import {
+  throttleTime,
+  skip
+  // distinctUntilChanged
+} from "rxjs/operators";
 
 import CrossFilter from "../../workers/subscribers/crossfilter";
 
-/**
- takes different data frames, filters the intersection and gives back the node indices
+const Filters = ({ ids, papers, dimensions, onChange }) => {
+  const filtersRef = useRef(dimensions.map(d => d.filter));
+  const filters_ = new BehaviorSubject();
 
- compute the filter stack for enter/hover interactions
+  const crossFilterSubscriber = useRef(null);
 
- @todo debounce hover interactions
- @todo compute ID intersections on web-worker
-*/
-const Filters = ({ filters, ids, papers, dimensions }) => {
-  const [filterState, setFilterState] = useState(filters);
-  const prevFiltersRef = useRef();
+  const onFilterComponentChange = ({ filterIdx, _ }) => value => {
+    filtersRef.current[filterIdx] = value;
+    filters_.next(filtersRef.current);
+  };
 
-  const crossFilterSubscriber = useRef(
-    new CrossFilter({
-      dimensions: dimensions.map((d, i) => ({
-        accessorName: i === 0 ? "country" : "name",
-        data: d.data,
-        filter: i === 0 ? filters.countries : filters.topics
-      }))
-    })
-  );
-  crossFilterSubscriber.current.compute().then(d => {
-    console.log("web worker done", d);
-  });
-
-  console.log(filters);
-  // this hook keeps track of previous state
-  useEffect(() => {
-    prevFiltersRef.current = filterState;
-  });
-
-  console.time("transducer");
-
-  // what happens in case of empty filter?
-  const idsByCountry$ = from(filters.countries).pipe(
-    reduce(
-      (acc, country) => [
-        ...acc,
-        ...papers.byCountry.find(n => n.country === country).ids
-      ],
-      []
+  filters_
+    .pipe(
+      // don't emit provided filter props
+      skip(1),
+      throttleTime(1000)
+      // pairwise()
+      // distinctUntilChanged((prev, current) => {
+      //   console.log(prev, current);
+      //   for (let i = 0; i < prev.length; i++) {
+      //     if (prev[i].toString() !== current[i].toString()) return false;
+      //   }
+      //   return true;
+      // })
     )
-  );
+    .subscribe(filters => {
+      console.log(filters);
+      console.group("web worker computations");
+      console.time("web worker computations");
+      crossFilterSubscriber.current = CrossFilter({
+        dimensions: dimensions.map((d, i) => ({
+          accessorName: i === 0 ? "country" : "name",
+          data: d.data,
+          filter: filters[i]
+        }))
+      });
 
-  // what happens in case of empty filter?
-  const idsByTopic$ = from(filters.topics).pipe(
-    reduce(
-      (acc, topic) => [
-        ...acc,
-        ...papers.byTopic.find(n => n.name === topic).ids
-      ],
-      []
-    )
-  );
-
-  forkJoin(idsByCountry$, idsByTopic$).subscribe(papers => {
-    // @todo merge distinct array elements
-
-    console.timeEnd("transducer");
-  });
-
-  // const allFiltered = merge(idsByCountry$, idsByTopic$)
-
-  // idsByCountry$.subscribe(papers => {
-  //   console.log(papers);
-  //   console.timeEnd("transducer");
-  // });
-  // console.log(r);
+      crossFilterSubscriber.current.compute().then(ids => {
+        console.timeEnd("web worker computations");
+        console.groupEnd("web worker computations");
+        onChange({ ids });
+        crossFilterSubscriber.current.terminate();
+      });
+    });
 
   return (
     <>
-      {dimensions.map(d => {
+      {dimensions.map((d, filterIdx) => {
         const TagName = d.component;
         return (
           <Row key={`${d.title}-row`}>
@@ -89,6 +86,7 @@ const Filters = ({ filters, ids, papers, dimensions }) => {
               dataset={d.data.map(p => d.accessor(p))}
               placeholder={d.placeholder}
               title={d.title}
+              onChange={onFilterComponentChange({ filterIdx })}
             />
           </Row>
         );
