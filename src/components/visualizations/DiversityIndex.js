@@ -1,6 +1,7 @@
 import { scaleLinear, extent, select, axisBottom, axisLeft } from "d3";
 import * as THREE from "three";
 
+import { clamp } from "../../utils";
 import Renderer2D from "./Renderer2D";
 
 class DiversityIndex extends Renderer2D {
@@ -14,7 +15,12 @@ class DiversityIndex extends Renderer2D {
 
     this.data = data;
     this.draw();
+
     this.initScrollListeners();
+    this.bbox = {
+      max: new THREE.Box3().setFromObject(this.scene).max,
+      min: new THREE.Box3().setFromObject(this.scene).min
+    };
 
     this.animate = this.animate.bind(this);
     this.animate();
@@ -34,12 +40,12 @@ class DiversityIndex extends Renderer2D {
 
   scroll(yDelta = 0) {
     this.scrollTo(this.camera.top + yDelta);
-    // const yOffset = yDelta
   }
 
-  scrollTo(yOffset = 0) {
-    this.camera.top = yOffset > 0 ? yOffset : 0;
-    this.camera.bottom = (yOffset > 0 ? yOffset : 0) + this.height;
+  scrollTo(yPos = 0) {
+    const yOffset = clamp(yPos, this.bbox.min.y, this.bbox.max.y);
+    this.camera.top = yOffset;
+    this.camera.bottom = yOffset + this.height;
     this.camera.updateProjectionMatrix();
   }
 
@@ -75,7 +81,8 @@ class DiversityIndex extends Renderer2D {
   get layout() {
     return {
       margins: {
-        top: 40
+        top: 40,
+        bottom: 100
       },
       labels: {
         width: 100
