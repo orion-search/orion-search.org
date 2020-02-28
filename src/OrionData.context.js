@@ -1,9 +1,15 @@
-import React, { useRef, useState, useContext, createContext } from "react";
-// import { useQuery } from "@apollo/react-hooks";
+import React, {
+  useRef,
+  useState,
+  useContext,
+  createContext,
+  useEffect
+} from "react";
+import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
 
 import LoadingBar from "./components/loading-bar";
-// import { SEED_PAPER_COUNTRY, SEED_PAPER_TOPICS } from "./queries";
+import { TOP_TOPICS } from "./queries";
 import papersByCountry from "./data/paper_country.csv";
 import papersByTopic from "./data/paper_topics.csv";
 
@@ -18,6 +24,17 @@ export const OrionDataProvider = ({ children }) => {
       byTopic: null
     }
   });
+
+  const { data: topics, loading } = useQuery(TOP_TOPICS);
+
+  useEffect(() => {
+    if (loading) return;
+
+    data.current = {
+      ...data.current,
+      topics: topics.view_top_topics
+    };
+  }, [loading, topics]);
 
   switch (process.env.NODE_ENV) {
     case "development":
@@ -36,40 +53,32 @@ export const OrionDataProvider = ({ children }) => {
           ids: d.paper_ids.split("|").map(i => +i)
         }))
       ]).then(([byCountry, byTopic], error) => {
-        data.current.papers = {
-          byCountry,
-          byTopic
+        data.current = {
+          ...data.current,
+          papers: {
+            byCountry,
+            byTopic
+          }
         };
-        setReady(true);
+        // data.current.papers = {
+        //   byCountry,
+        //   byTopic
+        // };
+        // setReady(true);
       });
       break;
     default:
       break;
   }
 
-  // const {
-  //   data: paperCountryData,
-  //   error: paperCountryError,
-  //   loading: paperCountryLoading
-  // } = useQuery(SEED_PAPER_COUNTRY);
-
-  // const {
-  //   data: paperTopicData,
-  //   error: paperTopicError,
-  //   loading: paperTopicLoading
-  // } = useQuery(SEED_PAPER_TOPICS);
-
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV === "development") return;
-  //   console.log(paperCountryData, paperTopicData);
-  //   if (paperCountryData && paperTopicData) {
-  //     data.current = {
-  //       country: paperCountryData,
-  //       topic: paperTopicData
-  //     };
-  //     setReady(true);
-  //   }
-  // }, [paperCountryData, paperTopicData, paperCountryError, paperTopicError]);
+  /**
+   * @todo find a better way to merge useQuery and CSVs
+   */
+  useEffect(() => {
+    if (data.current.topics && data.current.papers) {
+      setReady(true);
+    }
+  });
 
   return (
     <OrionDataContext.Provider value={data.current}>

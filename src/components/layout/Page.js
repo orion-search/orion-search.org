@@ -60,7 +60,7 @@ const navURLs = [
 export const PageLayout = ({ children, match, ...props }) => {
   const location = useLocation().pathname;
   return (
-    <PageLayoutWrapper>
+    <PageLayoutWrapper {...props}>
       <NavBarWrapper>
         <div
           css={css`
