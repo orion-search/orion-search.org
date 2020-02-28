@@ -1,7 +1,7 @@
 /** @jsx jsx */
 import React, { useState, useRef, useEffect } from "react";
 import { css, jsx } from "@emotion/core";
-import { useOrionData } from "../../OrionData.context";
+// import { useOrionData } from "../../OrionData.context";
 
 import { Row } from "../../components/layout";
 import Dropdown from "../../components/dropdown";
@@ -28,48 +28,37 @@ const ControlPanel = ({ views, currentView, onChangeView = () => {} }) => {
         selected={views[currentView]}
         onChange={onChangeView}
       />
+      <Dropdown
+        values={[2016, 2017, 2018, 2019]}
+        selected={2019}
+        // onChange={onChangeView}
+      />
       {/* <Legend /> */}
     </Row>
   );
 };
 
-const DiversityIndex = ({ topics }) => {
+const DiversityIndex = ({ data }) => {
   const currentView = useState(VIEW_BY_TOPIC);
   const canvasRef = useRef(null);
   const viz = useRef(null);
 
   useEffect(() => {
     if (!canvasRef.current) return;
-    const dpr = window.devicePixelRatio || 1;
 
-    const viewportHeight = window.innerHeight - canvasRef.current.offsetTop;
-
-    // canvasRef.current.height = window.innerHeight - canvasRef.current.offsetTop;
     canvasRef.current.style.height = `${window.innerHeight -
       canvasRef.current.offsetTop}px`;
 
-    const rect = canvasRef.current.getBoundingClientRect();
-
-    // canvasRef.current.height = rect.height * dpr;
-    // canvasRef.current.width = rect.width * dpr;
-
-    // const ctx = canvasRef.current.getContext("2d");
-
-    // viz.current = DiversityIndexVisualization({
-    //   ctx
-    // });
-    // viz.current.draw();
-    console.log("hello");
     viz.current = new DiversityIndexVisualization({
-      canvas: canvasRef.current
+      canvas: canvasRef.current,
+      data
     });
     viz.current.draw();
   }, [
-    canvasRef
+    canvasRef,
+    data
     //size
   ]);
-
-  console.log(useOrionData());
 
   return (
     <>

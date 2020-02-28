@@ -26,3 +26,15 @@ export const DIVERSITY_BY_TOPIC = gql`
     }
   }
 `;
+
+export const DIVERSITY_TOP_TOPICS = gql`
+  query diversityTopTopics($topics: [String!]) {
+    view_diversity_by_country(where: { topic: { _in: $topics } }) {
+      country
+      diversity: shannon_diversity
+      year
+      female_share
+      topic
+    }
+  }
+`;
