@@ -50,8 +50,8 @@ const DiversityIndex = ({ topics }) => {
 
     const rect = canvasRef.current.getBoundingClientRect();
 
-    canvasRef.current.height = rect.height * dpr;
-    canvasRef.current.width = rect.width * dpr;
+    // canvasRef.current.height = rect.height * dpr;
+    // canvasRef.current.width = rect.width * dpr;
 
     // const ctx = canvasRef.current.getContext("2d");
 

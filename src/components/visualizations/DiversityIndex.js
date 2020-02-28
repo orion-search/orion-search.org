@@ -3,26 +3,14 @@ import * as THREE from "three";
 
 import Renderer2D from "./Renderer2D";
 
-// export const DiversityIndex = function({ ctx, data }) {
-//   const {clientWidth, clientHeight} = ctx.canvas;
-
-//   return {
-//     scroll: () => {},
-
-//     draw: () => {
-//       ctx.fillStyle = "white";
-//       ctx.fillRect(0, 0, 100, 100);
-//       ctx.fillRect(100, 400, 100, 100);
-//       ctx.fillRect(200, 400, 100, 400);
-//       ctx.fillRect(200, 400, 100, 400);
-//       console.log(ctx.canvas.clientWidth, ctx.canvas.clientHeight);
-//     }
-//   };
-// };
-
 class DiversityIndex extends Renderer2D {
   constructor({ canvas, data }) {
     super({ canvas });
+
+    this.groups = {
+      categories: new THREE.Group(),
+      points: new THREE.Group()
+    };
 
     this.data = data;
     this.draw();
@@ -65,8 +53,8 @@ class DiversityIndex extends Renderer2D {
     for (let i = 0; i < 1000; i++) {
       pointsGeometry.vertices.push(
         new THREE.Vector3(
-          this.width * 0.33 + Math.random() * this.width * 0.66,
-          ((i % 100) / 10) * this.height,
+          this.width * 0.2 + Math.random() * this.width * 0.8,
+          ((i % 100) / 10) * this.height + Math.random() * 10,
           0
         )
       );
@@ -80,7 +68,8 @@ class DiversityIndex extends Renderer2D {
       vertexColors: THREE.VertexColors
     });
 
-    this.scene.add(new THREE.Points(pointsGeometry, pointsMaterial));
+    this.groups.points.add(new THREE.Points(pointsGeometry, pointsMaterial));
+    this.scene.add(this.groups.points);
   }
 
   get layout() {
