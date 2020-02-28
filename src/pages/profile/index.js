@@ -14,6 +14,7 @@ const Profile = () => {
     <PageLayout
       css={css`
         // height: 100vh;
+        padding-bottom: 0;
       `}
     >
       <Switch>

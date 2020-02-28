@@ -26,6 +26,7 @@ class DiversityIndex extends Renderer2D {
 
     this.data = data;
     this.draw();
+    this.initScrollListeners();
 
     this.animate = this.animate.bind(this);
     this.animate();
@@ -36,9 +37,22 @@ class DiversityIndex extends Renderer2D {
     this.render();
   }
 
-  scroll(yOffset = 0) {
-    this.camera.top = yOffset;
-    this.camera.bottom = yOffset + this.height;
+  initScrollListeners() {
+    this.canvas.addEventListener("wheel", e => {
+      e.preventDefault();
+      this.scroll(e.deltaY);
+    });
+  }
+
+  scroll(yDelta = 0) {
+    this.scrollTo(this.camera.top + yDelta);
+    // const yOffset = yDelta
+  }
+
+  scrollTo(yOffset = 0) {
+    this.camera.top = yOffset > 0 ? yOffset : 0;
+    this.camera.bottom = (yOffset > 0 ? yOffset : 0) + this.height;
+    this.camera.updateProjectionMatrix();
   }
 
   setScales() {}
