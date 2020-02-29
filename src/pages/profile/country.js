@@ -4,14 +4,20 @@ import { useQuery } from "@apollo/react-hooks";
 import { Query } from "@apollo/react-components";
 import { css, jsx } from "@emotion/core";
 
-import Dropdown from "../../components/dropdown";
-import List from "../../components/list";
+import Dropdown from "../../components/shared/dropdown";
+import List from "../../components/shared/list";
 
-import { Title, Header, Row, Column, Flex } from "../../components/layout";
+import {
+  Title,
+  Header,
+  Row,
+  Column,
+  Flex
+} from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
 import { DIVERSITY_BY_COUNTRY, OUTPUT_TOPIC_COUNTRY } from "../../queries";
 import { formatThousands } from "../../utils";
-import Scatterplot from "../../components/visualizations/Scatterplot";
+import Scatterplot from "../../components/visualizations/scatterplot";
 
 const CountryProfile = () => {
   const countries = useOrionData()

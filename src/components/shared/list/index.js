@@ -6,9 +6,6 @@ const ListItem = styled("li")`
 
   display: flex;
 
-  // flex-grow: 1;
-  // align-items: left;
-
   &:hover {
     text-decoration: underline;
   }
@@ -25,9 +22,7 @@ const Title = styled("div")`
   text-transform: capitalize;
 `;
 
-const Wrapper = styled("div")`
-  // display: flex;
-`;
+const Wrapper = styled("div")``;
 
 export const List = styled("ul")`
   display: flex;
@@ -35,7 +30,6 @@ export const List = styled("ul")`
 
   margin-bottom: ${props => props.theme.spacing.normal};
   padding: 0;
-  // list-style-type: none;
 `;
 
 export default ({ title, values }) => {

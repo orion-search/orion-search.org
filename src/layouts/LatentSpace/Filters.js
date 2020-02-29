@@ -21,7 +21,7 @@
 
 import React, { useRef } from "react";
 
-import { Row } from "../layout";
+import { Row } from "../../components/shared/layout";
 
 import { BehaviorSubject } from "rxjs";
 import {

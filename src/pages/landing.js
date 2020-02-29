@@ -1,9 +1,9 @@
 import React from "react";
 
-import { PageLayout, Row, Column } from "../components/layout";
-import { Title } from "../components/layout";
+import { PageLayout, Row, Column } from "../components/shared/layout";
+import { Title } from "../components/shared/layout";
 
-import { LinkButton } from "../components/button";
+import { LinkButton } from "../components/shared/button";
 
 const Landing = () => {
   return (

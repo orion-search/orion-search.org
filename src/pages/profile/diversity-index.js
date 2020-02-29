@@ -3,9 +3,9 @@ import React, { useState, useRef, useEffect } from "react";
 import { css, jsx } from "@emotion/core";
 // import { useOrionData } from "../../OrionData.context";
 
-import { Row } from "../../components/layout";
-import Dropdown from "../../components/dropdown";
-import DiversityIndexVisualization from "../../components/visualizations/DiversityIndex";
+import { Row } from "../../components/shared/layout";
+import Dropdown from "../../components/shared/dropdown";
+import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 import Diversity from "../diversity";
 
 const VIEWS = ["topics", "countries"];

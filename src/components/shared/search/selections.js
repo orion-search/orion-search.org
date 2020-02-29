@@ -1,7 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
 
-import closeIcon from "../../assets/img/cross.svg";
+import closeIcon from "../../../assets/img/cross.svg";
 
 const Wrapper = styled("div")`
   margin: ${props => props.theme.spacing.small} 0;
