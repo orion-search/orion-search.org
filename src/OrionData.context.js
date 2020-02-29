@@ -12,6 +12,7 @@ import LoadingBar from "./components/shared/loading-bar";
 import { TOP_TOPICS } from "./queries";
 import papersByCountry from "./data/paper_country.csv";
 import papersByTopic from "./data/paper_topics.csv";
+import topTopics from "./data/top_topics.csv";
 
 const OrionDataContext = createContext({});
 
@@ -21,20 +22,25 @@ export const OrionDataProvider = ({ children }) => {
   const data = useRef({
     papers: {
       byCountry: null,
-      byTopic: null
+      byTopic: null,
+      topics: null
     }
   });
 
-  const { data: topics, loading } = useQuery(TOP_TOPICS);
+  // const { data: topics, loading } = useQuery(TOP_TOPICS);
 
-  useEffect(() => {
-    if (loading) return;
+  // useEffect(() => {
+  //   if (loading) return;
 
-    data.current = {
-      ...data.current,
-      topics: topics.view_top_topics
-    };
-  }, [loading, topics]);
+  //   data.current = {
+  //     ...data.current,
+  //     papers: {
+  //       ...data.current.papers
+  //     },
+  //     topics: topics.view_top_topics
+  //   };
+  //   console.log(data.current);
+  // }, [loading, topics]);
 
   switch (process.env.NODE_ENV) {
     case "development":
@@ -51,34 +57,22 @@ export const OrionDataProvider = ({ children }) => {
           level: +d.level,
           frequency: +d.frequency,
           ids: d.paper_ids.split("|").map(i => +i)
-        }))
-      ]).then(([byCountry, byTopic], error) => {
+        })),
+        csv(topTopics)
+      ]).then(([byCountry, byTopic, topics], error) => {
         data.current = {
-          ...data.current,
           papers: {
             byCountry,
             byTopic
-          }
+          },
+          topics
         };
-        // data.current.papers = {
-        //   byCountry,
-        //   byTopic
-        // };
-        // setReady(true);
+        setReady(true);
       });
       break;
     default:
       break;
   }
-
-  /**
-   * @todo find a better way to merge useQuery and CSVs
-   */
-  useEffect(() => {
-    if (data.current.topics && data.current.papers) {
-      setReady(true);
-    }
-  });
 
   return (
     <OrionDataContext.Provider value={data.current}>
