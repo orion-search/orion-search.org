@@ -1,5 +1,4 @@
 import * as THREE from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class Renderer2D {
   constructor({ canvas }) {
@@ -20,8 +19,6 @@ export default class Renderer2D {
       0,
       1
     );
-    // this.controls = new OrbitControls(this.camera, this.canvas);
-    // this.camera.z = 100;
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0c0c0c);

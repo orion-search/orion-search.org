@@ -4,10 +4,16 @@ import { useQuery } from "@apollo/react-hooks";
 import { Query } from "@apollo/react-components";
 import { css, jsx } from "@emotion/core";
 
-import { Title, Header, Row, Column, Flex } from "../../components/layout";
-import Dropdown from "../../components/dropdown";
+import {
+  Title,
+  Header,
+  Row,
+  Column,
+  Flex
+} from "../../components/shared/layout";
+import Dropdown from "../../components/shared/dropdown";
 import { DIVERSITY_BY_TOPIC, TOP_TOPICS } from "../../queries";
-import Scatterplot from "../../components/visualizations/Scatterplot";
+import Scatterplot from "../../components/visualizations/scatterplot";
 
 const TopicProfile = () => {
   const [topic, setTopic] = useState("Bioinformatics");

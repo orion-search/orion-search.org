@@ -8,7 +8,7 @@ import React, {
 import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
 
-import LoadingBar from "./components/loading-bar";
+import LoadingBar from "./components/shared/loading-bar";
 import { TOP_TOPICS } from "./queries";
 import papersByCountry from "./data/paper_country.csv";
 import papersByTopic from "./data/paper_topics.csv";

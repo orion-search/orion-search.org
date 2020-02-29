@@ -1,7 +1,7 @@
 import React from "react";
 
-import { PageLayout } from "../components/layout";
-import { LinkButton } from "../components/button";
+import { PageLayout } from "../components/shared/layout";
+import { LinkButton } from "../components/shared/button";
 
 const Topics = () => {
   return (

@@ -3,8 +3,8 @@ import React, { useState, useRef, useEffect } from "react";
 import styled from "@emotion/styled";
 
 import { Subheader } from "../layout";
-import Suggestions from "./Suggestions";
-import Selections from "./Selections";
+import Suggestions from "./suggestions";
+import Selections from "./selections";
 
 const Wrapper = styled("div")`
   display: flex;

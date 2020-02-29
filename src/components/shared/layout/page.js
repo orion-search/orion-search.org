@@ -4,10 +4,9 @@ import styled from "@emotion/styled";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
-import logo from "../../assets/img/logo.svg";
+import logo from "../../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
-import { Column } from "../layout";
-import { Row } from "./Flex";
+import { Row } from "./flex";
 
 export const PageLayoutWrapper = styled("main")`
   width: 100%;

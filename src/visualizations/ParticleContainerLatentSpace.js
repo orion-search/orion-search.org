@@ -2,8 +2,8 @@ import * as THREE from "three";
 import Renderer3D from "./Renderer3D";
 import { extent } from "d3";
 
-import pointFS from "../../shaders/point.fs.js";
-import pointVS from "../../shaders/point.vs.js";
+import pointFS from "../shaders/point.fs.js";
+import pointVS from "../shaders/point.vs.js";
 
 export class ParticleContainerLatentSpace extends Renderer3D {
   constructor({ layout, canvas }) {

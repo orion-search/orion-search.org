@@ -1,7 +1,7 @@
 import { scaleLinear, extent, scaleOrdinal } from "d3";
 import * as THREE from "three";
 
-import { clamp } from "../../utils";
+import { clamp } from "../utils";
 import Renderer2D from "./Renderer2D";
 
 class DiversityIndex extends Renderer2D {

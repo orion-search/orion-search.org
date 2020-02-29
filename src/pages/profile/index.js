@@ -4,7 +4,7 @@ import { css, jsx } from "@emotion/core";
 import { Route, Switch } from "react-router-dom";
 import { Query } from "@apollo/react-components";
 
-import { PageLayout } from "../../components/layout";
+import { PageLayout } from "../../components/shared/layout";
 import CountryProfile from "./country";
 import TopicProfile from "./topic";
 import DiversityIndex from "./diversity-index";

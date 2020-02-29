@@ -7,8 +7,8 @@ import documentVectors from "../data/doc_vectors.csv";
 
 // import Network from "../components/network";
 // import { ARTICLE_VECTORS } from "../queries";
-import { PageLayout } from "../components/layout";
-import LatentSpace from "../components/LatentSpace/";
+import { PageLayout } from "../components/shared/layout";
+import LatentSpace from "../layouts/LatentSpace";
 import { useOrionData } from "../OrionData.context";
 // import { SharedCanvasProvider } from "../SharedCanvas.context";
 

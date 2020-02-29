@@ -49,7 +49,6 @@ const Timeline = ({ children }) => {
           width={chartSize.width}
           css={css`
             rect.overlay {
-              // stroke: white;
             }
           `}
         >
