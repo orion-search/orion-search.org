@@ -10,7 +10,8 @@ class DiversityIndex extends Renderer2D {
     data,
     xAccessor = d => +d["diversity"],
     yAccessor = d => +d["female_share"],
-    groupBy = d => d["topic"]
+    groupBy = d => d["topic"],
+    filter = d => +d["year"] === 2019
   }) {
     super({ canvas });
 
@@ -90,26 +91,18 @@ class DiversityIndex extends Renderer2D {
 
     let colors = [];
 
-    // for (let i = 0; i < 1000; i++) {
-    //   pointsGeometry.vertices.push(
-    //     new THREE.Vector3(
-    //       this.width * 0.2 + Math.random() * this.layout.pointSegment.width,
-    //       ((i % 100) / 10) * this.height + Math.random() * 10,
-    //       0
-    //     )
-    //   );
-    //   colors.push(new THREE.Color(0xffffff));
-    // }
-    this.data.forEach(d => {
-      pointsGeometry.vertices.push(
-        new THREE.Vector3(
-          this.scales.x(+d["diversity"]),
-          this.scales.category(d["topic"]) - this.scales.y(d["female_share"]),
-          0
-        )
-      );
-      colors.push(new THREE.Color(0xffffff));
-    });
+    this.data
+      .filter(d => +d.year === 2019)
+      .forEach(d => {
+        pointsGeometry.vertices.push(
+          new THREE.Vector3(
+            this.scales.x(+d["diversity"]),
+            this.scales.category(d["topic"]) - this.scales.y(d["female_share"]),
+            0
+          )
+        );
+        colors.push(new THREE.Color(0xffffff));
+      });
     pointsGeometry.colors = colors;
 
     let pointsMaterial = new THREE.PointsMaterial({
