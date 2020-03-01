@@ -1,6 +1,8 @@
 {
   "search.exclude": {
+    "**/data": true,
     "build": true,
+    "LICENSE": true,
     "package-lock.json": true,
     "package.json": true
   }
