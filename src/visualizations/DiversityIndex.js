@@ -8,10 +8,12 @@ class DiversityIndex extends Renderer2D {
   constructor({
     canvas,
     data,
-    xAccessor = d => +d["diversity"],
-    yAccessor = d => +d["female_share"],
+    layout,
+    scales,
+    xFunc = d => +d["diversity"],
+    yFunc = d => +d["female_share"],
     groupBy = d => d["topic"],
-    filter = d => +d["year"] === 2019
+    filterFunc = d => +d["year"] === 2019
   }) {
     super({ canvas });
 
@@ -20,17 +22,20 @@ class DiversityIndex extends Renderer2D {
       points: new THREE.Group()
     };
 
-    this.setScales({
-      data,
-      xAccessor,
-      yAccessor,
-      groupBy
-    });
-
+    this.scales = scales;
+    this.layout = layout;
     this.data = data;
+
+    // this.setScales({
+    //   data,
+    //   xFunc,
+    //   yFunc,
+    //   groupBy
+    // });
+
     this.draw();
 
-    this.initScrollListeners();
+    // this.initScrollListeners();
     this.bbox = {
       max: new THREE.Box3().setFromObject(this.scene).max,
       min: new THREE.Box3().setFromObject(this.scene).min
@@ -45,12 +50,12 @@ class DiversityIndex extends Renderer2D {
     this.render();
   }
 
-  initScrollListeners() {
-    this.canvas.addEventListener("wheel", e => {
-      e.preventDefault();
-      this.scroll(e.deltaY);
-    });
-  }
+  // initScrollListeners() {
+  //   this.canvas.addEventListener("wheel", e => {
+  //     e.preventDefault();
+  //     this.scroll(e.deltaY);
+  //   });
+  // }
 
   scroll(yDelta = 0) {
     this.scrollTo(this.camera.top + yDelta);
@@ -67,24 +72,24 @@ class DiversityIndex extends Renderer2D {
     this.camera.updateProjectionMatrix();
   }
 
-  setScales({ data, xAccessor, groupBy }) {
-    const groups = [...new Set(data.map(d => groupBy(d)))];
+  // setScales({ data, xFunc, groupBy }) {
+  //   const groups = [...new Set(data.map(d => groupBy(d)))];
 
-    this.scales = {
-      x: scaleLinear()
-        .domain(extent(data, d => xAccessor(d)))
-        .range([0, this.layout.pointSegment.width]),
-      y: scaleLinear()
-        .domain([0, 1])
-        .range([this.layout.pointSegment.height, 0]),
-      category: scaleOrdinal(
-        groups,
-        groups.map((g, i) => i * this.layout.margins.perGroup)
-      )
-    };
+  //   this.scales = {
+  //     x: scaleLinear()
+  //       .domain(extent(data, d => xFunc(d)))
+  //       .range([0, this.layout.pointSegment.widthRatio * this.width]),
+  //     y: scaleLinear()
+  //       .domain([0, 1])
+  //       .range([this.layout.pointSegment.height, 0]),
+  //     category: scaleOrdinal(
+  //       groups,
+  //       groups.map((g, i) => i * this.layout.margins.perGroup)
+  //     )
+  //   };
 
-    // compute average here and then sort
-  }
+  //   // compute average here and then sort
+  // }
 
   draw(data) {
     let pointsGeometry = new THREE.Geometry();
@@ -116,22 +121,23 @@ class DiversityIndex extends Renderer2D {
     this.scene.add(this.groups.points);
   }
 
-  get layout() {
-    return {
-      margins: {
-        top: 40,
-        bottom: 200,
-        perGroup: 100
-      },
-      labels: {
-        width: 100
-      },
-      pointSegment: {
-        width: this.width * 0.8,
-        height: 50 // perGroup / 2
-      }
-    };
-  }
+  // get layout() {
+  //   return {
+  //     margins: {
+  //       top: 40,
+  //       bottom: 200,
+  //       perGroup: 100
+  //     },
+  //     labels: {
+  //       width: 100
+  //     },
+  //     pointSegment: {
+  //       width: this.width * 0.8,
+  //       widthRatio: 0.8,
+  //       height: 50 // perGroup / 2
+  //     }
+  //   };
+  // }
 }
 
 export default DiversityIndex;

@@ -7,7 +7,7 @@ import { Query } from "@apollo/react-components";
 import { PageLayout } from "../../components/shared/layout";
 import CountryProfile from "./country";
 import TopicProfile from "./topic";
-import DiversityIndex from "./diversity-index";
+import DiversityIndex from "../../layouts/DiversityIndex";
 import { DIVERSITY_TOP_TOPICS } from "../../queries";
 import { useOrionData } from "../../OrionData.context";
 
