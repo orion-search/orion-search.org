@@ -27,7 +27,6 @@ export default class Renderer2D {
       canvas: this.canvas
     });
     this.renderer.setSize(this.width, this.height);
-    console.log(this.canvas);
 
     this.renderer.setPixelRatio(window.devicePixelRatio);
 

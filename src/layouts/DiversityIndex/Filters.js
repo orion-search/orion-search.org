@@ -19,7 +19,7 @@ const Filters = ({
         width: fit-content;
       `}
     >
-      Explore diversity for{" "}
+      Explore diversity by{" "}
       <Dropdown
         values={groupings}
         selected={groupingAccessor}
