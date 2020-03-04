@@ -113,7 +113,9 @@ const DiversityIndex = ({ data }) => {
           mask-image: linear-gradient(
             to bottom,
             rgba(0, 0, 0, 0),
-            rgba(0, 0, 0, 1) 6%
+            rgba(0, 0, 0, 1) 6%,
+            rgba(0, 0, 0, 1) 94%,
+            rgba(0, 0, 0, 0) 100%
           );
         `}
         ref={canvasContainerRef}
