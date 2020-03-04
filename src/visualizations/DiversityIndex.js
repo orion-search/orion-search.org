@@ -1,6 +1,7 @@
 import * as THREE from "three";
 
 import { clamp } from "../utils";
+import ForceLayout from "../workers/subscribers/force-layout-links";
 import Renderer2D from "./Renderer2D";
 import theme from "../styles";
 
@@ -9,10 +10,10 @@ class DiversityIndex extends Renderer2D {
     super({ canvas });
 
     this.groups = {
-      labels: new THREE.Group(),
       points: new THREE.Group()
     };
 
+    // get access to HUD canvas context
     this.hudCanvas = hudCanvas;
     this.hudCanvas.width = this.width;
     this.hudCanvas.height = this.height;
@@ -20,7 +21,6 @@ class DiversityIndex extends Renderer2D {
     this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
 
     this.scene.add(this.groups.points);
-    this.scene.add(this.groups.labels);
 
     this.initScrollListeners();
     this.animate = this.animate.bind(this);
@@ -29,11 +29,28 @@ class DiversityIndex extends Renderer2D {
 
   animate() {
     requestAnimationFrame(this.animate);
+    this.update();
     this.render();
   }
 
   setData(data) {
-    this.data = data;
+    this.data = data.filter(d => this.scales.filterFunc(d));
+    this.nodes = this.data.map(d => ({
+      x: this.scales.x(this.scales.xFunc(d)),
+      y:
+        this.scales.category(this.scales.groupFunc(d)) +
+        this.scales.y(this.scales.yFunc(d)),
+      r: Math.random() * 5
+    }));
+    const { tick: tickSimulation, tickS, terminate } = ForceLayout({
+      nodes: this.nodes,
+      links: []
+    });
+
+    this.tickS = tickS;
+    this.tickSimulation = tickSimulation;
+    this.terminate && this.terminate();
+    this.terminate = terminate;
   }
 
   setLayout(layout) {
@@ -99,19 +116,17 @@ class DiversityIndex extends Renderer2D {
 
     let colors = [];
 
-    this.data
-      .filter(d => this.scales.filterFunc(d))
-      .forEach(d => {
-        pointsGeometry.vertices.push(
-          new THREE.Vector3(
-            this.scales.x(this.scales.xFunc(d)),
-            this.scales.category(this.scales.groupFunc(d)) +
-              this.scales.y(this.scales.yFunc(d)),
-            0
-          )
-        );
-        colors.push(new THREE.Color(0xffffff));
-      });
+    this.data.forEach(d => {
+      pointsGeometry.vertices.push(
+        new THREE.Vector3(
+          this.scales.x(this.scales.xFunc(d)),
+          this.scales.category(this.scales.groupFunc(d)) +
+            this.scales.y(this.scales.yFunc(d)),
+          0
+        )
+      );
+      colors.push(new THREE.Color(0xffffff));
+    });
     pointsGeometry.colors = colors;
 
     let pointsMaterial = new THREE.PointsMaterial({
@@ -120,7 +135,9 @@ class DiversityIndex extends Renderer2D {
       vertexColors: THREE.VertexColors
     });
 
-    this.groups.points.add(new THREE.Points(pointsGeometry, pointsMaterial));
+    const points = new THREE.Points(pointsGeometry, pointsMaterial);
+
+    this.groups.points.add(points);
     this.groups.points.position.x = this.width * 0.2;
     // this.scene.add(this.groups.points);
 
@@ -128,6 +145,24 @@ class DiversityIndex extends Renderer2D {
       max: new THREE.Box3().setFromObject(this.scene).max,
       min: new THREE.Box3().setFromObject(this.scene).min
     };
+    this.geometry = points;
+  }
+
+  update() {
+    if (this.tickSimulation) {
+      this.tickSimulation(1).then(({ nodes }) => {
+        this.nodes = nodes;
+        // update positions / radii
+        const vertices = this.groups.points.children[0].geometry.vertices;
+        for (var i = 0; i < vertices.length; i++) {
+          vertices[i].x = nodes[i].x;
+          vertices[i].y = nodes[i].y;
+        }
+
+        // @todo use morph target
+        this.groups.points.children[0].geometry.verticesNeedUpdate = true;
+      });
+    }
   }
 }
 
