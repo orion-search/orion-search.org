@@ -1,46 +1,28 @@
-import { scaleLinear, extent, scaleOrdinal } from "d3";
 import * as THREE from "three";
 
 import { clamp } from "../utils";
 import Renderer2D from "./Renderer2D";
+import theme from "../styles";
 
 class DiversityIndex extends Renderer2D {
-  constructor({
-    canvas,
-    data,
-    layout,
-    scales,
-    xFunc = d => +d["diversity"],
-    yFunc = d => +d["female_share"],
-    groupBy = d => d["topic"],
-    filterFunc = d => +d["year"] === 2019
-  }) {
+  constructor({ canvas, hudCanvas }) {
     super({ canvas });
 
     this.groups = {
-      categories: new THREE.Group(),
+      labels: new THREE.Group(),
       points: new THREE.Group()
     };
 
-    this.scales = scales;
-    this.layout = layout;
-    this.data = data;
+    this.hudCanvas = hudCanvas;
+    this.hudCanvas.width = this.width;
+    this.hudCanvas.height = this.height;
+    this.ctx = hudCanvas.getContext("2d");
+    this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
 
-    // this.setScales({
-    //   data,
-    //   xFunc,
-    //   yFunc,
-    //   groupBy
-    // });
+    this.scene.add(this.groups.points);
+    this.scene.add(this.groups.labels);
 
-    this.draw();
-
-    // this.initScrollListeners();
-    this.bbox = {
-      max: new THREE.Box3().setFromObject(this.scene).max,
-      min: new THREE.Box3().setFromObject(this.scene).min
-    };
-
+    this.initScrollListeners();
     this.animate = this.animate.bind(this);
     this.animate();
   }
@@ -50,12 +32,24 @@ class DiversityIndex extends Renderer2D {
     this.render();
   }
 
-  // initScrollListeners() {
-  //   this.canvas.addEventListener("wheel", e => {
-  //     e.preventDefault();
-  //     this.scroll(e.deltaY);
-  //   });
-  // }
+  setData(data) {
+    this.data = data;
+  }
+
+  setLayout(layout) {
+    this.layout = layout;
+  }
+
+  setScales(scales) {
+    this.scales = scales;
+  }
+
+  initScrollListeners() {
+    this.canvas.addEventListener("wheel", e => {
+      e.preventDefault();
+      this.scroll(e.deltaY);
+    });
+  }
 
   scroll(yDelta = 0) {
     this.scrollTo(this.camera.top + yDelta);
@@ -70,39 +64,49 @@ class DiversityIndex extends Renderer2D {
     this.camera.top = yOffset;
     this.camera.bottom = yOffset + this.height;
     this.camera.updateProjectionMatrix();
+
+    // scroll HUD canvas
+    const { a: scaleX, d: scaleY } = this.ctx.getTransform();
+    this.ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+    this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
+    this.ctx.translate(0, -yOffset / scaleY);
+    this.drawLabels();
   }
 
-  // setScales({ data, xFunc, groupBy }) {
-  //   const groups = [...new Set(data.map(d => groupBy(d)))];
+  drawLabels() {
+    const textFont = 12;
+    this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
+    this.scales.category.domain().forEach((category, i) => {
+      let labelBaseline =
+        i * this.layout.pointSegment.height + this.layout.margins.top / 2;
+      this.ctx.fillStyle = "white";
+      this.ctx.font = `bold ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
+      this.ctx.textBaseline = "middle";
 
-  //   this.scales = {
-  //     x: scaleLinear()
-  //       .domain(extent(data, d => xFunc(d)))
-  //       .range([0, this.layout.pointSegment.widthRatio * this.width]),
-  //     y: scaleLinear()
-  //       .domain([0, 1])
-  //       .range([this.layout.pointSegment.height, 0]),
-  //     category: scaleOrdinal(
-  //       groups,
-  //       groups.map((g, i) => i * this.layout.margins.perGroup)
-  //     )
-  //   };
+      this.ctx.fillText(`${category}`, 0, labelBaseline);
 
-  //   // compute average here and then sort
-  // }
+      this.ctx.font = `normal ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
+      this.ctx.fillText(`X papers`, 0, (labelBaseline += textFont));
+    });
+  }
 
-  draw(data) {
+  draw() {
+    for (var i = this.groups.points.children.length - 1; i >= 0; i--) {
+      this.groups.points.remove(this.groups.points.children[i]);
+    }
+
     let pointsGeometry = new THREE.Geometry();
 
     let colors = [];
 
     this.data
-      .filter(d => +d.year === 2019)
+      .filter(d => this.scales.filterFunc(d))
       .forEach(d => {
         pointsGeometry.vertices.push(
           new THREE.Vector3(
-            this.scales.x(+d["diversity"]),
-            this.scales.category(d["topic"]) - this.scales.y(d["female_share"]),
+            this.scales.x(this.scales.xFunc(d)),
+            this.scales.category(this.scales.groupFunc(d)) +
+              this.scales.y(this.scales.yFunc(d)),
             0
           )
         );
@@ -118,26 +122,13 @@ class DiversityIndex extends Renderer2D {
 
     this.groups.points.add(new THREE.Points(pointsGeometry, pointsMaterial));
     this.groups.points.position.x = this.width * 0.2;
-    this.scene.add(this.groups.points);
-  }
+    // this.scene.add(this.groups.points);
 
-  // get layout() {
-  //   return {
-  //     margins: {
-  //       top: 40,
-  //       bottom: 200,
-  //       perGroup: 100
-  //     },
-  //     labels: {
-  //       width: 100
-  //     },
-  //     pointSegment: {
-  //       width: this.width * 0.8,
-  //       widthRatio: 0.8,
-  //       height: 50 // perGroup / 2
-  //     }
-  //   };
-  // }
+    this.bbox = {
+      max: new THREE.Box3().setFromObject(this.scene).max,
+      min: new THREE.Box3().setFromObject(this.scene).min
+    };
+  }
 }
 
 export default DiversityIndex;
