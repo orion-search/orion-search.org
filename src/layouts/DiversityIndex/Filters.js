@@ -17,6 +17,7 @@ const Filters = ({
     <Row
       css={css`
         width: fit-content;
+        margin-bottom: 0;
       `}
     >
       Explore diversity by{" "}
@@ -25,6 +26,7 @@ const Filters = ({
         selected={groupingAccessor}
         onChange={onChangeGrouping}
       />
+      in
       <Dropdown
         values={[2016, 2017, 2018, 2019]}
         selected={year}

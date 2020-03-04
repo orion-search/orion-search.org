@@ -109,6 +109,12 @@ const DiversityIndex = ({ data }) => {
         css={css`
           display: flex;
           position: relative;
+
+          mask-image: linear-gradient(
+            to bottom,
+            rgba(0, 0, 0, 0),
+            rgba(0, 0, 0, 1) 6%
+          );
         `}
         ref={canvasContainerRef}
       >
