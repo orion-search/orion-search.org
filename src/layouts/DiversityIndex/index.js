@@ -93,8 +93,8 @@ const DiversityIndex = ({ data }) => {
     viz.current.setScales(generateScales());
     viz.current.setData(data);
     viz.current.setLayout(layout);
-    viz.current.draw();
     viz.current.drawLabels();
+    viz.current.draw();
   });
 
   return (

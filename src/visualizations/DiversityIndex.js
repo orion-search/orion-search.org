@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import { clamp } from "../utils";
 import Renderer2D from "./Renderer2D";
+import theme from "../styles";
 
 class DiversityIndex extends Renderer2D {
   constructor({ canvas, hudCanvas }) {
@@ -73,12 +74,19 @@ class DiversityIndex extends Renderer2D {
   }
 
   drawLabels() {
+    const textFont = 12;
     this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
     this.scales.category.domain().forEach((category, i) => {
+      let labelBaseline =
+        i * this.layout.pointSegment.height + this.layout.margins.top / 2;
       this.ctx.fillStyle = "white";
-      this.ctx.fontStyle = "Matter 40px";
+      this.ctx.font = `bold ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
       this.ctx.textBaseline = "middle";
-      this.ctx.fillText(`${category}`, 0, i * this.layout.pointSegment.height);
+
+      this.ctx.fillText(`${category}`, 0, labelBaseline);
+
+      this.ctx.font = `normal ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
+      this.ctx.fillText(`X papers`, 0, (labelBaseline += textFont));
     });
   }
 

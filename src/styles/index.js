@@ -7,6 +7,7 @@ const spacingUnit = "rem";
 const spacingBaseSize = 1;
 
 const typeSize = {
+  tiny: `${typeBaseSize * 0.66}${typeUnit}`,
   small: `${typeBaseSize * 0.875}${typeUnit}`,
   normal: `${typeBaseSize}${typeUnit}`,
   large: `${typeBaseSize * 1.125}${typeUnit}`,
