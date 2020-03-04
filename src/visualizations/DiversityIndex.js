@@ -42,7 +42,12 @@ class DiversityIndex extends Renderer2D {
         this.scales.y(this.scales.yFunc(d)),
       r: Math.random() * 5
     }));
-    const { tick: tickSimulation, tickS, terminate } = ForceLayout({
+    const {
+      set: simulationSet,
+      tick: tickSimulation,
+      tickS,
+      terminate
+    } = ForceLayout({
       nodes: this.nodes,
       links: []
     });
@@ -51,6 +56,7 @@ class DiversityIndex extends Renderer2D {
     this.tickSimulation = tickSimulation;
     this.terminate && this.terminate();
     this.terminate = terminate;
+    this.simulationSet = simulationSet;
   }
 
   setLayout(layout) {
@@ -88,6 +94,8 @@ class DiversityIndex extends Renderer2D {
     this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
     this.ctx.translate(0, -yOffset / scaleY);
     this.drawLabels();
+
+    // @todo (optional) if simulation is running do something funky with vy
   }
 
   drawLabels() {
