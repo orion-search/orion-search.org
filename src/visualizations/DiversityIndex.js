@@ -1,14 +1,10 @@
 import * as THREE from "three";
-// import TextSprite from "@seregpie/three.text-sprite";
-// import TextTexture from "@seregpie/three.text-texture";
-import SpriteText from "three-spritetext";
 
 import { clamp } from "../utils";
 import Renderer2D from "./Renderer2D";
-import theme from "../styles";
 
 class DiversityIndex extends Renderer2D {
-  constructor({ canvas, textCanvas }) {
+  constructor({ canvas, hudCanvas }) {
     super({ canvas });
 
     this.groups = {
@@ -16,10 +12,10 @@ class DiversityIndex extends Renderer2D {
       points: new THREE.Group()
     };
 
-    this.textCanvas = textCanvas;
-    this.textCanvas.width = this.width;
-    this.textCanvas.height = this.height;
-    this.ctx = textCanvas.getContext("2d");
+    this.hudCanvas = hudCanvas;
+    this.hudCanvas.width = this.width;
+    this.hudCanvas.height = this.height;
+    this.ctx = hudCanvas.getContext("2d");
     this.ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
 
     this.scene.add(this.groups.points);
@@ -68,22 +64,16 @@ class DiversityIndex extends Renderer2D {
     this.camera.bottom = yOffset + this.height;
     this.camera.updateProjectionMatrix();
 
-    // scroll text canvas
-    this.ctx.setTransform(
-      window.devicePixelRatio || 1,
-      0,
-      0,
-      window.devicePixelRatio || 1,
-      0,
-      0
-    );
-    this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
-    this.ctx.translate(0, -yOffset / 2);
+    // scroll HUD canvas
+    const { a: scaleX, d: scaleY } = this.ctx.getTransform();
+    this.ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
+    this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
+    this.ctx.translate(0, -yOffset / scaleY);
     this.drawLabels();
   }
 
   drawLabels() {
-    this.ctx.clearRect(0, 0, this.textCanvas.width, this.textCanvas.height);
+    this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
     this.scales.category.domain().forEach((category, i) => {
       this.ctx.fillStyle = "white";
       this.ctx.fontStyle = "Matter 40px";

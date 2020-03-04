@@ -1,4 +1,5 @@
 import * as THREE from "three";
+import theme from "../styles";
 // import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class Renderer2D {
@@ -23,13 +24,15 @@ export default class Renderer2D {
     );
 
     this.scene = new THREE.Scene();
-    this.scene.background = new THREE.Color(0x0c0c0c);
+    // this.scene.background = new THREE.Color(0x0c0c0c);
 
     // this.controls = new OrbitControls(this.camera, this.canvas);
 
     this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas
+      canvas: this.canvas,
+      alpha: true
     });
+    this.renderer.setClearColor(theme.colors.black);
     this.renderer.setSize(this.width, this.height);
 
     this.renderer.setPixelRatio(window.devicePixelRatio);

@@ -16,7 +16,7 @@ import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 
 const DiversityIndex = ({ data }) => {
   const canvasRef = useRef(null);
-  const canvasTextRef = useRef(null);
+  const canvasHUDRef = useRef(null);
   const canvasContainerRef = useRef(null);
 
   const viz = useRef(null);
@@ -82,7 +82,7 @@ const DiversityIndex = ({ data }) => {
 
     viz.current = new DiversityIndexVisualization({
       canvas: canvasRef.current,
-      textCanvas: canvasTextRef.current
+      hudCanvas: canvasHUDRef.current
     });
   }, []);
 
@@ -134,7 +134,7 @@ const DiversityIndex = ({ data }) => {
               outline: none;
             }
           `}
-          ref={canvasTextRef}
+          ref={canvasHUDRef}
         />
       </div>
     </>
