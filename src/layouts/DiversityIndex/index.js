@@ -81,7 +81,8 @@ const DiversityIndex = ({ data }) => {
     // canvasRef.current.offsetTop}px`;
 
     viz.current = new DiversityIndexVisualization({
-      canvas: canvasRef.current
+      canvas: canvasRef.current,
+      textCanvas: canvasTextRef.current
     });
   }, []);
 
@@ -113,6 +114,16 @@ const DiversityIndex = ({ data }) => {
       >
         <canvas
           css={css`
+            width: 100%;
+            height: 100%;
+            &:focus {
+              outline: none;
+            }
+          `}
+          ref={canvasRef}
+        />
+        <canvas
+          css={css`
             position: absolute;
             pointer-events: none;
             top: 0;
@@ -124,16 +135,6 @@ const DiversityIndex = ({ data }) => {
             }
           `}
           ref={canvasTextRef}
-        />
-        <canvas
-          css={css`
-            width: 100%;
-            height: 100%;
-            &:focus {
-              outline: none;
-            }
-          `}
-          ref={canvasRef}
         />
       </div>
     </>
