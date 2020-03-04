@@ -1,10 +1,12 @@
 import * as THREE from "three";
+// import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default class Renderer2D {
   constructor({ canvas }) {
     const { width, height } = canvas.getBoundingClientRect();
     this.width = width;
     this.height = height;
+    console.log(this.width, this.height);
 
     this.canvas = canvas;
     this.init();
@@ -17,11 +19,13 @@ export default class Renderer2D {
       0,
       this.height,
       0,
-      1
+      30
     );
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0c0c0c);
+
+    // this.controls = new OrbitControls(this.camera, this.canvas);
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas

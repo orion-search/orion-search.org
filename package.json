@@ -14,6 +14,8 @@
     "@emotion/core": "^10.0.27",
     "@emotion/styled": "^10.0.27",
     "@hot-loader/react-dom": "^16.11.0",
+    "@seregpie/three.text-sprite": "^2.0.0",
+    "@seregpie/three.text-texture": "^2.0.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
@@ -35,7 +37,8 @@
     "react-scripts": "3.3.0",
     "react-use-dimensions": "^1.2.1",
     "rxjs": "^6.5.2",
-    "three": "^0.112.1"
+    "three": "^0.112.1",
+    "three-spritetext": "^1.2.2"
   },
   "eslintConfig": {
     "extends": "react-app"

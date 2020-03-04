@@ -1,3 +1,5 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import React, {
   useRef,
   useDebugValue,
@@ -14,6 +16,9 @@ import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 
 const DiversityIndex = ({ data }) => {
   const canvasRef = useRef(null);
+  const canvasTextRef = useRef(null);
+  const canvasContainerRef = useRef(null);
+
   const viz = useRef(null);
   const canvasWidthRef = useRef(null);
 
@@ -62,14 +67,18 @@ const DiversityIndex = ({ data }) => {
   useLayoutEffect(() => {
     console.log("LAYOUT EFFECT");
     const {
-      width: canvasWidth
+      width: canvasWidth,
+      y: canvasY
       // height: canvasHeight
     } = canvasRef.current.getBoundingClientRect();
+    console.log(canvasWidth);
 
     canvasWidthRef.current = canvasWidth;
 
-    canvasRef.current.style.height = `${window.innerHeight -
-      canvasRef.current.offsetTop}px`;
+    canvasContainerRef.current.style.height = `${window.innerHeight -
+      canvasY}px`;
+    // canvasRef.current.style.height = `${window.innerHeight -
+    // canvasRef.current.offsetTop}px`;
 
     viz.current = new DiversityIndexVisualization({
       canvas: canvasRef.current
@@ -79,11 +88,12 @@ const DiversityIndex = ({ data }) => {
   useEffect(() => {
     console.log("re-drawing");
     if (!viz.current) return;
-    // scales.current = generateScales();
+
     viz.current.setScales(generateScales());
     viz.current.setData(data);
     viz.current.setLayout(layout);
     viz.current.draw();
+    viz.current.drawLabels();
   });
 
   return (
@@ -94,9 +104,38 @@ const DiversityIndex = ({ data }) => {
         year={year}
         groupingAccessor={groupingAccessor}
       />
-      <>
-        <canvas ref={canvasRef} />
-      </>
+      <div
+        css={css`
+          display: flex;
+          position: relative;
+        `}
+        ref={canvasContainerRef}
+      >
+        <canvas
+          css={css`
+            position: absolute;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            &:focus {
+              outline: none;
+            }
+          `}
+          ref={canvasTextRef}
+        />
+        <canvas
+          css={css`
+            width: 100%;
+            height: 100%;
+            &:focus {
+              outline: none;
+            }
+          `}
+          ref={canvasRef}
+        />
+      </div>
     </>
   );
 };
