@@ -111,7 +111,7 @@ class DiversityIndex extends Renderer2D {
       this.ctx.fillText(`${category}`, 0, labelBaseline);
 
       this.ctx.font = `normal ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
-      this.ctx.fillText(`X papers`, 0, (labelBaseline += textFont));
+      this.ctx.fillText(`X papers / Explore`, 0, (labelBaseline += textFont));
     });
   }
 
