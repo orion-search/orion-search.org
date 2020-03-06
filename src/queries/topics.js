@@ -2,6 +2,14 @@
 
 import { gql } from "apollo-boost";
 
+export const TOP_TOPICS = gql`
+  query topTopics {
+    view_top_topics(order_by: { topic: asc }) {
+      topic
+    }
+  }
+`;
+
 export const FIELDS_OF_STUDY = gql`
   query fieldsOfStudy {
     hierarchy: view_child_parent_field_of_study(

@@ -4,10 +4,9 @@ import styled from "@emotion/styled";
 import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
-import logo from "../../assets/img/logo.svg";
+import logo from "../../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
-import { Column } from "../layout";
-import { Row } from "./Flex";
+import { Row } from "./flex";
 
 export const PageLayoutWrapper = styled("main")`
   width: 100%;
@@ -44,6 +43,10 @@ export const NavItem = styled(({ highlighted, ...props }) => (
 
 const navURLs = [
   {
+    to: "/profile",
+    name: "Diversity Index"
+  },
+  {
     to: "/profile/country",
     name: "Country"
   },
@@ -60,7 +63,7 @@ const navURLs = [
 export const PageLayout = ({ children, match, ...props }) => {
   const location = useLocation().pathname;
   return (
-    <PageLayoutWrapper>
+    <PageLayoutWrapper {...props}>
       <NavBarWrapper>
         <div
           css={css`

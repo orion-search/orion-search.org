@@ -1,11 +1,18 @@
-import React, { useRef, useState, useContext, createContext } from "react";
-// import { useQuery } from "@apollo/react-hooks";
+import React, {
+  useRef,
+  useState,
+  useContext,
+  createContext,
+  useEffect
+} from "react";
+import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
 
-import LoadingBar from "./components/loading-bar";
-// import { SEED_PAPER_COUNTRY, SEED_PAPER_TOPICS } from "./queries";
+import LoadingBar from "./components/shared/loading-bar";
+import { TOP_TOPICS } from "./queries";
 import papersByCountry from "./data/paper_country.csv";
 import papersByTopic from "./data/paper_topics.csv";
+import topTopics from "./data/top_topics.csv";
 
 const OrionDataContext = createContext({});
 
@@ -15,9 +22,25 @@ export const OrionDataProvider = ({ children }) => {
   const data = useRef({
     papers: {
       byCountry: null,
-      byTopic: null
+      byTopic: null,
+      topics: null
     }
   });
+
+  // const { data: topics, loading } = useQuery(TOP_TOPICS);
+
+  // useEffect(() => {
+  //   if (loading) return;
+
+  //   data.current = {
+  //     ...data.current,
+  //     papers: {
+  //       ...data.current.papers
+  //     },
+  //     topics: topics.view_top_topics
+  //   };
+  //   console.log(data.current);
+  // }, [loading, topics]);
 
   switch (process.env.NODE_ENV) {
     case "development":
@@ -34,11 +57,15 @@ export const OrionDataProvider = ({ children }) => {
           level: +d.level,
           frequency: +d.frequency,
           ids: d.paper_ids.split("|").map(i => +i)
-        }))
-      ]).then(([byCountry, byTopic], error) => {
-        data.current.papers = {
-          byCountry,
-          byTopic
+        })),
+        csv(topTopics)
+      ]).then(([byCountry, byTopic, topics], error) => {
+        data.current = {
+          papers: {
+            byCountry,
+            byTopic
+          },
+          topics
         };
         setReady(true);
       });
@@ -46,30 +73,6 @@ export const OrionDataProvider = ({ children }) => {
     default:
       break;
   }
-
-  // const {
-  //   data: paperCountryData,
-  //   error: paperCountryError,
-  //   loading: paperCountryLoading
-  // } = useQuery(SEED_PAPER_COUNTRY);
-
-  // const {
-  //   data: paperTopicData,
-  //   error: paperTopicError,
-  //   loading: paperTopicLoading
-  // } = useQuery(SEED_PAPER_TOPICS);
-
-  // useEffect(() => {
-  //   if (process.env.NODE_ENV === "development") return;
-  //   console.log(paperCountryData, paperTopicData);
-  //   if (paperCountryData && paperTopicData) {
-  //     data.current = {
-  //       country: paperCountryData,
-  //       topic: paperTopicData
-  //     };
-  //     setReady(true);
-  //   }
-  // }, [paperCountryData, paperTopicData, paperCountryError, paperTopicError]);
 
   return (
     <OrionDataContext.Provider value={data.current}>

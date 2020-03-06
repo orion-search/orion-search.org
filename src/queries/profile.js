@@ -12,3 +12,18 @@ export const COUNTRY_OUTPUT_TOPIC = gql`
     }
   }
 `;
+
+export const OUTPUT_TOPIC_COUNTRY = gql`
+  query outputByTopicCountry($country: String!, $year: String!) {
+    output_topic_country(
+      where: { country: { _eq: $country }, year: { _eq: $year } }
+      order_by: { total_papers: desc }
+    ) {
+      country
+      year
+      topic: name
+      total_citations
+      total_papers
+    }
+  }
+`;

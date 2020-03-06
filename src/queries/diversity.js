@@ -9,21 +9,32 @@ export const DIVERSITY_BY_COUNTRY = gql`
       diversity: shannon_diversity
       year
       female_share
-      topic: field_of_study_id
     }
   }
 `;
 
 export const DIVERSITY_BY_TOPIC = gql`
-  query diversityByTopic($topic: Int!) {
+  query diversityByTopic($topic: String!, $year: String!) {
     view_diversity_by_country(
-      where: { field_of_study_id: { _eq: $topic }, year: { _eq: "2019" } }
+      where: { topic: { _eq: $topic }, year: { _eq: $year } }
     ) {
       country
       diversity: shannon_diversity
       year
       female_share
-      topic: field_of_study_id
+      topic
+    }
+  }
+`;
+
+export const DIVERSITY_TOP_TOPICS = gql`
+  query diversityTopTopics($topics: [String!]) {
+    view_diversity_by_country(where: { topic: { _in: $topics } }) {
+      country
+      diversity: shannon_diversity
+      year
+      female_share
+      topic
     }
   }
 `;

@@ -19,8 +19,6 @@ const Select = styled("select")`
   font-size: inherit;
   text-transform: inherit;
 
-  // box-sizing: border-box;
-
   padding: ${props => props.theme.spacing.small}
     ${props => props.theme.spacing.normal};
 
@@ -34,7 +32,6 @@ const Select = styled("select")`
   & > option {
     font-weight: normal;
     max-width: 40px;
-    // font-size: ${props => props.theme.type.sizes.small};
     font-size: 10px;
   }
 `;

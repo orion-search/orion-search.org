@@ -5,10 +5,10 @@ import { csv } from "d3";
 import countryOutputData from "../../data/country_output.csv";
 import fieldsOfStudyData from "../../data/field_of_study.csv";
 
-import { AbsoluteCanvas } from "../renderer";
-import Dropdown from "../dropdown";
-import OutputNetworkLayoutManager from "./LayoutManager";
-import { ParticleContainerForce } from "./ParticleContainerForce";
+import { AbsoluteCanvas } from "../shared/renderer";
+import Dropdown from "../shared/dropdown";
+import OutputNetworkLayoutManager from "../../visualizations/LayoutManager";
+import { ParticleContainerForce } from "../../visualizations/ParticleContainerForce";
 
 const HierarchicalViz = () => {
   const canvasRef = useRef(null);

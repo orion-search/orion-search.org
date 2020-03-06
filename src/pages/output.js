@@ -1,6 +1,6 @@
 import React from "react";
 
-import { PageLayout } from "../components/layout";
+import { PageLayout } from "../components/shared/layout";
 import Hierarchical from "../components/visualizations/hierarchical";
 
 const Output = () => {

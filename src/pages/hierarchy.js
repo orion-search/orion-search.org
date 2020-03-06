@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { stratify, pack, select } from "d3";
 
-import { PageLayout } from "../components/layout";
+import { PageLayout } from "../components/shared/layout";
 
 import { FIELDS_OF_STUDY } from "../queries/topics";
 

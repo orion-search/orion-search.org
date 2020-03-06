@@ -8,7 +8,7 @@ import Hierarchy from "./pages/hierarchy";
 import Network from "./pages/network";
 import Landing from "./pages/landing";
 import Output from "./pages/output";
-import Profile from "./pages/profile";
+import Profile from "./pages/profile/";
 import Topics from "./pages/topics";
 
 function App() {
@@ -20,7 +20,8 @@ function App() {
       <Route exact path={["/hierarchy"]} component={Hierarchy} />
       <Route exact path={["/network"]} component={Network} />
       <Route exact path={["/output"]} component={Output} />
-      <Route
+      <Route path={"/profile"} component={Profile} />
+      {/* <Route
         exact
         path={["/profile/country/:countryCode?"]}
         render={({ match }) => {
@@ -41,7 +42,7 @@ function App() {
             <Profile topic={params.topic} match={match} />
           ) : null;
         }}
-      />
+      /> */}
       <Route exact path={["/topics"]} component={Topics} />
     </Switch>
   );
