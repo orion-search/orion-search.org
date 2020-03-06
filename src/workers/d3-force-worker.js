@@ -1,6 +1,13 @@
 /* eslint-env worker */
 /* eslint no-restricted-globals: 0 */
-import { forceSimulation, forceLink, forceCollide, forceManyBody } from "d3";
+import {
+  forceSimulation,
+  forceLink,
+  forceX,
+  forceY,
+  forceCollide,
+  forceManyBody
+} from "d3";
 
 const link = forceLink();
 const simulation = forceSimulation().on("tick", () => {
@@ -34,20 +41,28 @@ self.addEventListener("message", ({ data }) => {
               link.id(({ id }) => id)
             )
             .force(
-              "charge",
-              forceManyBody()
-                .strength(-100)
-                .distanceMin(40)
-                .distanceMax(130)
+              "x",
+              forceX().x(({ x }) => x)
             )
+            .force(
+              "y",
+              forceY().y(({ y }) => y)
+            )
+            // .force(
+            //   "charge",
+            //   forceManyBody()
+            //     .strength(-100)
+            //     .distanceMin(40)
+            //     .distanceMax(130)
+            // )
             .force(
               "collide",
               forceCollide()
-                .radius(({ r }) => r * 2)
+                .radius(({ r }) => r)
                 .iterations(2)
             )
             // .force("center", forceCenter(width / 2, height / 2))
-            .velocityDecay(0.4)
+            // .velocityDecay(0.4)
             .stop();
         }
 
