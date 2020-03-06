@@ -58,7 +58,7 @@ self.addEventListener("message", ({ data }) => {
             .force(
               "collide",
               forceCollide()
-                .radius(({ r }) => r * 2)
+                .radius(({ r }) => r)
                 .iterations(2)
             )
             // .force("center", forceCenter(width / 2, height / 2))
