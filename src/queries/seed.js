@@ -1,23 +1,33 @@
 import { gql } from "apollo-boost";
 
-export const SEED_PAPER_COUNTRY = gql`
-  query papersByCountry {
-    paper_country {
+export const SEED_DATA = gql`
+  query seedData {
+    byCountry: viz_paper_country {
       country
       count
-      paper_ids: ids
+      ids: paper_ids
     }
-  }
-`;
-
-export const SEED_PAPER_TOPICS = gql`
-  query papersByTopic($frequency: Int) {
-    paper_topics(where: { frequency: { _gte: $frequency } }) {
-      id
+    byTopic: viz_paper_topics {
+      field_of_study_id
       name
-      level
-      frequency
-      paper_ids
+      count
+      ids: paper_ids
+    }
+    byYear: viz_paper_year {
+      year
+      count
+      ids: paper_ids
+    }
+    diversity: viz_metrics_by_country {
+      year
+      country
+      diversity: shannon_diversity
+      rca_sum
+      female_share
+      topic: name
+    }
+    topics: viz_paper_topics {
+      topic: name
     }
   }
 `;
