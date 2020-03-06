@@ -62,7 +62,7 @@ self.addEventListener("message", ({ data }) => {
                 .iterations(2)
             )
             // .force("center", forceCenter(width / 2, height / 2))
-            // .velocityDecay(0.4)
+            .velocityDecay(0.8)
             .stop();
         }
 
