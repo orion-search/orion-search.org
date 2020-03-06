@@ -13,6 +13,7 @@ import { useOrionData } from "../../OrionData.context";
 
 const Profile = () => {
   const topics = useOrionData().topics.map(t => t.topic);
+  const diversity = useOrionData().diversity;
 
   return (
     <PageLayout
@@ -26,16 +27,17 @@ const Profile = () => {
           path={["/profile"]}
           render={() => {
             return (
-              <Query query={DIVERSITY_TOP_TOPICS} variables={{ topics }}>
-                {({ loading, error, data }) => {
-                  if (loading) return null;
-                  if (error) console.error(error);
-                  console.log(data.view_diversity_by_country);
-                  return (
-                    <DiversityIndex data={data.view_diversity_by_country} />
-                  );
-                }}
-              </Query>
+              <DiversityIndex data={diversity} />
+              // <Query query={DIVERSITY_TOP_TOPICS} variables={{ topics }}>
+              //   {({ loading, error, data }) => {
+              //     if (loading) return null;
+              //     if (error) console.error(error);
+              //     console.log(data.view_diversity_by_country);
+              //     return (
+              //       <DiversityIndex data={data.view_diversity_by_country} />
+              //     );
+              //   }}
+              // </Query>
             );
           }}
         />
