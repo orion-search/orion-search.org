@@ -1,9 +1,9 @@
 import { cold } from "react-hot-loader";
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useState } from "react";
 // import { useQuery } from "@apollo/react-hooks";
 
 import { Row, Column } from "../../components/shared/layout";
-import { formatThousands } from "../../utils";
+import { formatThousands, accessors } from "../../utils";
 
 import { MultiItemSearch } from "../../components/shared/search";
 import Filters from "./Filters";
@@ -20,17 +20,21 @@ const LatentSpace = ({ data, papers }) => {
 
   const [filters, setFilters] = useState({
     citations: 0,
-    countries: papers.byCountry.map(p => p.country),
-    topics: papers.byTopic.map(p => p.name)
+    countries: papers[accessors.filters.country].map(p =>
+      accessors.types.country(p)
+    ),
+    topics: papers[accessors.filters.topic].map(p => accessors.types.topic(p))
   });
 
   const layout = useRef({
     nodes: data.map(item => {
+      const [x, y, z] = accessors.types.vector3d(item);
+      const id = accessors.types.id(item);
       return {
-        x: item.vector_3d[0] * 1000,
-        y: item.vector_3d[1] * 1000,
-        z: item.vector_3d[2] * 1000,
-        id: item.id
+        x: x * 1000,
+        y: y * 1000,
+        z: z * 1000,
+        id
       };
     })
   });
@@ -69,22 +73,22 @@ const LatentSpace = ({ data, papers }) => {
         <Filters
           colorScheme={schemeCategory10}
           papers={papers}
-          ids={layout.current.nodes.map(o => o.id)}
+          ids={layout.current.nodes.map(o => accessors.types.id(o))}
           dimensions={[
             {
-              accessor: d => d.country,
-              accessorName: "country",
+              accessor: accessors.types.country,
+              accessorName: accessors.names.country,
               component: MultiItemSearch,
-              data: papers.byCountry,
+              data: papers[accessors.filters.country],
               filter: [],
               placeholder: "Search by Country...",
               title: "Country"
             },
             {
-              accessor: d => d.name,
-              accessorName: "name",
+              accessor: accessors.types.topic,
+              accessorName: accessors.names.topic,
               component: MultiItemSearch,
-              data: papers.byTopic,
+              data: papers[accessors.filters.topic],
               filter: [],
               placeholder: "Search by Topic...",
               title: "Topic"

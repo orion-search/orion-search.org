@@ -1,19 +1,57 @@
-export const diversityAccessor = "diversity";
-export const diversity = d => d[diversityAccessor];
+/**
+ * @todo build and export scheme in accordance with DB at runtim
+ */
+const id = a => d => d[a];
+const number = a => d => +d[a];
 
-export const topicAccessor = "topic";
-export const topic = d => d[topicAccessor];
+const schema = [
+  {
+    name: "country",
+    type: id
+  },
+  {
+    name: "diversity",
+    type: number
+  },
+  {
+    name: "femaleShare",
+    type: number
+  },
+  {
+    name: "id",
+    type: id
+  },
+  {
+    name: "ids",
+    type: id
+  },
+  {
+    name: "rca",
+    type: number
+  },
+  {
+    name: "topic",
+    type: id
+  },
+  {
+    name: "vector3d",
+    type: id
+  },
+  {
+    name: "year",
+    type: number
+  }
+];
 
-export const countryAccessor = "country";
-export const country = d => d[country];
+const zipObj = xs => ys =>
+  xs.reduce((obj, x, i) => ({ ...obj, [x]: ys[i] }), {});
 
-export const paperIDsAccessor = "ids";
-export const paperIDs = d => d[paperIDsAccessor];
-
-export const rcaAccessor = "rca_sum";
-export const rca = d => d[rcaAccessor];
-
-// FILTERS
-export const countryFilterName = "byCountry";
-export const topicFilterName = "byTopic";
-export const yearFilterName = "byYear";
+export const accessors = {
+  names: zipObj(schema.map(s => s.name))(schema.map(s => s.name)),
+  types: zipObj(schema.map(s => s.name))(schema.map(s => s.type(s.name))),
+  filters: {
+    country: "byCountry",
+    topic: "byTopic",
+    year: "byYear"
+  }
+};

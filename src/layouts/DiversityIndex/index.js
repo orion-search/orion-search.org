@@ -13,6 +13,7 @@ import { scaleLinear, scaleOrdinal, extent } from "d3";
 
 import Filters from "./Filters";
 import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
+import { accessors } from "../../utils";
 
 const DiversityIndex = ({ data }) => {
   const canvasRef = useRef(null);
@@ -22,9 +23,11 @@ const DiversityIndex = ({ data }) => {
   const viz = useRef(null);
   const canvasWidthRef = useRef(null);
 
-  const [groupingAccessor, setGroupingAccessor] = useState("topic");
-  const [xAccessor, setXAccessor] = useState("diversity");
-  const [yAccessor, setYAccessor] = useState("female_share");
+  const [groupingAccessor, setGroupingAccessor] = useState(
+    accessors.names.topic
+  );
+  const [xAccessor, setXAccessor] = useState(accessors.names.diversity);
+  const [yAccessor, setYAccessor] = useState(accessors.names.femaleShare);
   const [year, setYear] = useState(2019);
 
   const layout = {
@@ -56,7 +59,7 @@ const DiversityIndex = ({ data }) => {
         groups,
         groups.map((g, i) => i * layout.margins.perGroup)
       ),
-      filterFunc: d => +d["year"] === year,
+      filterFunc: d => accessors.types.year(d) === year,
       groupFunc: d => d[groupingAccessor],
       xFunc: d => +d[xAccessor],
       yFunc: d => +d[yAccessor]

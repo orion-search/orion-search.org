@@ -1,6 +1,7 @@
 import React, { useRef, useState, useContext, createContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
+import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
@@ -13,8 +14,12 @@ const OrionDataContext = createContext({});
 const FetchOnline = ({ children }) => {
   const data = useRef();
   const [ready, setReady] = useState(false);
+  console.log(accessors);
 
   useQuery(SEED_DATA, {
+    onError: e => {
+      throw e;
+    },
     onCompleted: ({
       byCountry,
       byTopic,
@@ -31,14 +36,23 @@ const FetchOnline = ({ children }) => {
           byYear,
           vectors
         },
-        topics
+        topics,
+        vectors
       };
       setReady(true);
     }
   });
 
   return (
-    <OrionDataContext.Provider value={data.current}>
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
+  );
+};
+
+const LoadingOrChildren = ({ ready, children, data }) => {
+  return (
+    <OrionDataContext.Provider value={data}>
       {!ready && <LoadingBar />}
       {ready && children}
     </OrionDataContext.Provider>
@@ -75,10 +89,9 @@ const FetchOffline = ({ children }) => {
   });
 
   return (
-    <OrionDataContext.Provider value={data.current}>
-      {!ready && <LoadingBar />}
-      {ready && children}
-    </OrionDataContext.Provider>
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
   );
 };
 

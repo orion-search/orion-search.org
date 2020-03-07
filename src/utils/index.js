@@ -1,3 +1,4 @@
+export * from "./accessors";
 export * from "./apollo";
 export * from "./format";
 export * from "./numbers";

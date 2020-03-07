@@ -17,27 +17,29 @@ const Explore = () => {
   // useEffect(() => {
   //   console.log(data, error);
   // }, [data, error]);
-  const [data, setData] = useState(null);
-  const papers = useOrionData().papers;
+  // const [data, setData] = useState(null);
+  const { papers, vectors } = useOrionData();
+  console.log("HELLO", vectors[0]);
 
-  useEffect(() => {
-    Promise.all([
-      csv(documentVectors, d => ({
-        vector_3d: d.vector_3d.split("|").map(v => +v),
-        vector_2d: d.vector_2d.split("|").map(v => +v),
-        id: +d.id
-      }))
-    ]).then(([vectors], error) => {
-      setData(vectors);
-    });
-  }, []);
+  // useEffect(() => {
+  //   Promise.all([
+  //     csv(documentVectors, d => ({
+  //       vector_3d: d.vector_3d.split("|").map(v => +v),
+  //       vector_2d: d.vector_2d.split("|").map(v => +v),
+  //       id: +d.id
+  //     }))
+  //   ]).then(([vectors], error) => {
+  //     setData(vectors);
+  //   });
+  // }, []);
 
   return (
     <PageLayout>
       {/* <SharedCanvasProvider>
         {data && <Network data={data} />}
       </SharedCanvasProvider> */}
-      {data && <LatentSpace data={data} papers={papers} />}
+      {/* {data && <LatentSpace data={data} papers={papers} />} */}
+      {<LatentSpace data={vectors} papers={papers} />}
       {/* <Tree /> */}
     </PageLayout>
   );
