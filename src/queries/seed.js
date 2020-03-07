@@ -29,5 +29,9 @@ export const SEED_DATA = gql`
     topics: viz_paper_topics {
       topic: name
     }
+    vectors: doc_vectors {
+      vector_3d
+      id
+    }
   }
 `;

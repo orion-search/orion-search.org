@@ -15,13 +15,21 @@ const FetchOnline = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   useQuery(SEED_DATA, {
-    onCompleted: ({ byCountry, byTopic, byYear, topics, diversity }) => {
+    onCompleted: ({
+      byCountry,
+      byTopic,
+      byYear,
+      topics,
+      diversity,
+      vectors
+    }) => {
       data.current = {
         diversity,
         papers: {
           byCountry,
           byTopic,
-          byYear
+          byYear,
+          vectors
         },
         topics
       };
