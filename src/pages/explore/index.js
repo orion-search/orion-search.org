@@ -1,8 +1,8 @@
 import React from "react";
 
-import { PageLayout } from "../components/shared/layout";
-import LatentSpace from "../layouts/LatentSpace";
-import { useOrionData } from "../OrionData.context";
+import { PageLayout } from "../../components/shared/layout";
+import LatentSpace from "../../layouts/LatentSpace";
+import { useOrionData } from "../../OrionData.context";
 
 const Explore = () => {
   const { papers, vectors } = useOrionData();
