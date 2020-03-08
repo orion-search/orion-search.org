@@ -14,10 +14,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.transform = new THREE.Object3D();
 
     // camera transformations
-    const [nearClippingPlane, farClippingPlane] = extent(
-      this.layout.nodes,
-      d => d.z
-    );
+    const [, farClippingPlane] = extent(this.layout.nodes, d => d.z);
 
     this.camera.far = farClippingPlane * 20;
     this.camera.position.z = 4000;

@@ -38,7 +38,7 @@ const Landing = () => {
         </Column>
       </Row>
       <Row width={2 / 3}>
-        <LinkButton to={"/profile/"}>View diversity index</LinkButton>
+        <LinkButton to={"/diversity/"}>View diversity index</LinkButton>
         <LinkButton to={"/profile/country"}>Explore Country</LinkButton>
         <LinkButton to={"/explore"}>Explore all Papers</LinkButton>
         <LinkButton inactive to={"/profile/topic"}>

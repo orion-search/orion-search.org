@@ -37,7 +37,7 @@ const Search = ({
   title
 }) => {
   const searchRef = useRef(null);
-  const [query, setQuery] = useState("");
+  const [, setQuery] = useState("");
 
   const onChange = () => {
     setQuery(searchRef.current.value);
@@ -120,7 +120,7 @@ export const MultiItemSearch = ({
         onChange(selections);
       }
     }
-  }, [selections, focusedSelection, onChange]);
+  }, [selections, focusedSelection, onChange]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Search

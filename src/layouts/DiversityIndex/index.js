@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
-import React, {
+
+import React, { // eslint-disable-line no-unused-vars
   useRef,
   useDebugValue,
   useEffect,
@@ -26,8 +27,8 @@ const DiversityIndex = ({ data }) => {
   const [groupingAccessor, setGroupingAccessor] = useState(
     accessors.names.topic
   );
-  const [xAccessor, setXAccessor] = useState(accessors.names.diversity);
-  const [yAccessor, setYAccessor] = useState(accessors.names.femaleShare);
+  const [xAccessor] = useState(accessors.names.diversity);
+  const [yAccessor] = useState(accessors.names.femaleShare);
   const [year, setYear] = useState(2019);
 
   const layout = {

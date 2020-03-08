@@ -1,30 +1,19 @@
 import { cold } from "react-hot-loader";
-import React, { useRef, useEffect, useState } from "react";
-// import { useQuery } from "@apollo/react-hooks";
+import React, { useRef, useEffect } from "react";
+import { schemeCategory10 } from "d3";
 
 import { Row, Column } from "../../components/shared/layout";
-import { formatThousands, accessors } from "../../utils";
+import { accessors } from "../../utils";
 
 import { MultiItemSearch } from "../../components/shared/search";
 import Filters from "./Filters";
 
-import { schemeCategory10 } from "d3";
-
 import { ParticleContainerLatentSpace } from "../../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
-import { PAPER_CITATIONS } from "../../queries";
 
 const LatentSpace = ({ data, papers }) => {
   const canvasRef = useRef(null);
   const particles = useRef(null);
-
-  const [filters, setFilters] = useState({
-    citations: 0,
-    countries: papers[accessors.filters.country].map(p =>
-      accessors.types.country(p)
-    ),
-    topics: papers[accessors.filters.topic].map(p => accessors.types.topic(p))
-  });
 
   const layout = useRef({
     nodes: data.map(item => {
@@ -104,11 +93,11 @@ const LatentSpace = ({ data, papers }) => {
   );
 };
 
-const Summary = ({ paperIDs, filters = [] }) => {
-  const p = formatThousands(paperIDs.length);
-  const c = filters.countries.length ? filters.countries.length : `All`;
-  const t = filters.topics.length ? filters.topics.length : `All`;
-  return <div>{`Showing ${p} papers from ${c} countries and ${t} topics`}</div>;
-};
+// const Summary = ({ paperIDs, filters = [] }) => {
+//   const p = formatThousands(paperIDs.length);
+//   const c = filters.countries.length ? filters.countries.length : `All`;
+//   const t = filters.topics.length ? filters.topics.length : `All`;
+//   return <div>{`Showing ${p} papers from ${c} countries and ${t} topics`}</div>;
+// };
 
 export default cold(LatentSpace);

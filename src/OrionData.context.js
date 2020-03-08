@@ -61,6 +61,7 @@ const LoadingOrChildren = ({ ready, children, data }) => {
   );
 };
 
+// eslint-disable-next-line
 const FetchOffline = ({ children }) => {
   const data = useRef();
   const [ready, setReady] = useState(false);
