@@ -15,9 +15,10 @@ const Filters = ({
 }) => {
   return (
     <Row
-      css={css`
+      css={props => css`
         width: fit-content;
-        margin-bottom: 0;
+        border-bottom: 1px solid white;
+        align-items: center;
       `}
     >
       Explore diversity by{" "}

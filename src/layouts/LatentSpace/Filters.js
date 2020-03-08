@@ -52,7 +52,7 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
   const spawnIntersectionWorker = filters => {
     return CrossFilter({
       dimensions: dimensions.map((d, i) => ({
-        accessorName: i === 0 ? "country" : "name",
+        accessorName: d.accessorName,
         data: d.data,
         filter: filters[i]
       }))

@@ -1,84 +1,111 @@
-import React, {
-  useRef,
-  useState,
-  useContext,
-  createContext,
-  useEffect
-} from "react";
+import React, { useRef, useState, useContext, createContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
+import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
-import { TOP_TOPICS } from "./queries";
-import papersByCountry from "./data/paper_country.csv";
-import papersByTopic from "./data/paper_topics.csv";
-import topTopics from "./data/top_topics.csv";
+import { SEED_DATA } from "./queries";
+import csvPapersByCountry from "./data/viz_paper_country.csv";
+import csvPapersByTopic from "./data/viz_paper_topics.csv";
+import csvPapersByYear from "./data/viz_paper_year.csv";
+import csvDiversity from "./data/viz_metrics_by_country.csv";
+import csvVectors from "./data/doc_vectors.csv";
 
 const OrionDataContext = createContext({});
 
-export const OrionDataProvider = ({ children }) => {
+const FetchOnline = ({ children }) => {
+  const data = useRef();
   const [ready, setReady] = useState(false);
+  console.log(accessors);
 
-  const data = useRef({
-    papers: {
-      byCountry: null,
-      byTopic: null,
-      topics: null
+  useQuery(SEED_DATA, {
+    onError: e => {
+      throw e;
+    },
+    onCompleted: ({
+      byCountry,
+      byTopic,
+      byYear,
+      topics,
+      diversity,
+      vectors
+    }) => {
+      data.current = {
+        diversity,
+        papers: {
+          byCountry,
+          byTopic,
+          byYear,
+          vectors
+        },
+        topics,
+        vectors
+      };
+      setReady(true);
     }
   });
 
-  // const { data: topics, loading } = useQuery(TOP_TOPICS);
-
-  // useEffect(() => {
-  //   if (loading) return;
-
-  //   data.current = {
-  //     ...data.current,
-  //     papers: {
-  //       ...data.current.papers
-  //     },
-  //     topics: topics.view_top_topics
-  //   };
-  //   console.log(data.current);
-  // }, [loading, topics]);
-
-  switch (process.env.NODE_ENV) {
-    case "development":
-    case "production":
-      Promise.all([
-        csv(papersByCountry, d => ({
-          country: d.country,
-          count: +d.count,
-          ids: d.ids.split("|").map(i => +i)
-        })),
-        csv(papersByTopic, d => ({
-          topic_id: d.id,
-          name: d.name,
-          level: +d.level,
-          frequency: +d.frequency,
-          ids: d.paper_ids.split("|").map(i => +i)
-        })),
-        csv(topTopics)
-      ]).then(([byCountry, byTopic, topics], error) => {
-        data.current = {
-          papers: {
-            byCountry,
-            byTopic
-          },
-          topics
-        };
-        setReady(true);
-      });
-      break;
-    default:
-      break;
-  }
-
   return (
-    <OrionDataContext.Provider value={data.current}>
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
+  );
+};
+
+const LoadingOrChildren = ({ ready, children, data }) => {
+  return (
+    <OrionDataContext.Provider value={data}>
       {!ready && <LoadingBar />}
       {ready && children}
     </OrionDataContext.Provider>
+  );
+};
+
+// eslint-disable-next-line
+const FetchOffline = ({ children }) => {
+  const data = useRef();
+  const [ready, setReady] = useState(false);
+
+  Promise.all([
+    csv(csvPapersByCountry),
+    csv(csvPapersByTopic),
+    csv(csvPapersByYear),
+    csv(csvDiversity),
+    csv(csvVectors)
+  ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
+    if (error) throw error;
+    data.current = {
+      papers: {
+        byCountry,
+        byTopic,
+        byYear
+      },
+      diversity,
+      topics: byTopic.map(t => ({
+        [accessors.names.topic]: accessors.types.topic(t)
+      })),
+      vectors
+    };
+    setReady(true);
+  });
+
+  return (
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
+  );
+};
+
+export const OrionDataProvider = ({ children }) => {
+  return (
+    <>
+      {process.env.NODE_ENV === "development" && (
+        <FetchOnline>{children}</FetchOnline>
+      )}
+      {process.env.NODE_ENV === "production" && (
+        <FetchOnline>{children}</FetchOnline>
+      )}
+    </>
   );
 };
 

@@ -1,36 +1,29 @@
 import { cold } from "react-hot-loader";
-import React, { useRef, useEffect, useState, useMemo } from "react";
-// import { useQuery } from "@apollo/react-hooks";
+import React, { useRef, useEffect } from "react";
+import { schemeCategory10 } from "d3";
 
 import { Row, Column } from "../../components/shared/layout";
-import { formatThousands } from "../../utils";
+import { accessors } from "../../utils";
 
 import { MultiItemSearch } from "../../components/shared/search";
 import Filters from "./Filters";
 
-import { schemeCategory10 } from "d3";
-
 import { ParticleContainerLatentSpace } from "../../visualizations/ParticleContainerLatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
-import { PAPER_CITATIONS } from "../../queries";
 
 const LatentSpace = ({ data, papers }) => {
   const canvasRef = useRef(null);
   const particles = useRef(null);
 
-  const [filters, setFilters] = useState({
-    citations: 0,
-    countries: papers.byCountry.map(p => p.country),
-    topics: papers.byTopic.map(p => p.name)
-  });
-
   const layout = useRef({
     nodes: data.map(item => {
+      const [x, y, z] = accessors.types.vector3d(item);
+      const id = accessors.types.id(item);
       return {
-        x: item.vector_3d[0] * 1000,
-        y: item.vector_3d[1] * 1000,
-        z: item.vector_3d[2] * 1000,
-        id: item.id
+        x: x * 1000,
+        y: y * 1000,
+        z: z * 1000,
+        id
       };
     })
   });
@@ -69,22 +62,22 @@ const LatentSpace = ({ data, papers }) => {
         <Filters
           colorScheme={schemeCategory10}
           papers={papers}
-          ids={layout.current.nodes.map(o => o.id)}
+          ids={layout.current.nodes.map(o => accessors.types.id(o))}
           dimensions={[
             {
-              accessor: d => d.country,
-              accessorName: "country",
+              accessor: accessors.types.country,
+              accessorName: accessors.names.country,
               component: MultiItemSearch,
-              data: papers.byCountry,
+              data: papers[accessors.filters.country],
               filter: [],
               placeholder: "Search by Country...",
               title: "Country"
             },
             {
-              accessor: d => d.name,
-              accessorName: "name",
+              accessor: accessors.types.topic,
+              accessorName: accessors.names.topic,
               component: MultiItemSearch,
-              data: papers.byTopic,
+              data: papers[accessors.filters.topic],
               filter: [],
               placeholder: "Search by Topic...",
               title: "Topic"
@@ -100,11 +93,11 @@ const LatentSpace = ({ data, papers }) => {
   );
 };
 
-const Summary = ({ paperIDs, filters = [] }) => {
-  const p = formatThousands(paperIDs.length);
-  const c = filters.countries.length ? filters.countries.length : `All`;
-  const t = filters.topics.length ? filters.topics.length : `All`;
-  return <div>{`Showing ${p} papers from ${c} countries and ${t} topics`}</div>;
-};
+// const Summary = ({ paperIDs, filters = [] }) => {
+//   const p = formatThousands(paperIDs.length);
+//   const c = filters.countries.length ? filters.countries.length : `All`;
+//   const t = filters.topics.length ? filters.topics.length : `All`;
+//   return <div>{`Showing ${p} papers from ${c} countries and ${t} topics`}</div>;
+// };
 
 export default cold(LatentSpace);

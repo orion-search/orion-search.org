@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "data:static": "echo '@todo add PostgreSQL Node.js scripts'",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",

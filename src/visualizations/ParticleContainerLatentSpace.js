@@ -4,22 +4,18 @@ import { extent } from "d3";
 
 import pointFS from "../shaders/point.fs.js";
 import pointVS from "../shaders/point.vs.js";
+import { accessors } from "../utils";
 
 export class ParticleContainerLatentSpace extends Renderer3D {
   constructor({ layout, canvas }) {
     super({ canvas });
-    console.log(canvas);
 
     this.layout = layout;
     this.transform = new THREE.Object3D();
 
     // camera transformations
-    const [nearClippingPlane, farClippingPlane] = extent(
-      this.layout.nodes,
-      d => d.z
-    );
-    console.log(nearClippingPlane, farClippingPlane);
-    // this.camera.near = nearClippingPlane;
+    const [, farClippingPlane] = extent(this.layout.nodes, d => d.z);
+
     this.camera.far = farClippingPlane * 20;
     this.camera.position.z = 4000;
     this.camera.updateProjectionMatrix();
@@ -66,7 +62,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
       this.attributes.position.push(x, y, z);
       this.attributes.color.push(color.r, color.g, color.b);
-      this.attributes.size.push(50 + Math.random() * 50);
+      this.attributes.size.push(120 + Math.random() * 50);
       this.attributes.opacity.push(Math.random());
     }
 
@@ -119,7 +115,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     console.time("Updating opacity attributes");
     const opacities = this.geometry.attributes.opacity.array;
 
-    const nodes = this.layout.nodes.map(d => d.id);
+    const nodes = this.layout.nodes.map(d => accessors.types.id(d));
 
     if (!ids) {
       for (let i = 0; i < opacities.length; i++) {
@@ -148,7 +144,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     const color = new THREE.Color();
 
-    const nodes = this.layout.nodes.map(d => d.id);
+    const nodes = this.layout.nodes.map(d => accessors.types.id(d));
 
     papers.forEach(p => {
       let idx3 = nodes.indexOf(p.id) * 3;
