@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import logo from "../../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
 import { Row } from "./flex";
+import { urls } from "../../../utils";
 
 export const PageLayoutWrapper = styled("main")`
   width: 100%;
@@ -43,19 +44,19 @@ export const NavItem = styled(({ highlighted, ...props }) => (
 
 const navURLs = [
   {
-    to: "/diversity",
+    to: urls.diversity,
     name: "Diversity Index"
   },
   {
-    to: "/profile/country",
+    to: urls.profileCountry,
     name: "Country"
   },
   {
-    to: "/profile/topic",
+    to: urls.profileTopic,
     name: "Topic"
   },
   {
-    to: "/explore",
+    to: urls.explore,
     name: "Papers"
   }
 ];
@@ -71,7 +72,7 @@ export const PageLayout = ({ children, match, ...props }) => {
             margin-right: 1rem;
           `}
         >
-          <Link to={"/"}>
+          <Link to={urls.root}>
             <img
               css={css`
                 height: 100%;

@@ -2,8 +2,8 @@ import React from "react";
 
 import { PageLayout, Row, Column } from "../../components/shared/layout";
 import { Title } from "../../components/shared/layout";
-
 import { LinkButton } from "../../components/shared/button";
+import { urls } from "../../utils";
 
 const Landing = () => {
   return (
@@ -38,14 +38,14 @@ const Landing = () => {
         </Column>
       </Row>
       <Row width={2 / 3}>
-        <LinkButton to={"/diversity/"}>View diversity index</LinkButton>
-        <LinkButton to={"/profile/country"}>Explore Country</LinkButton>
-        <LinkButton to={"/explore"}>Explore all Papers</LinkButton>
-        <LinkButton inactive to={"/profile/topic"}>
+        <LinkButton to={urls.diversity}>View diversity index</LinkButton>
+        <LinkButton to={urls.profileCountry}>Explore Country</LinkButton>
+        <LinkButton to={urls.explore}>Explore all Papers</LinkButton>
+        <LinkButton inactive to={urls.profileTopic}>
           Explore Topic
         </LinkButton>
 
-        <LinkButton inactive to={"/search"}>
+        <LinkButton inactive to={urls.search}>
           Search by Abstract
         </LinkButton>
       </Row>

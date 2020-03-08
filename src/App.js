@@ -6,14 +6,15 @@ import Diversity from "./pages/diversity/";
 import Explore from "./pages/explore/";
 import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
+import { urls } from "./utils";
 
 function App() {
   return (
     <Switch>
-      <Route exact path={["/"]} component={Landing} />
-      <Route exact path={["/diversity"]} component={Diversity} />
-      <Route exact path={["/explore"]} component={Explore} />
-      <Route path={"/profile"} component={Profile} />
+      <Route exact path={[urls.root]} component={Landing} />
+      <Route exact path={[urls.diversity]} component={Diversity} />
+      <Route exact path={[urls.explore]} component={Explore} />
+      <Route path={urls.profile} component={Profile} />
     </Switch>
   );
 }

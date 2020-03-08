@@ -7,6 +7,7 @@ import { Route, Switch } from "react-router-dom";
 import { PageLayout } from "../../components/shared/layout";
 import CountryProfile from "./country";
 import TopicProfile from "./topic";
+import { urls } from "../../utils";
 
 const Profile = () => {
   // const topics = useOrionData().topics.map(t => t.topic);
@@ -18,8 +19,8 @@ const Profile = () => {
       `}
     >
       <Switch>
-        <Route exact path={["/profile/country"]} component={CountryProfile} />
-        <Route exact path={["/profile/topic"]} component={TopicProfile} />
+        <Route exact path={[urls.profileCountry]} component={CountryProfile} />
+        <Route exact path={[urls.profileTopic]} component={TopicProfile} />
       </Switch>
     </PageLayout>
   );
