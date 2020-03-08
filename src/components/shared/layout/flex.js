@@ -5,6 +5,7 @@ import styled from "@emotion/styled";
 export const Flex = styled("div")`
   display: flex;
   justify-content: ${props => props.justifyContent || null};
+  flex-wrap: wrap;
 `;
 
 export const Row = styled("div")`
@@ -15,7 +16,24 @@ export const Row = styled("div")`
 
   margin: ${props => props.theme.spacing.small} 0;
 
-  width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
+  // width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
+
+  @media screen and (max-width: 768px) {
+    & {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    & {
+      width: ${props =>
+        props.width
+          ? typeof props.width === "number"
+            ? `${props.width * 100}%`
+            : props.width
+          : `100%`};
+    }
+  }
 `;
 
 export const Column = styled("div")`
@@ -23,5 +41,17 @@ export const Column = styled("div")`
   display: flex;
   flex-direction: column;
 
-  width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
+  // width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
+
+  @media screen and (max-width: 768px) {
+    & {
+      width: 100%;
+    }
+  }
+
+  @media screen and (min-width: 768px) {
+    & {
+      width: ${props => (props.width ? `${props.width * 100}%` : `100%`)};
+    }
+  }
 `;

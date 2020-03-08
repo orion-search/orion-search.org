@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
 import Breadcrumbs from "../breadcrumbs";
-import { Row } from "./flex";
+import { Row, Flex } from "./flex";
 import { urls } from "../../../utils";
 
 export const PageLayoutWrapper = styled("main")`
@@ -18,14 +18,16 @@ export const PageLayoutWrapper = styled("main")`
   box-sizing: border-box;
 `;
 
-export const NavBarWrapper = styled("div")`
+export const NavBarWrapper = styled(Flex)`
   width: 100vw;
-  height: 60px;
+  height: fit-content;
   margin-bottom: ${props => props.theme.spacing.medium};
   padding: ${props => props.theme.spacing.small} 5vmin;
   box-sizing: border-box;
+
   align-items: center;
   align-self: center;
+  justify-content: space-between;
 
   backdrop-filter: blur(2px) brightness(20%);
 
@@ -43,6 +45,10 @@ export const NavItem = styled(({ highlighted, ...props }) => (
 `;
 
 const navURLs = [
+  {
+    to: urls.networks,
+    name: "Collaboration Networks"
+  },
   {
     to: urls.diversity,
     name: "Diversity Index"
@@ -69,10 +75,15 @@ export const PageLayout = ({ children, match, ...props }) => {
         <div
           css={css`
             height: 40px;
-            margin-right: 1rem;
+            display: flex;
           `}
         >
-          <Link to={urls.root}>
+          <Link
+            css={css`
+              width: fit-content;
+            `}
+            to={urls.root}
+          >
             <img
               css={css`
                 height: 100%;
@@ -81,19 +92,17 @@ export const PageLayout = ({ children, match, ...props }) => {
               alt="orion-search-logo"
             />
           </Link>
-        </div>
-        <div
-          css={css`
-            margin-right: 1rem;
-          `}
-        >
-          Orion Search Engine v0.0.1
+          <div
+            css={css`
+              align-self: center;
+              margin-left: 10px;
+            `}
+          >
+            Orion Search Engine v0.0.1
+          </div>
         </div>
 
-        {/* @todo Breadcrumbs is just a dummy value for correct flex alignment  */}
-        <Breadcrumbs values={[]} />
-
-        <Row width={1 / 4}>
+        <Row width={1 / 2}>
           {navURLs.map(u => (
             <NavItem
               key={`nav-item-to-${u.to}`}
