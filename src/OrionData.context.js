@@ -5,9 +5,11 @@ import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import papersByCountry from "./data/old/paper_country.csv";
-import papersByTopic from "./data/old/paper_topics.csv";
-import topTopics from "./data/old/top_topics.csv";
+import csvPapersByCountry from "./data/viz_paper_country.csv";
+import csvPapersByTopic from "./data/viz_paper_topics.csv";
+import csvPapersByYear from "./data/viz_paper_year.csv";
+import csvDiversity from "./data/viz_metrics_by_country.csv";
+import csvVectors from "./data/doc_vectors.csv";
 
 const OrionDataContext = createContext({});
 
@@ -64,31 +66,24 @@ const FetchOffline = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   Promise.all([
-    csv(papersByCountry, d => ({
-      country: d.country,
-      count: +d.count,
-      ids: d.ids.split("|").map(i => +i)
-    })),
-    csv(papersByTopic, d => ({
-      topic_id: d.id,
-      name: d.name,
-      level: +d.level,
-      frequency: +d.frequency,
-      ids: d.paper_ids.split("|").map(i => +i)
-    })),
-    csv(topTopics)
-    // csv(documentVectors, d => ({
-    //   vector_3d: d.vector_3d.split("|").map(v => +v),
-    //   vector_2d: d.vector_2d.split("|").map(v => +v),
-    //   id: +d.id
-    // }))
-  ]).then(([byCountry, byTopic, topics], error) => {
+    csv(csvPapersByCountry),
+    csv(csvPapersByTopic),
+    csv(csvPapersByYear),
+    csv(csvDiversity),
+    csv(csvVectors)
+  ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
+    if (error) throw error;
     data.current = {
       papers: {
         byCountry,
-        byTopic
+        byTopic,
+        byYear
       },
-      topics
+      diversity,
+      topics: byTopic.map(t => ({
+        [accessors.names.topic]: accessors.types.topic(t)
+      })),
+      vectors
     };
     setReady(true);
   });
