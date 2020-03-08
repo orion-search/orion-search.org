@@ -28,6 +28,12 @@ export const SEED_DATA = gql`
       ${accessors.names.femaleShare}: female_share
       ${accessors.names.topic}: name
     }
+    networks: country_collaborations {
+      ${accessors.names.source} country_a
+      ${accessors.names.target} country_b
+      ${accessors.names.weight}
+      ${accessors.names.year}
+    }
     topics: viz_paper_topics {
       ${accessors.names.topic}: name
     }

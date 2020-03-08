@@ -9,6 +9,7 @@ import csvPapersByCountry from "./data/viz_paper_country.csv";
 import csvPapersByTopic from "./data/viz_paper_topics.csv";
 import csvPapersByYear from "./data/viz_paper_year.csv";
 import csvDiversity from "./data/viz_metrics_by_country.csv";
+import csvCountryCollaboration from "./data/country_collaboration.csv";
 import csvVectors from "./data/doc_vectors.csv";
 
 const OrionDataContext = createContext({});
@@ -90,6 +91,12 @@ const FetchOffline = ({ children }) => {
       [accessors.names.femaleShare]: +d["female_share"],
       [accessors.names.topic]: d["name"]
     })),
+    csv(csvCountryCollaboration, d => ({
+      [accessors.names.source]: d["country_a"],
+      [accessors.names.target]: d["country_b"],
+      [accessors.names.weight]: accessors.types.weight(d),
+      [accessors.names.year]: accessors.types.year(d)
+    })),
     csv(csvVectors, d => ({
       [accessors.names.vector3d]: d["vector_3d"]
         .replace(/{|}/g, " ")
@@ -97,22 +104,25 @@ const FetchOffline = ({ children }) => {
         .map(d => +d),
       [accessors.names.id]: accessors.types.id(d)
     }))
-  ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
-    if (error) throw error;
-    data.current = {
-      papers: {
-        byCountry,
-        byTopic,
-        byYear
-      },
-      diversity,
-      topics: byTopic.map(t => ({
-        [accessors.names.topic]: accessors.types.topic(t)
-      })),
-      vectors
-    };
-    setReady(true);
-  });
+  ]).then(
+    ([byCountry, byTopic, byYear, diversity, networks, vectors], error) => {
+      if (error) throw error;
+      data.current = {
+        papers: {
+          byCountry,
+          byTopic,
+          byYear
+        },
+        diversity,
+        networks,
+        topics: byTopic.map(t => ({
+          [accessors.names.topic]: accessors.types.topic(t)
+        })),
+        vectors
+      };
+      setReady(true);
+    }
+  );
 
   return (
     <LoadingOrChildren ready={ready} data={data.current}>

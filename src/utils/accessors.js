@@ -14,6 +14,10 @@ const schema = [
     type: id
   },
   {
+    name: "destination",
+    type: id
+  },
+  {
     name: "diversity",
     type: number
   },
@@ -34,6 +38,10 @@ const schema = [
     type: number
   },
   {
+    name: "source",
+    type: id
+  },
+  {
     name: "topic",
     type: id
   },
@@ -43,6 +51,10 @@ const schema = [
   },
   {
     name: "year",
+    type: number
+  },
+  {
+    name: "weight",
     type: number
   }
 ];
