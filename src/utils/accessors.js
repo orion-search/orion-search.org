@@ -6,6 +6,10 @@ const number = a => d => +d[a];
 
 const schema = [
   {
+    name: "count",
+    type: number
+  },
+  {
     name: "country",
     type: id
   },

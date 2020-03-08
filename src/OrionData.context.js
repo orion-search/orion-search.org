@@ -67,11 +67,36 @@ const FetchOffline = ({ children }) => {
   const [ready, setReady] = useState(false);
 
   Promise.all([
-    csv(csvPapersByCountry),
-    csv(csvPapersByTopic),
-    csv(csvPapersByYear),
-    csv(csvDiversity),
-    csv(csvVectors)
+    csv(csvPapersByCountry, d => ({
+      [accessors.names.country]: accessors.types.country(d),
+      [accessors.names.count]: accessors.types.count(d),
+      [accessors.names.ids]: d["paper_ids"].replace(/{|}/g, " ").split(",")
+    })),
+    csv(csvPapersByTopic, d => ({
+      [accessors.names.topic]: d["name"],
+      [accessors.names.count]: accessors.types.count(d),
+      [accessors.names.ids]: d["paper_ids"].replace(/{|}/g, " ").split(",")
+    })),
+    csv(csvPapersByYear, d => ({
+      [accessors.names.year]: accessors.types.year(d),
+      [accessors.names.count]: accessors.types.count(d),
+      [accessors.names.ids]: d["paper_ids"].replace(/{|}/g, " ").split(",")
+    })),
+    csv(csvDiversity, d => ({
+      [accessors.names.year]: accessors.types.year(d),
+      [accessors.names.country]: accessors.types.country(d),
+      [accessors.names.diversity]: +d["shannon_diversity"],
+      [accessors.names.rca]: +d["rca_sum"],
+      [accessors.names.femaleShare]: +d["female_share"],
+      [accessors.names.topic]: d["name"]
+    })),
+    csv(csvVectors, d => ({
+      [accessors.names.vector3d]: d["vector_3d"]
+        .replace(/{|}/g, " ")
+        .split(",")
+        .map(d => +d),
+      [accessors.names.id]: accessors.types.id(d)
+    }))
   ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
     if (error) throw error;
     data.current = {
@@ -100,7 +125,7 @@ export const OrionDataProvider = ({ children }) => {
   return (
     <>
       {process.env.NODE_ENV === "development" && (
-        <FetchOnline>{children}</FetchOnline>
+        <FetchOffline>{children}</FetchOffline>
       )}
       {process.env.NODE_ENV === "production" && (
         <FetchOnline>{children}</FetchOnline>

@@ -6,22 +6,22 @@ export const SEED_DATA = gql`
   query seedData {
     byCountry: viz_paper_country {
       ${accessors.names.country}
-      count
+      ${accessors.names.count}
       ${accessors.names.ids}: paper_ids
     }
     byTopic: viz_paper_topics {
       field_of_study_id
       ${accessors.names.topic}: name
-      count
+      ${accessors.names.count}
       ${accessors.names.ids}: paper_ids
     }
     byYear: viz_paper_year {
       ${accessors.names.year}
-      count
+      ${accessors.names.count}
       ${accessors.names.ids}: paper_ids
     }
     diversity: viz_metrics_by_country {
-      year
+      ${accessors.names.year}
       ${accessors.names.country}
       ${accessors.names.diversity}: shannon_diversity
       ${accessors.names.rca}: rca_sum
