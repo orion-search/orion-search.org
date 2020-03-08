@@ -5,9 +5,9 @@ import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import papersByCountry from "./data/paper_country.csv";
-import papersByTopic from "./data/paper_topics.csv";
-import topTopics from "./data/top_topics.csv";
+import papersByCountry from "./data/old/paper_country.csv";
+import papersByTopic from "./data/old/paper_topics.csv";
+import topTopics from "./data/old/top_topics.csv";
 
 const OrionDataContext = createContext({});
 
@@ -77,6 +77,11 @@ const FetchOffline = ({ children }) => {
       ids: d.paper_ids.split("|").map(i => +i)
     })),
     csv(topTopics)
+    // csv(documentVectors, d => ({
+    //   vector_3d: d.vector_3d.split("|").map(v => +v),
+    //   vector_2d: d.vector_2d.split("|").map(v => +v),
+    //   id: +d.id
+    // }))
   ]).then(([byCountry, byTopic, topics], error) => {
     data.current = {
       papers: {

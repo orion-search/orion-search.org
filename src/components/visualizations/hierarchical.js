@@ -2,8 +2,8 @@
 import React, { useEffect, useRef, useLayoutEffect, useState } from "react";
 import { csv } from "d3";
 
-import countryOutputData from "../../data/country_output.csv";
-import fieldsOfStudyData from "../../data/field_of_study.csv";
+import countryOutputData from "../../data/old/country_output.csv";
+import fieldsOfStudyData from "../../data/old/field_of_study.csv";
 
 import { AbsoluteCanvas } from "../shared/renderer";
 import Dropdown from "../shared/dropdown";
