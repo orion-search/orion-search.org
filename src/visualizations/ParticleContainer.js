@@ -1,6 +1,8 @@
 import * as THREE from "three";
 import { scaleOrdinal, extent, scaleLinear } from "d3";
+
 import Renderer3D from "./Renderer3D";
+import { accessors } from "../utils/accessors";
 
 export class FieldOfStudyParticles extends Renderer3D {
   constructor({ canvas, stats, data, topics, country }) {
@@ -82,11 +84,15 @@ export class FieldOfStudyParticles extends Renderer3D {
     var transform = new THREE.Object3D();
     transform.castShadow = true;
 
-    for (var i = 0; i < this.filteredData.length; i++) {
-      let topic = this.topics.find(t => t.id === this.filteredData[i].topic);
+    for (let i = 0; i < this.filteredData.length; i++) {
+      let topic = this.topics.find(
+        t => t.id === accessors.types.topic(this.filteredData[i])
+      );
 
       if (!topic) {
-        topic = this.topics.find(t => t.parent === this.filteredData[i].topic);
+        topic = this.topics.find(
+          t => t.parent === accessors.types.topic(this.filteredData[i])
+        );
         topic.level = topic.level - 1;
         topic.name = topic.parent_name;
       }

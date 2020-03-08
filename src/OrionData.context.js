@@ -1,20 +1,27 @@
 import React, { useRef, useState, useContext, createContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { csv } from "d3";
+import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import papersByCountry from "./data/paper_country.csv";
-import papersByTopic from "./data/paper_topics.csv";
-import topTopics from "./data/top_topics.csv";
+import csvPapersByCountry from "./data/viz_paper_country.csv";
+import csvPapersByTopic from "./data/viz_paper_topics.csv";
+import csvPapersByYear from "./data/viz_paper_year.csv";
+import csvDiversity from "./data/viz_metrics_by_country.csv";
+import csvVectors from "./data/doc_vectors.csv";
 
 const OrionDataContext = createContext({});
 
 const FetchOnline = ({ children }) => {
   const data = useRef();
   const [ready, setReady] = useState(false);
+  console.log(accessors);
 
   useQuery(SEED_DATA, {
+    onError: e => {
+      throw e;
+    },
     onCompleted: ({
       byCountry,
       byTopic,
@@ -31,54 +38,61 @@ const FetchOnline = ({ children }) => {
           byYear,
           vectors
         },
-        topics
+        topics,
+        vectors
       };
       setReady(true);
     }
   });
 
   return (
-    <OrionDataContext.Provider value={data.current}>
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
+  );
+};
+
+const LoadingOrChildren = ({ ready, children, data }) => {
+  return (
+    <OrionDataContext.Provider value={data}>
       {!ready && <LoadingBar />}
       {ready && children}
     </OrionDataContext.Provider>
   );
 };
 
+// eslint-disable-next-line
 const FetchOffline = ({ children }) => {
   const data = useRef();
   const [ready, setReady] = useState(false);
 
   Promise.all([
-    csv(papersByCountry, d => ({
-      country: d.country,
-      count: +d.count,
-      ids: d.ids.split("|").map(i => +i)
-    })),
-    csv(papersByTopic, d => ({
-      topic_id: d.id,
-      name: d.name,
-      level: +d.level,
-      frequency: +d.frequency,
-      ids: d.paper_ids.split("|").map(i => +i)
-    })),
-    csv(topTopics)
-  ]).then(([byCountry, byTopic, topics], error) => {
+    csv(csvPapersByCountry),
+    csv(csvPapersByTopic),
+    csv(csvPapersByYear),
+    csv(csvDiversity),
+    csv(csvVectors)
+  ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
+    if (error) throw error;
     data.current = {
       papers: {
         byCountry,
-        byTopic
+        byTopic,
+        byYear
       },
-      topics
+      diversity,
+      topics: byTopic.map(t => ({
+        [accessors.names.topic]: accessors.types.topic(t)
+      })),
+      vectors
     };
     setReady(true);
   });
 
   return (
-    <OrionDataContext.Provider value={data.current}>
-      {!ready && <LoadingBar />}
-      {ready && children}
-    </OrionDataContext.Provider>
+    <LoadingOrChildren ready={ready} data={data.current}>
+      {children}
+    </LoadingOrChildren>
   );
 };
 

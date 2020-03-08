@@ -1,3 +1,6 @@
+/**
+ * @deprecated
+ */
 // A layout manager that initializes force layout web workers, runs them
 // and communicates their position.
 

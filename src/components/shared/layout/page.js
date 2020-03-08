@@ -43,7 +43,7 @@ export const NavItem = styled(({ highlighted, ...props }) => (
 
 const navURLs = [
   {
-    to: "/profile",
+    to: "/diversity",
     name: "Diversity Index"
   },
   {
