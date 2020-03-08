@@ -18,9 +18,12 @@ export default injectGlobal`
   url(${MatterHeavy}) format('opentype') font-weight-bolder;
 }
 
+html {
+  background: ${theme.colors.black} !important;
+}
+
 body {
   margin: 0;
-  background-color: ${theme.colors.black};
   color: ${theme.colors.white};
   font-family: "Matter",
   // font-weight: lighter;

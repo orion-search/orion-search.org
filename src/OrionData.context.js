@@ -27,18 +27,20 @@ const FetchOnline = ({ children }) => {
       byCountry,
       byTopic,
       byYear,
-      topics,
       diversity,
+      networks,
+      topics,
       vectors
     }) => {
       data.current = {
-        diversity,
         papers: {
           byCountry,
           byTopic,
           byYear,
           vectors
         },
+        diversity,
+        networks,
         topics,
         vectors
       };

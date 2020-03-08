@@ -48,6 +48,9 @@ const Landing = () => {
         <LinkButton inactive to={urls.search}>
           Search by Abstract
         </LinkButton>
+        <LinkButton to={urls.networks}>
+          Explore Collaboration Networks
+        </LinkButton>
       </Row>
     </PageLayout>
   );

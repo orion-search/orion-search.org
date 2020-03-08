@@ -14,10 +14,6 @@ const schema = [
     type: id
   },
   {
-    name: "destination",
-    type: id
-  },
-  {
     name: "diversity",
     type: number
   },
@@ -39,6 +35,10 @@ const schema = [
   },
   {
     name: "source",
+    type: id
+  },
+  {
+    name: "target",
     type: id
   },
   {
