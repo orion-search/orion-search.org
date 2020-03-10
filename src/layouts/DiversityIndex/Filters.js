@@ -15,6 +15,7 @@ const Filters = ({
 }) => {
   return (
     <Row
+      width={"fit-content"}
       css={props => css`
         width: fit-content;
         border-bottom: 1px solid white;

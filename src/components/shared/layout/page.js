@@ -5,7 +5,6 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
-import Breadcrumbs from "../breadcrumbs";
 import { Row, Flex } from "./flex";
 import { urls } from "../../../utils";
 
