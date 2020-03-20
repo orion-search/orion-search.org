@@ -21,7 +21,7 @@ class DiversityIndex extends Renderer2D {
       this.hudCanvas = hudCanvas;
       this.hudCanvas.width = this.width;
       this.hudCanvas.height = this.height;
-      this.ctx = hudCanvas.getContext("2d");
+      this.ctx = this.hudCanvas.getContext("2d");
       this.ctx.scale(
         window.devicePixelRatio || 1,
         window.devicePixelRatio || 1
@@ -57,7 +57,7 @@ class DiversityIndex extends Renderer2D {
     if (this.drawSecondCanvas) {
       this.drawLabels();
     }
-    this.draw();
+    this.drawNodes();
   }
 
   initForceLayout() {
@@ -87,6 +87,10 @@ class DiversityIndex extends Renderer2D {
       e.preventDefault();
       this.scroll(e.deltaY);
     });
+  }
+
+  onWindowResize() {
+    super.onWindowResize();
   }
 
   scroll(yDelta = 0) {
@@ -121,6 +125,8 @@ class DiversityIndex extends Renderer2D {
   }
 
   drawLabels() {
+    this.ctx.scale.x = window.devicePixelRatio || 1;
+    this.ctx.scale.y = window.devicePixelRatio || 1;
     const textFont = 12;
     this.ctx.clearRect(0, 0, this.hudCanvas.width, this.hudCanvas.height);
     this.scales.category.domain().forEach((category, i) => {
@@ -137,7 +143,7 @@ class DiversityIndex extends Renderer2D {
     });
   }
 
-  draw() {
+  drawNodes() {
     // EXIT previous
     for (var i = this.groups.points.children.length - 1; i >= 0; i--) {
       this.groups.points.remove(this.groups.points.children[i]);
