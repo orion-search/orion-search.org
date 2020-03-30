@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  frontend:
+    container_name: frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - '3001:3000'
+    environment:
+      - NODE_ENV=development
+      - REACT_APP_HASURA_GRAPHQL_URL=https://api.orion-search.org/v1/graphql
