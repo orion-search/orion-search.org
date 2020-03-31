@@ -9,12 +9,14 @@ import Breadcrumbs from "../breadcrumbs";
 import { Row } from "./flex";
 import { urls } from "../../../utils";
 
+const sidePadding = `3vw`;
+
 export const PageLayoutWrapper = styled("main")`
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 5vmin 5vmin 5vmin;
+  padding: 0 ${sidePadding} 5vh ${sidePadding};
   box-sizing: border-box;
 `;
 
@@ -22,7 +24,7 @@ export const NavBarWrapper = styled("div")`
   width: 100vw;
   height: 60px;
   margin-bottom: ${props => props.theme.spacing.medium};
-  padding: ${props => props.theme.spacing.small} 5vmin;
+  padding: ${props => props.theme.spacing.small} ${sidePadding};
   box-sizing: border-box;
   align-items: center;
   align-self: center;
@@ -47,17 +49,21 @@ const navURLs = [
     to: urls.diversity,
     name: "Diversity Index"
   },
-  {
-    to: urls.profileCountry,
-    name: "Country"
-  },
-  {
-    to: urls.profileTopic,
-    name: "Topic"
-  },
+  // {
+  //   to: urls.profileCountry,
+  //   name: "Country"
+  // },
+  // {
+  //   to: urls.profileTopic,
+  //   name: "Topic"
+  // },
   {
     to: urls.explore,
     name: "Papers"
+  },
+  {
+    to: urls.search,
+    name: "Search"
   }
 ];
 

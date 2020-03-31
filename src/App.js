@@ -6,6 +6,7 @@ import Diversity from "./pages/diversity/";
 import Explore from "./pages/explore/";
 import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
+import Search from "./pages/search/";
 import { urls } from "./utils";
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Route exact path={[urls.diversity]} component={Diversity} />
       <Route exact path={[urls.explore]} component={Explore} />
       <Route path={urls.profile} component={Profile} />
+      <Route path={urls.search} component={Search} />
     </Switch>
   );
 }

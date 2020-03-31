@@ -14,7 +14,7 @@ const Landing = () => {
       <Row>
         <Column alignSelf={"normal"} width={1 / 2}>
           <p>
-            Orion is an odiven-source tool to monitor and measure progress in
+            Orion is an open-source tool to monitor and measure progress in
             science. Orion depends on a flexible data collection, enrichment,
             and analysis system that enables users to create and explore
             research databases.
@@ -45,9 +45,7 @@ const Landing = () => {
           Explore Topic
         </LinkButton>
 
-        <LinkButton inactive to={urls.search}>
-          Search by Abstract
-        </LinkButton>
+        <LinkButton to={urls.search}>Search by Abstract</LinkButton>
       </Row>
     </PageLayout>
   );
