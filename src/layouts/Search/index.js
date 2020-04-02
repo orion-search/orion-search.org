@@ -1,5 +1,6 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PageLayout, Row, Column, Title } from "../../components/shared/layout";
+import Toggle from "../../components/shared/toggle";
 import { PAPER_METADATA } from "../../queries";
 import Paper from "./Paper";
 import Input from "./Input";
@@ -50,7 +51,14 @@ const Search = () => {
 
   return (
     <PageLayout>
-      <Title>Search by abstract</Title>
+      <Title>
+        Search by{" "}
+        <Toggle
+          options={["Abstract", "Keyword"]}
+          selected={"Abstract"}
+          onChange={value => console.log(value)}
+        />
+      </Title>
       <Column width={1 / 3}>
         <p>This search engine / / /</p>
         <p>Add some methodology text here / / /</p>
