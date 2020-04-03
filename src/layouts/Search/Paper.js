@@ -1,17 +1,20 @@
 /** @jsx jsx */
 import styled from "@emotion/styled";
 import { css, jsx } from "@emotion/core";
+import { useSpring, animated } from "react-spring";
 
 import { Row } from "../../components/shared/layout";
-import { formatDate, parseDate } from "../../utils";
+import { formatDate, parseDate, fadeInUp } from "../../utils";
 
-const Wrapper = styled("div")`
+const Wrapper = styled(animated.div)`
   border-bottom: ${props => `2px solid ${props.theme.colors.white}`};
   flex-wrap: wrap;
   padding: ${props => `${props.theme.spacing.huge}`} 0;
   box-sizing: border-box;
 
-  animation: 1s fadeIn;
+  &:first-child {
+    padding-top: 0;
+  }
 `;
 
 const Flex = styled("div")`
@@ -64,13 +67,15 @@ const Topic = styled(Flex)`
   }
 `;
 
+const MAX_AUTHORS = 20;
+const MAX_TOPICS = 4;
+
 const Paper = ({ data }) => {
-  const MAX_AUTHORS = 20;
-  const MAX_TOPICS = 4;
+  const wrapperAnimation = useSpring(fadeInUp);
   const { title, date, authors, topics, citations, publisher } = data;
   const dateString = formatDate(parseDate(date));
   return (
-    <Wrapper>
+    <Wrapper style={wrapperAnimation}>
       <Row
         css={css`
           justify-content: start;

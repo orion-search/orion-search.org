@@ -17,11 +17,11 @@ const AnimatedOption = styled(animated.span)`
   cursor: pointer;
 `;
 
-const Toggle = ({ options, selected, onChange = () => {} }) => {
+const Toggle = ({ values, selected, onChange = () => {} }) => {
   const [active, setActive] = useState(selected);
   const springs = useSprings(
-    options.length,
-    options.map(option => ({
+    values.length,
+    values.map(option => ({
       opacity: option === active ? 1 : 0.35
     }))
   );
@@ -34,14 +34,14 @@ const Toggle = ({ options, selected, onChange = () => {} }) => {
   return (
     <Wrapper>
       {springs.map((props, i) => (
-        <Fragment key={`toggle-${options[i]}`}>
+        <Fragment key={`toggle-${values[i]}`}>
           <AnimatedOption
             style={props}
-            onClick={() => onToggleChange(options[i])}
+            onClick={() => onToggleChange(values[i])}
           >
-            {`${options[i]} `}
+            {`${values[i]} `}
           </AnimatedOption>
-          {i < options.length - 1 ? "/ " : ""}
+          {i < values.length - 1 ? "/ " : ""}
         </Fragment>
       ))}
     </Wrapper>
@@ -49,7 +49,7 @@ const Toggle = ({ options, selected, onChange = () => {} }) => {
 };
 
 Toggle.propTypes = {
-  options: PropTypes.array
+  values: PropTypes.array
 };
 
 export default Toggle;

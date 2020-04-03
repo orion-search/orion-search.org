@@ -11,17 +11,14 @@ import { urls } from "../../../utils";
 const sidePadding = `3vw`;
 
 export const PageLayoutWrapper = styled("main")`
-         width: 100%;
-         position: relative;
-         display: flex;
-         flex-direction: column;
-         padding: ${props =>
-           `0 ${sidePadding} ${
-             props.noPaddingBottom ? `0` : `5vh`
-           } ${sidePadding}`};
-        //  padding: 0 ${sidePadding} 5vh ${sidePadding};
-         box-sizing: border-box;
-       `;
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: ${props =>
+    `0 ${sidePadding} ${props.noPaddingBottom ? `0` : `5vh`} ${sidePadding}`};
+  box-sizing: border-box;
+`;
 
 export const NavBarWrapper = styled("div")`
   width: 100vw;
@@ -53,17 +50,9 @@ const navURLs = [
     to: urls.diversity,
     name: "Diversity Index"
   },
-  // {
-  //   to: urls.profileCountry,
-  //   name: "Country"
-  // },
-  // {
-  //   to: urls.profileTopic,
-  //   name: "Topic"
-  // },
   {
     to: urls.explore,
-    name: "Papers"
+    name: "Explore Papers"
   },
   {
     to: urls.search,
@@ -95,6 +84,7 @@ export const PageLayout = ({ children, match, ...props }) => {
         <div
           css={css`
             margin-right: 1rem;
+            line-height: 40px;
           `}
         >
           Orion Search Engine v0.0.1

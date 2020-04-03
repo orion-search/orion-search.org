@@ -4,20 +4,28 @@ const durations = {
   long: 1500
 };
 
+// export const fadeInUp = {
+//   from: { transform: "translate3d(0, 30px, 0)", opacity: 0 },
+//   // to: { transform: "translate3d(0, 0, 0)", opacity: 1 },
+//   to: async (next, cancel) => {
+//     await next({
+//       opacity: 1,
+//       transform: "translate3d(0, 0, 0)"
+//     });
+//     // await next({  });
+//   },
+//   config: {
+//     duration: durations.medium
+//   },
+//   delay: 100
+// };
+
 export const fadeInUp = {
-  from: { transform: "translate3d(0, 30px, 0)", opacity: 0 },
-  // to: { transform: "translate3d(0, 0, 0)", opacity: 1 },
-  to: async (next, cancel) => {
-    await next({
-      opacity: 1,
-      transform: "translate3d(0, 0, 0)"
-    });
-    // await next({  });
-  },
+  from: { transform: "translate3d(0, 60px, 0)", opacity: 0 },
+  to: { transform: "translate3d(0, 0, 0)", opacity: 1 },
   config: {
     duration: durations.medium
-  },
-  delay: 100
+  }
 };
 
 export const fadeIn = {

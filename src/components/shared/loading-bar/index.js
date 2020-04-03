@@ -7,9 +7,7 @@ import { fadeInUp } from "../../../utils";
 /**
  * @file A loading bar component
  */
-import React from "react";
 import { css, jsx } from "@emotion/core";
-// import { css } from "@emotion/core";
 
 const Wrapper = styled(animated.div)`
   font-size: ${props => `${props.theme.type.sizes.huge}`};
@@ -27,9 +25,16 @@ const LoadingBar = () => {
   const wrapperAnimation = useSpring(fadeInUp);
 
   return (
-    <Wrapper style={wrapperAnimation}>
-      <p>Downloading latent space /</p>
-      <p>Downloading diversity index / {navigator.connection.downlink}Mbps</p>
+    <Wrapper
+      css={css`
+        font-size: ${props => `${props.theme.type.sizes.huge}`};
+      `}
+      style={wrapperAnimation}
+    >
+      <div>Downloading latent space /</div>
+      <div>
+        Downloading diversity index @ {navigator.connection.downlink}Mbps
+      </div>
     </Wrapper>
   );
 };

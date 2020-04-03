@@ -9,8 +9,8 @@ const Wrapper = styled("div")`
   overflow: scroll;
   box-sizing: border-box;
   margin: -${props => props.theme.spacing.normal};
-  padding: ${props => `${props.theme.spacing.large}`}
-    ${props => `${props.theme.spacing.large}`} 0 0;
+  padding: ${props =>
+    `${props.theme.spacing.normal} ${props.theme.spacing.large} 0 0`};
 
   ${blurEdges};
 `;
