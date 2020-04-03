@@ -12,7 +12,7 @@ const Wrapper = styled("div")`
   width: 100%;
 `;
 
-const Input = styled("input")`
+export const Input = styled("input")`
   background: transparent;
   border: 2px solid ${props => props.theme.colors.white};
   display: flex;

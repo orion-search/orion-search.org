@@ -1,41 +1,41 @@
+/** @jsx jsx */
+import styled from "@emotion/styled";
+import { useSpring, animated } from "react-spring";
+
+import { fadeInUp } from "../../../utils";
+
 /**
- * @file A loading bar component that kicks off the experience
+ * @file A loading bar component
  */
-import React, { useRef } from "react";
-import { css } from "@emotion/core";
+import { css, jsx } from "@emotion/core";
+
+const Wrapper = styled(animated.div)`
+  font-size: ${props => `${props.theme.type.sizes.huge}`};
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
 const LoadingBar = () => {
-  const bar = useRef(null);
+  // const bar = useRef(null);
+  const wrapperAnimation = useSpring(fadeInUp);
 
   return (
-    <div
+    <Wrapper
       css={css`
-        font-size: 4vmin;
-        font-weight: 300;
-        height: 100vh;
-        width: 100vw;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        & > * {
-          animation: 2s fadeIn;
-        }
+        font-size: ${props => `${props.theme.type.sizes.huge}`};
       `}
+      style={wrapperAnimation}
     >
-      <p>Loading...</p>
-      <div
-        css={css`
-          background-color: white;
-          height: 5px;
-          border-radius: 3px;
-          width: 0px;
-          animation: 5s loadingBar;
-        `}
-        ref={bar}
-      />
-    </div>
+      <div>Downloading latent space /</div>
+      <div>
+        Downloading diversity index @ {navigator.connection.downlink}Mbps
+      </div>
+    </Wrapper>
   );
 };
 

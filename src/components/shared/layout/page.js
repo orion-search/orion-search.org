@@ -5,16 +5,18 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
-import Breadcrumbs from "../breadcrumbs";
 import { Row } from "./flex";
 import { urls } from "../../../utils";
+
+const sidePadding = `3vw`;
 
 export const PageLayoutWrapper = styled("main")`
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: 0 5vmin 5vmin 5vmin;
+  padding: ${props =>
+    `0 ${sidePadding} ${props.noPaddingBottom ? `0` : `5vh`} ${sidePadding}`};
   box-sizing: border-box;
 `;
 
@@ -22,10 +24,11 @@ export const NavBarWrapper = styled("div")`
   width: 100vw;
   height: 60px;
   margin-bottom: ${props => props.theme.spacing.medium};
-  padding: ${props => props.theme.spacing.small} 5vmin;
+  padding: ${props => props.theme.spacing.small} ${sidePadding};
   box-sizing: border-box;
   align-items: center;
   align-self: center;
+  font-weight: bold;
 
   backdrop-filter: blur(2px) brightness(20%);
 
@@ -48,16 +51,12 @@ const navURLs = [
     name: "Diversity Index"
   },
   {
-    to: urls.profileCountry,
-    name: "Country"
-  },
-  {
-    to: urls.profileTopic,
-    name: "Topic"
-  },
-  {
     to: urls.explore,
-    name: "Papers"
+    name: "Explore Papers"
+  },
+  {
+    to: urls.search,
+    name: "Search"
   }
 ];
 
@@ -85,15 +84,18 @@ export const PageLayout = ({ children, match, ...props }) => {
         <div
           css={css`
             margin-right: 1rem;
+            line-height: 40px;
           `}
         >
           Orion Search Engine v0.0.1
         </div>
 
-        {/* @todo Breadcrumbs is just a dummy value for correct flex alignment  */}
-        <Breadcrumbs values={[]} />
-
-        <Row width={1 / 4}>
+        <Row
+          css={css`
+            margin-left: auto;
+          `}
+          width={1 / 4}
+        >
           {navURLs.map(u => (
             <NavItem
               key={`nav-item-to-${u.to}`}
