@@ -22,7 +22,7 @@ const Toggle = ({ options, selected, onChange = () => {} }) => {
   const springs = useSprings(
     options.length,
     options.map(option => ({
-      opacity: option === active ? 1 : 0.2
+      opacity: option === active ? 1 : 0.35
     }))
   );
 

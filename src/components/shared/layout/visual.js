@@ -1,15 +1,7 @@
 /** @jsx jsx */
 import { css } from "@emotion/core";
 
-export const blurEdges = props => css`
-  mask-image: linear-gradient(
-    to bottom,
-    ${props.theme.colors.black}00,
-    ${props.theme.colors.black}FF 8%,
-    ${props.theme.colors.black}FF 92%,
-    ${props.theme.colors.black}00 100%
-  );
-
+const scrollbars = css`
   &::-webkit-scrollbar {
     width: 5px;
     border-radius: 4px;
@@ -19,6 +11,18 @@ export const blurEdges = props => css`
     background-color: white;
     border-radius: 10px;
   }
+`;
+
+export const blurEdges = props => css`
+  mask-image: linear-gradient(
+    to bottom,
+    ${props.theme.colors.black}00,
+    ${props.theme.colors.black}FF 8%,
+    ${props.theme.colors.black}FF 92%,
+    ${props.theme.colors.black}00 100%
+  );
+
+  ${scrollbars};
 `;
 
 export const yOverflow = props => css`

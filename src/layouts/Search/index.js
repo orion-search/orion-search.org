@@ -1,10 +1,11 @@
 import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { PageLayout, Row, Column, Title } from "../../components/shared/layout";
+import { Query } from "@apollo/react-components";
+
 import Toggle from "../../components/shared/toggle";
 import { PAPER_METADATA } from "../../queries";
-import Paper from "./Paper";
+import Results from "./Results";
 import Input from "./Input";
-import { Query } from "@apollo/react-components";
 
 const Search = () => {
   const searchRef = useRef("");
@@ -40,7 +41,6 @@ const Search = () => {
         .then(d => d.json())
         .then(data => {
           const ids = data["I"].map(d => parseInt(d));
-          console.log("setting Ids", ids);
           setIds(ids);
         });
   }, [query]);
@@ -50,7 +50,7 @@ const Search = () => {
   // };
 
   return (
-    <PageLayout>
+    <PageLayout noPaddingBottom>
       <Title>
         Search by{" "}
         <Toggle
@@ -59,30 +59,41 @@ const Search = () => {
           onChange={value => console.log(value)}
         />
       </Title>
-      <Column width={1 / 3}>
-        <p>This search engine / / /</p>
-        <p>Add some methodology text here / / /</p>
-      </Column>
       <Row>
-        <Column width={1 / 2}>
-          {/* <form onSubmit={handleSubmit}> */}
+        <Column width={1 / 3}>
+          <p>
+            Searching by abstract utilizes word embeddings and fast similarity
+            search (FAISS), to retrieve the most semantically similar abstracts
+            to the one provided.
+          </p>
           <Input placeholder={"Search for something..."} ref={searchRef} />
-          {/* </form> */}
+          <div noSpaceBetween>
+            Sort papers by{": "}
+            <Toggle
+              options={["citations", "date", "relevance"]}
+              selected={"relevance"}
+              onChange={value => console.log(value)}
+            />
+          </div>
+          <div>
+            Show{": "}
+            <Toggle
+              options={[25, 50, 100]}
+              selected={100}
+              onChange={value => console.log(value)}
+            />{" "}
+            results
+          </div>
         </Column>
-      </Row>
-      <Row>
-        <Column width={1}>
+        <Column width={2.5 / 4}>
           {ids.length && (
             <Query query={PAPER_METADATA} variables={{ ids }}>
               {({ loading, error, data }) => {
                 if (loading) return null;
                 if (error) throw error;
                 if (!data.papers) return null;
-                console.log(loading, error, data, "HELLO");
-
-                return data.papers.map(p => (
-                  <Paper key={`paper-${p.title}`} data={p} />
-                ));
+                console.log(data.papers);
+                return <Results data={data.papers} />;
               }}
             </Query>
           )}

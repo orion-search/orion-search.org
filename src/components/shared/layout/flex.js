@@ -11,7 +11,8 @@ export const Row = styled("div")`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
+  justify-content: ${props =>
+    props.noSpaceBetween ? `initial` : `space-between`};
 
   margin: ${props => props.theme.spacing.small} 0;
 
