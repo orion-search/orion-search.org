@@ -97,6 +97,7 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
       crossFilterSubscriber.current.compute().then(ids => {
         console.timeEnd("web worker computations");
         console.groupEnd("web worker computations");
+
         onChange({
           ids,
           colors: filters[0].length

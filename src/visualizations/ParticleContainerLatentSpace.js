@@ -2,9 +2,39 @@ import * as THREE from "three";
 import Renderer3D from "./Renderer3D";
 import { extent } from "d3";
 
-import pointFS from "../shaders/point.fs.js";
-import pointVS from "../shaders/point.vs.js";
+import { dataTexShaderFS } from "../shaders/point.fs.js";
+import { dataTexShaderVS } from "../shaders/point.vs.js";
 import { accessors } from "../utils";
+
+const VISIBLE = 1.0;
+const NOT_VISIBLE = 0.0;
+
+// function generateTexture(data, width) {
+//   const tex = new THREE.DataTexture(
+//     data,
+//     width,
+//     width,
+//     THREE.RGBFormat,
+//     THREE.FloatType
+//   );
+
+//   tex.minFilter = THREE.NearestFilter;
+//   tex.magFilter = THREE.NearestFilter;
+
+//   return tex;
+// }
+
+// function generateDataArray(valueMap, width, initialVal = 0) {
+//   const texValues = new Float32Array(width * width * 3).fill(initialVal);
+//   var idx = 0;
+//   valueMap.forEach((val, key, map) => {
+//     texValues[idx] = val;
+//     texValues[idx + 1] = val;
+//     texValues[idx + 2] = val;
+//     idx += 3;
+//   });
+//   return texValues;
+// }
 
 export class ParticleContainerLatentSpace extends Renderer3D {
   constructor({ layout, canvas }) {
@@ -48,23 +78,49 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry = new THREE.BufferGeometry();
 
     this.attributes = {
+      id: [],
       position: [],
       color: [],
+      opacity: [],
       size: [],
-      opacity: []
+      visible: []
     };
+
+    // Keeps track of the visibility state of each observation.
+    // Reset and mutated based on current filtering rules
+    this.visibilityMap = new Map();
+    this.opacityMap = new Map();
 
     var color = new THREE.Color();
 
+    this.textureWidth = Math.ceil(Math.log2(this.layout.nodes.length)) ** 2;
+
     for (let i = 0; i < this.layout.nodes.length; i++) {
-      const { x, y, z } = this.layout.nodes[i];
+      const { x, y, z, id } = this.layout.nodes[i];
       color.setRGB(1, 1, 1);
 
+      this.attributes.id.push(id);
       this.attributes.position.push(x, y, z);
       this.attributes.color.push(color.r, color.g, color.b);
+
+      // this will eventually changed based on
+      // citations or other metrics
+      const o = Math.random();
+      this.opacityMap.set(id, o);
+      this.attributes.opacity.push(o);
+
       this.attributes.size.push(120 + Math.random() * 50);
-      this.attributes.opacity.push(Math.random());
+
+      // populate our ID map for O(1) access
+      // 1 - show / 0 - hide
+      this.visibilityMap.set(id, VISIBLE);
+      this.attributes.visible.push(VISIBLE);
     }
+
+    this.geometry.setAttribute(
+      "id",
+      new THREE.Float32BufferAttribute(this.attributes.id, 1)
+    );
 
     this.geometry.setAttribute(
       "position",
@@ -77,13 +133,18 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     );
 
     this.geometry.setAttribute(
+      "opacity",
+      new THREE.Float32BufferAttribute(this.attributes.opacity, 1)
+    );
+
+    this.geometry.setAttribute(
       "size",
       new THREE.Float32BufferAttribute(this.attributes.size, 1)
     );
 
     this.geometry.setAttribute(
-      "opacity",
-      new THREE.Float32BufferAttribute(this.attributes.opacity, 1)
+      "visible",
+      new THREE.Float32BufferAttribute(this.attributes.visible, 1)
     );
 
     this.geometry.computeBoundingSphere();
@@ -95,8 +156,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
         }
       },
 
-      vertexShader: pointVS,
-      fragmentShader: pointFS,
+      vertexShader: dataTexShaderVS,
+      fragmentShader: dataTexShaderFS,
 
       blending: THREE.AdditiveBlending,
       depthTest: false,
@@ -111,29 +172,28 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   // filters papers by IDs
   // @todo: this could be done in a web worker
   filterPapers(ids) {
+    console.log("filtering papers");
     console.groupCollapsed("Updating attributes for filterPapers");
     console.time("Updating opacity attributes");
-    const opacities = this.geometry.attributes.opacity.array;
-
-    const nodes = this.layout.nodes.map(d => accessors.types.id(d));
 
     if (!ids) {
-      for (let i = 0; i < opacities.length; i++) {
-        opacities[i] = Math.random() * 0.5 + 0.5;
-      }
+      this.visibilityMap.forEach((val, key, map) => map.set(key, 1.0));
     } else {
-      for (let i = 0; i < opacities.length; i++) {
-        opacities[i] = 0;
-      }
+      this.visibilityMap.forEach((val, key, map) => map.set(key, 0.0));
       ids.forEach(id => {
-        let idx = nodes.indexOf(id);
-        opacities[idx] = Math.random() * 0.5 + 0.5;
+        this.visibilityMap.has(id) && this.visibilityMap.set(id, 1.0);
       });
     }
 
+    console.log(this.visibilityMap.size, "papers");
+    this.geometry.attributes.visible.set(
+      Float32Array.from(this.visibilityMap.values()),
+      0
+    );
+
     console.timeEnd("Updating opacity attributes");
     console.groupEnd("Updating attributes for filterPapers");
-    this.geometry.attributes.opacity.needsUpdate = true;
+    this.geometry.attributes.visible.needsUpdate = true;
   }
 
   // takes an array of {color, id}
