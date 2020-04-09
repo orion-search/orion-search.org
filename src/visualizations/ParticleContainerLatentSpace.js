@@ -9,35 +9,13 @@ import { accessors } from "../utils";
 const VISIBLE = 1.0;
 const NOT_VISIBLE = 0.0;
 
-// function generateTexture(data, width) {
-//   const tex = new THREE.DataTexture(
-//     data,
-//     width,
-//     width,
-//     THREE.RGBFormat,
-//     THREE.FloatType
-//   );
-
-//   tex.minFilter = THREE.NearestFilter;
-//   tex.magFilter = THREE.NearestFilter;
-
-//   return tex;
-// }
-
-// function generateDataArray(valueMap, width, initialVal = 0) {
-//   const texValues = new Float32Array(width * width * 3).fill(initialVal);
-//   var idx = 0;
-//   valueMap.forEach((val, key, map) => {
-//     texValues[idx] = val;
-//     texValues[idx + 1] = val;
-//     texValues[idx + 2] = val;
-//     idx += 3;
-//   });
-//   return texValues;
-// }
-
 export class ParticleContainerLatentSpace extends Renderer3D {
-  constructor({ layout, canvas }) {
+  rotate = false;
+  searchMode = false;
+  searchThreshold = 500;
+  cursor;
+
+  constructor({ layout, canvas, onHoverCallback = () => {} }) {
     super({ canvas });
 
     this.layout = layout;
@@ -47,11 +25,13 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     const [, farClippingPlane] = extent(this.layout.nodes, d => d.z);
 
     this.camera.far = farClippingPlane * 20;
-    this.camera.position.z = 4000;
+    this.camera.position.z = 15000;
     this.camera.updateProjectionMatrix();
 
     this.createGeometry();
-    // this.updateGeometry(layout);
+    this.createSphereGeometry();
+    // high tolerance raycaster for our search radius
+    this.raycaster.params.Points.threshold = this.searchThreshold;
 
     this.animate = this.animate.bind(this);
     this.animate();
@@ -59,6 +39,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
   animate() {
     requestAnimationFrame(this.animate);
+    this.renderer.clear(true, true, false);
 
     var time = Date.now() * 0.005;
 
@@ -69,9 +50,55 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
 
-    this.meshNodes.rotation.y = time * 0.005;
+    this.meshNodes.rotation.y = this.rotate
+      ? time * 0.005
+      : this.meshNodes.rotation.y;
 
     this.render();
+
+    const intersection = this.raycaster.intersectObject(this.meshNodes);
+
+    if (intersection.length > 0) {
+      this.cursor.position.copy(intersection[0].point);
+      this.cursor.scale.set(1, 1, 1);
+      console.log("intersection", intersection);
+    }
+  }
+
+  rotation(v) {
+    this.rotate = v;
+  }
+
+  destroy() {
+    document.removeEventListener("keyup", this.keyFunctions);
+  }
+
+  initKeyListeners() {
+    document.addEventListener("keyup", this.keyFunctions);
+  }
+
+  keyFunctions(e) {
+    switch (e.code) {
+      case "KeyS":
+        // Toggle interactive search mode
+        this.searchMode = !this.searchMode;
+        break;
+      case "KeyR":
+        // Toggles rotation
+        break;
+      case "BracketRight":
+        // Increase search radius
+        this.searchThreshold *= 1.2;
+        // make cursor bigger
+        break;
+      case "BracketLeft":
+        // Decrease search radius
+        this.searchThreshold /= 1.2;
+        // make cursor smaller
+        break;
+      default:
+        break;
+    }
   }
 
   createGeometry() {
@@ -160,13 +187,41 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       fragmentShader: dataTexShaderFS,
 
       blending: THREE.AdditiveBlending,
-      depthTest: false,
-      transparent: true
+      depthTest: true,
+      transparent: false
     });
 
     this.meshNodes = new THREE.Points(this.geometry, this.material);
 
-    this.meshNodes = this.scene.add(this.meshNodes);
+    this.scene.add(this.meshNodes);
+    console.log(this.meshNodes);
+  }
+
+  createSphereGeometry() {
+    let sphereGeometry = new THREE.SphereBufferGeometry(
+      this.searchThreshold,
+      8,
+      8
+    );
+    // let sphereMaterial = new THREE.MeshBasicMaterial({
+    //   color: 0xe0e0ff,
+    //   wireframe: true
+    // });
+    var sphereMaterial = new THREE.MeshNormalMaterial({
+      // color: 0xffffff,
+      wireframe: false,
+      // wireframeLinewidth: 10,
+      opacity: 0.75,
+      transparent: true,
+      // flatShading: true,
+      depthTest: true,
+      depthWrite: true,
+      side: THREE.FrontSide
+    });
+
+    this.cursor = new THREE.Mesh(sphereGeometry, sphereMaterial);
+    // this.cursor.renderOrder = 0;
+    this.scene.add(this.cursor);
   }
 
   // filters papers by IDs
@@ -233,19 +288,4 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     console.timeEnd("Resetting color attributes");
     console.groupEnd("Resetting color attributes");
   }
-
-  // updateGeometry({ nodes }) {
-  //   nodes.forEach((node, i) => {
-  //     this.transform.position.set(node.x, node.y, node.z);
-
-  //     this.transform.scale.set(node.r, node.r, node.r);
-  //     this.transform.updateMatrix();
-  //     this.meshNodes.setMatrixAt(i, this.transform.matrix);
-  //   });
-
-  //   this.meshNodes.instanceMatrix.needsUpdate = true;
-  //   this.meshNodes.updateMatrix();
-
-  //   this.nodes.computeBoundingSphere();
-  // }
 }

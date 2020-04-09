@@ -32,6 +32,7 @@ const LatentSpace = ({ data, papers }) => {
 
   const updateVizAttributes = ({ ids, colors }) => {
     ids.length && particles.current && particles.current.filterPapers(ids);
+    particles.current && particles.current.rotation(false);
 
     if (!colors) return;
 
@@ -60,13 +61,6 @@ const LatentSpace = ({ data, papers }) => {
           width: 25%;
         `}
       >
-        {/* <input
-        type="range"
-        value={citationFilter}
-        min={1}
-        max={100}
-        onChange={e => setCitationFilter(e.target.value)}
-      /> */}
         <Column>
           <Filters
             colorScheme={schemeCategory10}

@@ -45,8 +45,8 @@ export default class Renderer3D {
   }
 
   addLights() {
-    this.scene.fog = new THREE.Fog(0x050505, 2000, 3500);
-    this.scene.add(new THREE.AmbientLight(0xeeeeee));
+    // this.scene.fog = new THREE.Fog(0x050505, 2000, 3500);
+    // this.scene.add(new THREE.AmbientLight(0xeeeeee));
   }
 
   // animate() {
