@@ -1,5 +1,7 @@
+/** @jsx jsx */
+import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
-import React, { useRef, useEffect } from "react";
+import React, { Fragment, useRef, useEffect } from "react";
 import { schemeCategory10 } from "d3";
 
 import { Row, Column } from "../../components/shared/layout";
@@ -49,47 +51,55 @@ const LatentSpace = ({ data, papers }) => {
   }, [canvasRef]);
 
   return (
-    <div>
+    <Fragment>
       <AbsoluteCanvas ref={canvasRef} />
-      {/* <input
+      <div
+        css={css`
+          position: absolute;
+          top: 60px;
+          width: 25%;
+        `}
+      >
+        {/* <input
         type="range"
         value={citationFilter}
         min={1}
         max={100}
         onChange={e => setCitationFilter(e.target.value)}
       /> */}
-      <Column width={1 / 8}>
-        <Filters
-          colorScheme={schemeCategory10}
-          papers={papers}
-          ids={layout.current.nodes.map(o => accessors.types.id(o))}
-          dimensions={[
-            {
-              accessor: accessors.types.country,
-              accessorName: accessors.names.country,
-              component: MultiItemSearch,
-              data: papers[accessors.filters.country],
-              filter: [],
-              placeholder: "Search by Country...",
-              title: "Country"
-            },
-            {
-              accessor: accessors.types.topic,
-              accessorName: accessors.names.topic,
-              component: MultiItemSearch,
-              data: papers[accessors.filters.topic],
-              filter: [],
-              placeholder: "Search by Topic...",
-              title: "Topic"
-            }
-          ]}
-          onChange={updateVizAttributes}
-        />
-        <Row>
+        <Column>
+          <Filters
+            colorScheme={schemeCategory10}
+            papers={papers}
+            ids={layout.current.nodes.map(o => accessors.types.id(o))}
+            dimensions={[
+              {
+                accessor: accessors.types.country,
+                accessorName: accessors.names.country,
+                component: MultiItemSearch,
+                data: papers[accessors.filters.country],
+                filter: [],
+                placeholder: "Search by Country...",
+                title: "Country"
+              },
+              {
+                accessor: accessors.types.topic,
+                accessorName: accessors.names.topic,
+                component: MultiItemSearch,
+                data: papers[accessors.filters.topic],
+                filter: [],
+                placeholder: "Search by Topic...",
+                title: "Topic"
+              }
+            ]}
+            onChange={updateVizAttributes}
+          />
+          {/* <Row> */}
           {/* <Summary paperIDs={filteredPapers.ids} filters={filters} /> */}
-        </Row>
-      </Column>
-    </div>
+          {/* </Row> */}
+        </Column>
+      </div>
+    </Fragment>
   );
 };
 

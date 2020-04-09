@@ -29,6 +29,7 @@ export default class Renderer3D {
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
+    // this.renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
 
     this.mouse = new THREE.Vector2();
     this.raycaster = new THREE.Raycaster();
