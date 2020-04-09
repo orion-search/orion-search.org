@@ -1,5 +1,5 @@
 /** @jsx jsx */
-import React, { useState } from "react"; // eslint-disable-line no-unused-vars
+import React, { useState, Fragment } from "react"; // eslint-disable-line no-unused-vars
 import { useQuery } from "@apollo/react-hooks";
 import { Query } from "@apollo/react-components";
 import { css, jsx } from "@emotion/core";
@@ -25,7 +25,7 @@ const TopicProfile = () => {
   });
 
   return (
-    <>
+    <Fragment>
       <Row
         css={css`
           width: fit-content;
@@ -77,7 +77,7 @@ const TopicProfile = () => {
           )}
         </Column>
       </Flex>
-    </>
+    </Fragment>
   );
 };
 

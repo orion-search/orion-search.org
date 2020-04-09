@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import { Fragment } from "react";
 
 import React, { // eslint-disable-line no-unused-vars
   useRef,
@@ -100,7 +101,7 @@ const DiversityIndex = ({ data }) => {
   });
 
   return (
-    <>
+    <Fragment>
       <Filters
         onChangeGrouping={e => setGroupingAccessor(e.target.value)}
         onChangeYear={e => setYear(+e.target.value)}
@@ -147,7 +148,7 @@ const DiversityIndex = ({ data }) => {
           ref={canvasHUDRef}
         />
       </div>
-    </>
+    </Fragment>
   );
 };
 
