@@ -1,15 +1,10 @@
 import React, { useRef, useState, useContext, createContext } from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { csv } from "d3";
 import { accessors } from "../src/utils";
 
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import csvPapersByCountry from "./data/viz_paper_country.csv";
-import csvPapersByTopic from "./data/viz_paper_topics.csv";
-import csvPapersByYear from "./data/viz_paper_year.csv";
-import csvDiversity from "./data/viz_metrics_by_country.csv";
-import csvVectors from "./data/doc_vectors.csv";
+import cachedData from "./data/data.json";
 
 const OrionDataContext = createContext({});
 
@@ -64,33 +59,21 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 // eslint-disable-next-line
 const FetchOffline = ({ children }) => {
   const data = useRef();
-  const [ready, setReady] = useState(false);
-
-  Promise.all([
-    csv(csvPapersByCountry),
-    csv(csvPapersByTopic),
-    csv(csvPapersByYear),
-    csv(csvDiversity),
-    csv(csvVectors)
-  ]).then(([byCountry, byTopic, byYear, diversity, vectors], error) => {
-    if (error) throw error;
-    data.current = {
-      papers: {
-        byCountry,
-        byTopic,
-        byYear
-      },
-      diversity,
-      topics: byTopic.map(t => ({
-        [accessors.names.topic]: accessors.types.topic(t)
-      })),
-      vectors
-    };
-    setReady(true);
-  });
+  console.log(cachedData);
+  const { byCountry, byTopic, byYear } = cachedData.data;
+  data.current = cachedData.data;
+  data.current.papers = {
+    byCountry,
+    byTopic,
+    byYear
+  };
+  delete data.current.byCountry;
+  delete data.current.byTopic;
+  delete data.current.byYear;
+  console.log(data.current);
 
   return (
-    <LoadingOrChildren ready={ready} data={data.current}>
+    <LoadingOrChildren ready={true} data={data.current}>
       {children}
     </LoadingOrChildren>
   );
@@ -101,6 +84,7 @@ export const OrionDataProvider = ({ children }) => {
     <>
       {process.env.NODE_ENV === "development" && (
         <FetchOnline>{children}</FetchOnline>
+        // <FetchOffline>{children}</FetchOffline>
       )}
       {process.env.NODE_ENV === "production" && (
         <FetchOnline>{children}</FetchOnline>
