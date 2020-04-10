@@ -33,6 +33,9 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     // high tolerance raycaster for our search radius
     this.raycaster.params.Points.threshold = this.searchThreshold;
 
+    this.initKeyListeners();
+    this.renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
+
     this.animate = this.animate.bind(this);
     this.animate();
   }
@@ -43,6 +46,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     var time = Date.now() * 0.005;
 
+    // animate size
     for (var i = 0; i < this.geometry.attributes.size.array.length; i++) {
       this.geometry.attributes.size.array[i] += 0.5 * Math.sin(0.1 * i + time);
     }
@@ -50,9 +54,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
 
-    this.meshNodes.rotation.y = this.rotate
-      ? time * 0.005
-      : this.meshNodes.rotation.y;
+    this.meshNodes.rotation.y += this.rotate ? 0.001 : 0;
 
     this.render();
 
@@ -60,8 +62,12 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     if (intersection.length > 0) {
       this.cursor.position.copy(intersection[0].point);
-      this.cursor.scale.set(1, 1, 1);
-      console.log("intersection", intersection);
+      for (let intersected of intersection) {
+        const { index } = intersected;
+        this.meshNodes.geometry.attributes.customColor.setX(index, 0);
+      }
+
+      this.meshNodes.geometry.attributes.customColor.needsUpdate = true;
     }
   }
 
@@ -74,7 +80,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   }
 
   initKeyListeners() {
-    document.addEventListener("keyup", this.keyFunctions);
+    document.addEventListener("keyup", this.keyFunctions.bind(this));
   }
 
   keyFunctions(e) {
@@ -85,15 +91,20 @@ export class ParticleContainerLatentSpace extends Renderer3D {
         break;
       case "KeyR":
         // Toggles rotation
+        this.rotate = !this.rotate;
         break;
       case "BracketRight":
         // Increase search radius
         this.searchThreshold *= 1.2;
+        this.raycaster.params.Points.threshold = this.searchThreshold;
+        this.cursor.scale.multiplyScalar(1.2);
         // make cursor bigger
         break;
       case "BracketLeft":
         // Decrease search radius
         this.searchThreshold /= 1.2;
+        this.raycaster.params.Points.threshold = this.searchThreshold;
+        this.cursor.scale.divideScalar(1.2);
         // make cursor smaller
         break;
       default:
@@ -163,6 +174,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       "opacity",
       new THREE.Float32BufferAttribute(this.attributes.opacity, 1)
     );
+    this.geometry.morphAttributes.opacity = [];
 
     this.geometry.setAttribute(
       "size",
@@ -186,8 +198,10 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       vertexShader: dataTexShaderVS,
       fragmentShader: dataTexShaderFS,
 
+      morphTargets: true,
+      morphNormals: true,
       blending: THREE.AdditiveBlending,
-      depthTest: true,
+      depthTest: false,
       transparent: false
     });
 
