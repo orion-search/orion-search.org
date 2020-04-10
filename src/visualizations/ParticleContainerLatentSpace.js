@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import { SelectionBox } from "three/examples/jsm/interactive/SelectionBox";
+import { SelectionHelper } from "three/examples/jsm/interactive/SelectionHelper";
 import Renderer3D from "./Renderer3D";
 import { extent } from "d3";
 
@@ -30,6 +32,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     this.createGeometry();
     this.createSphereGeometry();
+    this.addGrid();
     // high tolerance raycaster for our search radius
     this.raycaster.params.Points.threshold = this.searchThreshold;
 
@@ -81,6 +84,27 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
   initKeyListeners() {
     document.addEventListener("keyup", this.keyFunctions.bind(this));
+  }
+
+  addGrid() {
+    this.meshNodes.geometry.computeBoundingBox();
+    // console.log(this.meshNodes.geometry.boundingBox);
+    const width =
+      this.meshNodes.geometry.boundingBox.max.x -
+      this.meshNodes.geometry.boundingBox.min.x;
+    const height =
+      this.meshNodes.geometry.boundingBox.max.y -
+      this.meshNodes.geometry.boundingBox.min.y;
+
+    let gridHelperX = new THREE.GridHelper(width, 10, 0xff0000, 0xffffff);
+    gridHelperX.position.y = this.meshNodes.geometry.boundingBox.min.y;
+
+    let gridHelperY = new THREE.GridHelper(height, 10, 0xff0000, 0xffffff);
+    gridHelperY.rotateX(Math.PI / 2);
+    gridHelperY.position.z = this.meshNodes.geometry.boundingBox.min.z;
+
+    this.scene.add(gridHelperX);
+    this.scene.add(gridHelperY);
   }
 
   keyFunctions(e) {
