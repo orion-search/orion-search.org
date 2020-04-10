@@ -15,10 +15,15 @@ void main() {
     // discard;
   // }
 
+  float border = 0.1;
+  float radius = 0.5;
+  float dist = radius - distance(gl_PointCoord, vec2(0.5));
+  float t = smoothstep(0.0, border, dist);
+
   if (distance(gl_PointCoord, vec2(0.5, .5)) > .5)
     discard;
 
-  gl_FragColor = vec4(color * vColor, vOpacity);
+  gl_FragColor = vec4(color * vColor, vOpacity * t);
 }
 `;
 
