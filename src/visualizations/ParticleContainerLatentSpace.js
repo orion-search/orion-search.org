@@ -15,6 +15,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   rotate = false;
   searchMode = false;
   searchThreshold = 500;
+  selectionBox;
+  selectionHelper;
   cursor;
 
   constructor({ layout, canvas, onHoverCallback = () => {} }) {
@@ -24,18 +26,19 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.transform = new THREE.Object3D();
 
     // camera transformations
-    const [, farClippingPlane] = extent(this.layout.nodes, d => d.z);
+    const [, farClippingPlane] = extent(this.layout.nodes, (d) => d.z);
 
     this.camera.far = farClippingPlane * 20;
     this.camera.position.z = 15000;
     this.camera.updateProjectionMatrix();
 
     this.createGeometry();
-    this.createSphereGeometry();
+    // this.createSphereGeometry();
     this.addGrid();
     // high tolerance raycaster for our search radius
     this.raycaster.params.Points.threshold = this.searchThreshold;
 
+    this.initSelectionBox();
     this.initKeyListeners();
     this.renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
 
@@ -61,17 +64,17 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     this.render();
 
-    const intersection = this.raycaster.intersectObject(this.meshNodes);
+    // const intersection = this.raycaster.intersectObject(this.meshNodes);
 
-    if (intersection.length > 0) {
-      this.cursor.position.copy(intersection[0].point);
-      for (let intersected of intersection) {
-        const { index } = intersected;
-        this.meshNodes.geometry.attributes.customColor.setX(index, 0);
-      }
+    // if (intersection.length > 0) {
+    //   this.cursor.position.copy(intersection[0].point);
+    //   for (let intersected of intersection) {
+    //     const { index } = intersected;
+    //     this.meshNodes.geometry.attributes.customColor.setX(index, 0);
+    //   }
 
-      this.meshNodes.geometry.attributes.customColor.needsUpdate = true;
-    }
+    //   this.meshNodes.geometry.attributes.customColor.needsUpdate = true;
+    // }
   }
 
   rotation(v) {
@@ -84,6 +87,72 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
   initKeyListeners() {
     document.addEventListener("keyup", this.keyFunctions.bind(this));
+  }
+
+  initMouseSelectionListeners() {
+    this.renderer.domElement.addEventListener("mousedown", (e) => {
+      console.log("MOUSEDOWN", this);
+      for (let item of this.selectionBox.collection) {
+        item.material.emissive.set(0xff0000);
+      }
+
+      this.selectionBox.startPoint.set(
+        (e.clientX / window.innerWidth) * 2 - 1,
+        -(e.clientY / window.innerHeight) * 2 + 1,
+        this.camera.position.z
+      );
+    });
+
+    this.renderer.domElement.addEventListener("mousemove", (event) => {
+      if (this.selectionHelper.isDown) {
+        console.log(this.selectionBox);
+        for (var i = 0; i < this.selectionBox.collection.length; i++) {
+          this.selectionBox.collection[i].material.emissive.set(0x000000);
+        }
+
+        this.selectionBox.endPoint.set(
+          (event.clientX / window.innerWidth) * 2 - 1,
+          -(event.clientY / window.innerHeight) * 2 + 1,
+          0.5
+        );
+
+        var allSelected = this.selectionBox.select();
+
+        for (var i = 0; i < allSelected.length; i++) {
+          allSelected[i].material.emissive.set(0xffffff);
+        }
+      }
+    });
+
+    document.addEventListener("mouseup", (event) => {
+      this.selectionBox.endPoint.set(
+        (event.clientX / window.innerWidth) * 2 - 1,
+        -(event.clientY / window.innerHeight) * 2 + 1,
+        0.5
+      );
+
+      var allSelected = this.selectionBox.select();
+      console.log("ALLSELECTED", allSelected);
+
+      for (var i = 0; i < allSelected.length; i++) {
+        allSelected[i].material.emissive.set(0xffffff);
+      }
+    });
+  }
+
+  initSelectionBox() {
+    this.controls.enabled = false;
+    this.selectionBox = new SelectionBox(
+      this.camera,
+      this.scene
+      // this.camera.far
+    );
+    this.selectionHelper = new SelectionHelper(
+      this.selectionBox,
+      this.renderer,
+      "selection-box-helper"
+    );
+    this.initMouseSelectionListeners();
   }
 
   addGrid() {
@@ -105,6 +174,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     this.scene.add(gridHelperX);
     this.scene.add(gridHelperY);
+
+    gridHelperY.depthTest = true;
   }
 
   keyFunctions(e) {
@@ -112,6 +183,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       case "KeyS":
         // Toggle interactive search mode
         this.searchMode = !this.searchMode;
+        // disables camera, enables search
         break;
       case "KeyR":
         // Toggles rotation
@@ -145,7 +217,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       color: [],
       opacity: [],
       size: [],
-      visible: []
+      visible: [],
     };
 
     // Keeps track of the visibility state of each observation.
@@ -154,8 +226,6 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.opacityMap = new Map();
 
     var color = new THREE.Color();
-
-    this.textureWidth = Math.ceil(Math.log2(this.layout.nodes.length)) ** 2;
 
     for (let i = 0; i < this.layout.nodes.length; i++) {
       const { x, y, z, id } = this.layout.nodes[i];
@@ -215,8 +285,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         color: {
-          value: new THREE.Color(0xffffff)
-        }
+          value: new THREE.Color(0xffffff),
+        },
       },
 
       vertexShader: dataTexShaderVS,
@@ -226,7 +296,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       morphNormals: true,
       blending: THREE.AdditiveBlending,
       depthTest: false,
-      transparent: false
+      transparent: false,
     });
 
     this.meshNodes = new THREE.Points(this.geometry, this.material);
@@ -254,7 +324,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       // flatShading: true,
       depthTest: true,
       depthWrite: true,
-      side: THREE.FrontSide
+      side: THREE.FrontSide,
     });
 
     this.cursor = new THREE.Mesh(sphereGeometry, sphereMaterial);
@@ -273,7 +343,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       this.visibilityMap.forEach((val, key, map) => map.set(key, 1.0));
     } else {
       this.visibilityMap.forEach((val, key, map) => map.set(key, 0.0));
-      ids.forEach(id => {
+      ids.forEach((id) => {
         this.visibilityMap.has(id) && this.visibilityMap.set(id, 1.0);
       });
     }
@@ -297,9 +367,9 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
     const color = new THREE.Color();
 
-    const nodes = this.layout.nodes.map(d => accessors.types.id(d));
+    const nodes = this.layout.nodes.map((d) => accessors.types.id(d));
 
-    papers.forEach(p => {
+    papers.forEach((p) => {
       let idx3 = nodes.indexOf(p.id) * 3;
       color.set(p.color);
       colors[idx3] = color.r;

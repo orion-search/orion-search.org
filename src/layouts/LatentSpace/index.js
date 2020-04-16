@@ -1,33 +1,34 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
-import React, { Fragment, useRef, useEffect } from "react";
+import { Fragment, useRef, useEffect } from "react";
 import { schemeCategory10 } from "d3";
 
-import { Row, Column } from "../../components/shared/layout";
+import { Column } from "../../components/shared/layout";
 import { accessors } from "../../utils";
 
 import { MultiItemSearch } from "../../components/shared/search";
 import Filters from "./Filters";
 
-import { ParticleContainerLatentSpace } from "../../visualizations/ParticleContainerLatentSpace";
+import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
 
 const LatentSpace = ({ data, papers }) => {
   const canvasRef = useRef(null);
+  const selectionBoxRef = useRef(null);
   const particles = useRef(null);
 
   const layout = useRef({
-    nodes: data.map(item => {
+    nodes: data.map((item) => {
       const [x, y, z] = accessors.types.vector3d(item);
       const id = accessors.types.id(item);
       return {
         x: x * 1000,
         y: y * 1000,
         z: z * 1000,
-        id
+        id,
       };
-    })
+    }),
   });
 
   const updateVizAttributes = ({ ids, colors }) => {
@@ -47,13 +48,15 @@ const LatentSpace = ({ data, papers }) => {
     console.log("new particle container");
     particles.current = new ParticleContainerLatentSpace({
       canvas: canvasRef.current,
-      layout: layout.current
+      layout: layout.current,
+      selectionBoxRef: selectionBoxRef.current,
     });
   }, [canvasRef]);
 
   return (
     <Fragment>
       <AbsoluteCanvas ref={canvasRef} />
+      {/* <SelectionBoxWrapper ref={selectionBoxRef} /> */}
       <div
         css={css`
           position: absolute;
@@ -65,7 +68,7 @@ const LatentSpace = ({ data, papers }) => {
           <Filters
             colorScheme={schemeCategory10}
             papers={papers}
-            ids={layout.current.nodes.map(o => accessors.types.id(o))}
+            ids={layout.current.nodes.map((o) => accessors.types.id(o))}
             dimensions={[
               {
                 accessor: accessors.types.country,
@@ -74,7 +77,7 @@ const LatentSpace = ({ data, papers }) => {
                 data: papers[accessors.filters.country],
                 filter: [],
                 placeholder: "Search by Country...",
-                title: "Country"
+                title: "Country",
               },
               {
                 accessor: accessors.types.topic,
@@ -83,8 +86,8 @@ const LatentSpace = ({ data, papers }) => {
                 data: papers[accessors.filters.topic],
                 filter: [],
                 placeholder: "Search by Topic...",
-                title: "Topic"
-              }
+                title: "Topic",
+              },
             ]}
             onChange={updateVizAttributes}
           />
