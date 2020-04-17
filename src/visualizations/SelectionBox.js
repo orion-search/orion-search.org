@@ -26,14 +26,14 @@ let SelectionBox = (function () {
     this.scene = scene;
     this.startPoint = new Vector3();
     this.endPoint = new Vector3();
-    this.collection = [];
+    this.collection = { ids: [], idx: [] };
     this.deep = deep || Number.MAX_VALUE;
   }
 
   SelectionBox.prototype.select = function (object) {
     // this.startPoint = startPoint || this.startPoint;
     // this.endPoint = endPoint || this.endPoint;
-    this.collection = [];
+    this.collection = { ids: [], idx: [] };
 
     this.updateFrustum(this.startPoint, this.endPoint);
     // this.searchChildInFrustum(frustum, this.scene);
@@ -119,8 +119,9 @@ let SelectionBox = (function () {
       center.applyMatrix4(object.matrixWorld);
 
       if (frustum.containsPoint(center)) {
-        this.collection.push(idx);
-        // this.collection.push(object.geometry.getAttribute("id").getX(idx));
+        this.collection.idx.push(idx);
+        // this.collection.ids.push(object.geometry.getAttribute("id").getX(idx));
+        this.collection.ids.push(object.geometry.userData.ids[idx]);
       }
     }
   };

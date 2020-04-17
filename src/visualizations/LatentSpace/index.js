@@ -1,6 +1,4 @@
 import * as THREE from "three";
-// import { SelectionBox } from "three/examples/jsm/interactive/SelectionBox";
-// import { SelectionHelper } from "three/examples/jsm/interactive/SelectionHelper";
 import { extent } from "d3";
 
 import { nodes, cursor } from "./geometry";
@@ -19,19 +17,23 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   rotate = true;
   searchMode = false;
   searchThreshold = 500;
-  selectionBox;
-  selectionHelper;
+  selection;
 
   // maps
   color = new Map();
   opacityMap = new Map();
   visibilityMap = new Map();
 
-  constructor({ layout, canvas, onHoverCallback = () => {} }) {
+  constructor({ layout, canvas, selectionCallback = () => {} }) {
     super({ canvas });
 
     this.layout = layout;
     this.transform = new THREE.Object3D();
+
+    // this callback is called when the selection is finished.
+    // in our case it notifies the parent Component to obtain
+    // information on selected papers
+    this.selectionCallback = selectionCallback;
 
     // camera transformations
     const [, farClippingPlane] = extent(this.layout.nodes, (d) => d.z);
@@ -61,9 +63,9 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     var time = Date.now() * 0.005;
 
     // animate size
-    for (var i = 0; i < this.geometry.attributes.size.array.length; i++) {
-      this.geometry.attributes.size.array[i] += 0.5 * Math.sin(0.1 * i + time);
-    }
+    // for (var i = 0; i < this.geometry.attributes.size.array.length; i++) {
+    //   this.geometry.attributes.size.array[i] += 0.5 * Math.sin(0.1 * i + time);
+    // }
 
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
@@ -104,40 +106,41 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     });
   }
 
-  onSelectionEnd({ selected }) {
+  onSelectionEnd({ selected }, updateParent = false) {
     // const intersection = this.raycaster.intersectObject(this.mesh);
-
-    // if (intersection.length > 0) {
-    if (selected.length > 0) {
-      const srcAttributes = {
-        position: this.mesh.geometry.getAttribute("position"),
-        size: this.mesh.geometry.getAttribute("size"),
-      };
-
-      const destAttributes = {
-        position: this.meshSelected.geometry.getAttribute("position"),
-        size: this.meshSelected.geometry.getAttribute("size"),
-      };
-
-      // this.cursor.position.copy(intersection[0].point);
-
-      // Copy intersected attributes to interaction mesh
-      // for (const [idx, intersected] of intersection.entries()) {
-      for (const [idx, index] of selected.entries()) {
-        // const { index } = intersected;
-
-        destAttributes.position.copyAt(idx, srcAttributes.position, index);
-        destAttributes.size.copyAt(idx, srcAttributes.size, index);
-      }
-
-      destAttributes.position.needsUpdate = true;
-      destAttributes.size.needsUpdate = true;
-
-      // this.meshSelected.geometry.setDrawRange(0, intersection.length);
-      this.meshSelected.geometry.setDrawRange(0, selected.length);
-
-      this.mesh.geometry.attributes.customColor.needsUpdate = true;
+    if (!selected.idx.length) return;
+    if (updateParent) {
+      this.selectionCallback(selected.ids);
     }
+    // if (intersection.length > 0) {
+    const srcAttributes = {
+      position: this.mesh.geometry.getAttribute("position"),
+      size: this.mesh.geometry.getAttribute("size"),
+    };
+
+    const destAttributes = {
+      position: this.meshSelected.geometry.getAttribute("position"),
+      size: this.meshSelected.geometry.getAttribute("size"),
+    };
+
+    // this.cursor.position.copy(intersection[0].point);
+
+    // Copy intersected attributes to interaction mesh
+    // for (const [idx, intersected] of intersection.entries()) {
+    for (const [idx, index] of selected.idx.entries()) {
+      // const { index } = intersected;
+
+      destAttributes.position.copyAt(idx, srcAttributes.position, index);
+      destAttributes.size.copyAt(idx, srcAttributes.size, index);
+    }
+
+    destAttributes.position.needsUpdate = true;
+    destAttributes.size.needsUpdate = true;
+
+    // this.meshSelected.geometry.setDrawRange(0, intersection.length);
+    this.meshSelected.geometry.setDrawRange(0, selected.idx.length);
+
+    this.mesh.geometry.attributes.customColor.needsUpdate = true;
   }
 
   keyFunctions(e) {
@@ -215,7 +218,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.meshSelected.name = "Selected_Particles";
     // this.meshSelected.position.z += 1;
 
-    const count = this.meshSelected.geometry.getAttribute("id").count;
+    const count = this.meshSelected.geometry.userData.ids.length;
 
     // stride of 3
     const c = this.meshSelected.geometry.getAttribute("customColor").array;

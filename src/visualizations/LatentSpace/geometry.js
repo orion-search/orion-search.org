@@ -16,6 +16,8 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
     visible: [],
   };
 
+  geometry.userData.ids = [];
+
   let color = new THREE.Color();
 
   for (let i = 0; i < data.length; i++) {
@@ -23,6 +25,8 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
     color.setRGB(1, 1, 1);
 
     attributes.id.push(id);
+    geometry.userData.ids.push(id);
+
     attributes.position.push(x, y, z);
     attributes.color.push(color.r, color.g, color.b);
 
@@ -34,10 +38,12 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
     attributes.size.push(120 + Math.random() * 50);
   }
 
-  geometry.setAttribute(
-    "id",
-    new THREE.Float32BufferAttribute(attributes.id, 1)
-  );
+  // @todo using Float32 for ids causes precision loss.
+  // Consider using userData instead?
+  // geometry.setAttribute(
+  //   "id",
+  //   new THREE.Uint32BufferAttribute(attributes.id, 1)
+  // );
 
   geometry.setAttribute(
     "position",

@@ -14,7 +14,7 @@ const FetchOnline = ({ children }) => {
   console.log(accessors);
 
   useQuery(SEED_DATA, {
-    onError: e => {
+    onError: (e) => {
       throw e;
     },
     onCompleted: ({
@@ -23,7 +23,7 @@ const FetchOnline = ({ children }) => {
       byYear,
       topics,
       diversity,
-      vectors
+      vectors,
     }) => {
       data.current = {
         diversity,
@@ -31,13 +31,13 @@ const FetchOnline = ({ children }) => {
           byCountry,
           byTopic,
           byYear,
-          vectors
+          vectors,
         },
         topics,
-        vectors
+        vectors,
       };
       setReady(true);
-    }
+    },
   });
 
   return (
@@ -59,18 +59,16 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 // eslint-disable-next-line
 const FetchOffline = ({ children }) => {
   const data = useRef();
-  console.log(cachedData);
   const { byCountry, byTopic, byYear } = cachedData.data;
   data.current = cachedData.data;
   data.current.papers = {
     byCountry,
     byTopic,
-    byYear
+    byYear,
   };
   delete data.current.byCountry;
   delete data.current.byTopic;
   delete data.current.byYear;
-  console.log(data.current);
 
   return (
     <LoadingOrChildren ready={true} data={data.current}>

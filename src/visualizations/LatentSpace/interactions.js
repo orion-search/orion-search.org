@@ -90,15 +90,26 @@ export class Selection {
 
     // this.raycaster.setFromCamera(new Vector2(x, y), this.camera);
 
-    this.onSelectionEnd({
-      selected: this.selectionBox.select(
-        this.scene.getObjectByName("All_Particles", true)
-      ),
-      plane: [],
-    });
+    this.onSelectionEnd(
+      {
+        selected: this.selectionBox.select(
+          this.scene.getObjectByName("All_Particles", true)
+        ),
+        plane: [],
+      },
+      false
+    );
   }
 
   onSelectOver() {
-    //
+    this.onSelectionEnd(
+      {
+        selected: this.selectionBox.select(
+          this.scene.getObjectByName("All_Particles", true)
+        ),
+        plane: [],
+      },
+      true
+    );
   }
 }
