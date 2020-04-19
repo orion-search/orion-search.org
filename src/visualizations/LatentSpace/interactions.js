@@ -9,6 +9,7 @@ import { SelectionBox } from "../SelectionBox";
 
 export class Selection {
   camera;
+  enabled = true;
   isDown = false;
   pointTopLeft = new Vector2();
   pointBottomRight = new Vector2();
@@ -33,6 +34,7 @@ export class Selection {
     renderer.domElement.addEventListener(
       "mousedown",
       function (event) {
+        if (!this.enabled) return;
         this.isDown = true;
         this.onSelectStart(event);
 
@@ -48,6 +50,7 @@ export class Selection {
     renderer.domElement.addEventListener(
       "mousemove",
       function (event) {
+        if (!this.enabled) return;
         if (this.isDown) {
           this.onSelectMove(event);
 
@@ -64,6 +67,7 @@ export class Selection {
     renderer.domElement.addEventListener(
       "mouseup",
       function (event) {
+        if (!this.enabled) return;
         this.isDown = false;
         this.selectionBox.setEndPoint(
           (event.clientX / window.innerWidth) * 2 - 1,

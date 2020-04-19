@@ -81,8 +81,8 @@ export const OrionDataProvider = ({ children }) => {
   return (
     <>
       {process.env.NODE_ENV === "development" && (
-        <FetchOnline>{children}</FetchOnline>
-        // <FetchOffline>{children}</FetchOffline>
+        // <FetchOnline>{children}</FetchOnline>
+        <FetchOffline>{children}</FetchOffline>
       )}
       {process.env.NODE_ENV === "production" && (
         <FetchOnline>{children}</FetchOnline>
