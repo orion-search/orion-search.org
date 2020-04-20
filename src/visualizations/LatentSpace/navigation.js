@@ -1,6 +1,3 @@
-import { Vector2 } from "three";
-import { tween } from "@tweenjs/tween.js";
-
 export class Navigation {
   state = {
     rotate: {
@@ -12,10 +9,11 @@ export class Navigation {
   renderer;
   camera;
 
-  constructor({ renderer, camera }) {
+  constructor({ renderer, camera, controls }) {
     this.idleState = this.state;
     this.renderer = renderer;
     this.camera = camera;
+    this.controls = controls;
 
     this.renderer.domElement.addEventListener(
       "keydown",
@@ -49,6 +47,15 @@ export class Navigation {
           },
         };
         break;
+      case "KeyF":
+        this.flyTo({
+          position: {
+            x: -6470.934313189284,
+            y: 10129.905082625233,
+            z: -12712.04995590219,
+          },
+        });
+        break;
       case "KeyQ":
         // Rotate left
         this.state = {
@@ -64,5 +71,9 @@ export class Navigation {
     }
   }
 
-  flyTo() {}
+  flyTo({ position }) {
+    // @todo make a tween here
+    // this.controls.target.set(position.x, position.y, position.z);
+    // this.controls.update();
+  }
 }

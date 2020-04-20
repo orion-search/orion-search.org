@@ -56,17 +56,18 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.navigation = new Navigation({
       renderer: this.renderer,
       camera: this.camera,
+      controls: this.controls,
     });
 
     this.animate = this.animate.bind(this);
     this.animate();
   }
 
-  animate() {
+  animate(t) {
     requestAnimationFrame(this.animate);
     this.renderer.clear(true, true, false);
 
-    // var time = Date.now() * 0.005;
+    var time = Date.now() * 0.005;
 
     // animate size
     // for (var i = 0; i < this.geometry.attributes.size.array.length; i++) {
@@ -134,10 +135,6 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     // const intersection = this.raycaster.intersectObject(this.mesh);
     if (!selected.idx.length) return;
 
-    // Updates parent state, to find metadata on selected items
-    if (updateParent) {
-      this.selectionCallback(selected.ids);
-    }
     // if (intersection.length > 0) {
     const srcAttributes = {
       position: this.mesh.geometry.getAttribute("position"),
@@ -167,6 +164,24 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.meshSelected.geometry.setDrawRange(0, selected.idx.length);
 
     this.mesh.geometry.attributes.customColor.needsUpdate = true;
+
+    // Updates parent state, to find metadata on selected items
+    // Ideally this should be prior to setting draw range on mesh
+    // as it invokes an asynchronous process
+    if (updateParent) {
+      this.meshSelected.geometry.computeBoundingBox();
+      // const { min, max } = this.meshSelected.geometry.boundingBox;
+
+      // @todo handle flying here
+      // this.navigation.flyTo({
+      //   position: {
+      //     x: (min.x + max.x) / 2,
+      //     y: (min.y + max.y) / 2,
+      //     z: this.camera.position.z,
+      //   },
+      // });
+      this.selectionCallback(selected.ids);
+    }
   }
 
   keyFunctions(e) {
