@@ -25,7 +25,7 @@ export default class Renderer3D {
     this.addLights();
 
     this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas
+      canvas: this.canvas,
     });
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(window.innerWidth, window.innerHeight);
@@ -45,7 +45,7 @@ export default class Renderer3D {
   }
 
   addLights() {
-    // this.scene.fog = new THREE.Fog(0x050505, 2000, 3500);
+    // this.scene.fog = new THREE.Fog(0x00ff00, 0, 10000);
     // this.scene.add(new THREE.AmbientLight(0xeeeeee));
   }
 
@@ -72,7 +72,7 @@ export default class Renderer3D {
   }
 
   render() {
-    this.raycaster.setFromCamera(this.mouse, this.camera);
+    // this.raycaster.setFromCamera(this.mouse, this.camera);
     this.renderer.render(this.scene, this.camera);
   }
 }

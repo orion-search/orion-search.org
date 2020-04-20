@@ -1,6 +1,6 @@
 /** @jsx jsx */
 import styled from "@emotion/styled";
-import { css, jsx } from "@emotion/core";
+import { jsx } from "@emotion/core";
 import { useRef, useLayoutEffect } from "react";
 
 import { Row, Column } from "../../components/shared/layout";
@@ -8,13 +8,13 @@ import Toggle from "../../components/shared/toggle";
 import Input from "./Input";
 
 const Option = styled("div")`
-  margin-top: ${props => props.theme.spacing.large};
+  margin-top: ${(props) => props.theme.spacing.large};
 `;
 
 const Panel = ({ type, onSearch, onSearchOptionChange }) => {
   const searchRef = useRef("");
   useLayoutEffect(() => {
-    const onSearchEnter = document.addEventListener("keyup", e => {
+    const onSearchEnter = document.addEventListener("keyup", (e) => {
       e.preventDefault();
       switch (e.key) {
         case "Enter":
@@ -43,7 +43,7 @@ const Panel = ({ type, onSearch, onSearchOptionChange }) => {
         <Toggle
           values={["citations", "date", "relevance"]}
           selected={"relevance"}
-          onChange={value => console.log(value)}
+          onChange={(value) => console.log(value)}
         />
       </Option>
       <Option>
@@ -51,7 +51,7 @@ const Panel = ({ type, onSearch, onSearchOptionChange }) => {
         <Toggle
           values={[25, 50, 100]}
           selected={100}
-          onChange={value => console.log(value)}
+          onChange={(value) => console.log(value)}
         />{" "}
         results
       </Option>

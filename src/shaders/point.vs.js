@@ -1,7 +1,6 @@
 export const dataTexShaderVS = `
 attribute float size;
 
-attribute float id;
 attribute vec3 customColor;
 attribute float opacity;
 attribute float visible;
