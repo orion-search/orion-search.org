@@ -89,7 +89,7 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
 
     blending: THREE.NormalBlending,
     // do we depend on draw order or coordinates in order to calculate depth?
-    depthTest: false,
+    depthTest: true,
     depthWrite: true,
     // fog: true,
     alphaTest: 0.1,

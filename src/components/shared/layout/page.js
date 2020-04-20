@@ -15,7 +15,7 @@ export const PageLayoutWrapper = styled("main")`
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: ${props =>
+  padding: ${(props) =>
     `0 ${sidePadding} ${props.noPaddingBottom ? `0` : `5vh`} ${sidePadding}`};
   box-sizing: border-box;
 `;
@@ -23,16 +23,18 @@ export const PageLayoutWrapper = styled("main")`
 export const NavBarWrapper = styled("div")`
   width: 100vw;
   height: 60px;
-  margin-bottom: ${props => props.theme.spacing.medium};
-  padding: ${props => props.theme.spacing.small} ${sidePadding};
+  margin-bottom: ${(props) => props.theme.spacing.medium};
+  padding: ${(props) => props.theme.spacing.small} ${sidePadding};
   box-sizing: border-box;
   align-items: center;
   align-self: center;
   font-weight: bold;
 
+  user-select: none;
+
   backdrop-filter: blur(2px) brightness(20%);
 
-  border-bottom: ${props => `1px solid ${props.theme.colors.white}`};
+  border-bottom: ${(props) => `1px solid ${props.theme.colors.white}`};
 
   display: flex;
   position: relative;
@@ -41,23 +43,23 @@ export const NavBarWrapper = styled("div")`
 export const NavItem = styled(({ highlighted, ...props }) => (
   <Link {...props} />
 ))`
-  text-decoration: ${props => (props.highlighted ? `underline` : `none`)};
-  color: ${props => props.theme.colors.white};
+  text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
+  color: ${(props) => props.theme.colors.white};
 `;
 
 const navURLs = [
   {
     to: urls.diversity,
-    name: "Diversity Index"
+    name: "Diversity Index",
   },
   {
     to: urls.explore,
-    name: "Explore Papers"
+    name: "Explore Papers",
   },
   {
     to: urls.search,
-    name: "Search"
-  }
+    name: "Search",
+  },
 ];
 
 export const PageLayout = ({ children, match, ...props }) => {
@@ -96,7 +98,7 @@ export const PageLayout = ({ children, match, ...props }) => {
           `}
           width={1 / 4}
         >
-          {navURLs.map(u => (
+          {navURLs.map((u) => (
             <NavItem
               key={`nav-item-to-${u.to}`}
               to={u.to}

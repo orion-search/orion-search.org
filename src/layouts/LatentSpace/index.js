@@ -3,14 +3,12 @@ import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { Fragment, useRef, useState, useEffect } from "react";
 import { schemeCategory10 } from "d3";
-import { Query } from "@apollo/react-components";
-
-import { Row, Column } from "../../components/shared/layout";
-import { accessors, formatThousands } from "../../utils";
-import { PAPER_METADATA } from "../../queries";
 
 import { MultiItemSearch } from "../../components/shared/search";
-import Filters from "./Filters";
+
+import { Row, Column } from "../../components/shared/layout";
+import { accessors } from "../../utils";
+import Summary from "./Summary";
 
 import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
@@ -106,29 +104,6 @@ const LatentSpace = ({ data, papers }) => {
       </div>
     </Fragment>
   );
-};
-
-const Summary = ({ paperIds }) => {
-  const p = formatThousands(paperIds.length);
-  if (!paperIds.length) return null;
-  return (
-    <Query query={PAPER_METADATA} variables={{ ids: paperIds.slice(0, 20) }}>
-      {({ loading, error, data }) => {
-        if (loading) return null;
-        if (error) throw error;
-        if (!data.papers) return null;
-        return (
-          <ul>
-            <li>{`Showing 20/${p} papers -> EXPLORE CLUSTER`}</li>
-            {data.papers.map((p) => (
-              <li key={`${p.id}`}>{p.title}</li>
-            ))}
-          </ul>
-        );
-      }}
-    </Query>
-  );
-  // return <div>{`Showing ${p} papers from`}</div>;
 };
 
 export default cold(LatentSpace);
