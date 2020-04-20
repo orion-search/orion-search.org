@@ -3,6 +3,7 @@ import { extent } from "d3";
 
 import { nodes, cursor } from "./geometry";
 import { Selection } from "./interactions";
+import { Navigation } from "./navigation";
 
 import { accessors } from "../../utils";
 import Renderer3D from "../Renderer3D";
@@ -52,11 +53,17 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.initKeyListeners();
     this.renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
 
+    this.navigation = new Navigation({
+      renderer: this.renderer,
+      camera: this.camera,
+      controls: this.controls,
+    });
+
     this.animate = this.animate.bind(this);
     this.animate();
   }
 
-  animate() {
+  animate(t) {
     requestAnimationFrame(this.animate);
     this.renderer.clear(true, true, false);
 
@@ -70,10 +77,30 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.geometry.attributes.size.needsUpdate = true;
     // this.geometry.attributes.color.needsUpdate = true;
 
-    if (this.rotate) {
-      this.mesh.rotation.y += 0.001;
-      this.meshSelected.rotation.y += 0.001;
+    const rotationAmount = 0.01;
+
+    if (this.navigation.state.disableOrbitControls) {
+      // When SHIFT key is pressed, disable orbit controls and enable selection
+      this.controls.enabled = false;
+      this.selection.enabled = true;
+      console.log("disabling controls");
+    } else {
+      // When SHIFT key is released, enable orbit controls and disable selection
+      this.selection.enabled = false;
+      this.controls.enabled = true;
     }
+
+    if (this.navigation.state.rotate.right) {
+      this.mesh.rotation.y += rotationAmount;
+      this.meshSelected.rotation.y += rotationAmount;
+    } else if (this.navigation.state.rotate.left) {
+      this.mesh.rotation.y -= rotationAmount;
+      this.meshSelected.rotation.y -= rotationAmount;
+    }
+    //  if (this.rotate) {
+    //    this.mesh.rotation.y += 0.001;
+    //    this.meshSelected.rotation.y += 0.001;
+    //  }
 
     this.render();
   }
@@ -95,8 +122,6 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   // Selection Interactions
   // =======================
   initSelectionBox() {
-    // disable OrbitControls
-    this.controls.enabled = false;
     this.selection = new Selection({
       camera: this.camera,
       onSelectionEnd: this.onSelectionEnd.bind(this),
@@ -109,9 +134,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   onSelectionEnd({ selected }, updateParent = false) {
     // const intersection = this.raycaster.intersectObject(this.mesh);
     if (!selected.idx.length) return;
-    if (updateParent) {
-      this.selectionCallback(selected.ids);
-    }
+
     // if (intersection.length > 0) {
     const srcAttributes = {
       position: this.mesh.geometry.getAttribute("position"),
@@ -141,6 +164,24 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.meshSelected.geometry.setDrawRange(0, selected.idx.length);
 
     this.mesh.geometry.attributes.customColor.needsUpdate = true;
+
+    // Updates parent state, to find metadata on selected items
+    // Ideally this should be prior to setting draw range on mesh
+    // as it invokes an asynchronous process
+    if (updateParent) {
+      this.meshSelected.geometry.computeBoundingBox();
+      // const { min, max } = this.meshSelected.geometry.boundingBox;
+
+      // @todo handle flying here
+      // this.navigation.flyTo({
+      //   position: {
+      //     x: (min.x + max.x) / 2,
+      //     y: (min.y + max.y) / 2,
+      //     z: this.camera.position.z,
+      //   },
+      // });
+      this.selectionCallback(selected.ids);
+    }
   }
 
   keyFunctions(e) {
@@ -199,7 +240,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     gridHelperY.depthTest = true;
 
     this.scene.add(gridHelperX);
-    this.scene.add(gridHelperY);
+    // this.scene.add(gridHelperY);
   }
 
   addNodes() {
