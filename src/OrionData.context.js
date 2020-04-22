@@ -1,7 +1,17 @@
-import React, { useRef, useState, useContext, createContext } from "react";
+/**
+ * Everything that happens before the app kicks off.
+ */
+import React, {
+  useRef,
+  useState,
+  useContext,
+  useLayoutEffect,
+  createContext,
+} from "react";
 import { useQuery } from "@apollo/react-hooks";
-import { accessors } from "../src/utils";
+import { AbsoluteCanvas, initApp } from "./components/shared/renderer";
 
+import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
 import cachedData from "./data/data.json";
@@ -48,10 +58,29 @@ const FetchOnline = ({ children }) => {
 };
 
 const LoadingOrChildren = ({ ready, children, data }) => {
+  const canvasRef = useRef(null);
+  const [providerData, setProviderData] = useState({
+    ...data,
+  });
+  // const [providerData, setProviderData] = useState(seedData)
+
+  useLayoutEffect(() => {
+    if (!ready) return;
+    console.info("Mounting App");
+    const { controls, raycaster, renderer, render } = initApp({
+      canvas: canvasRef.current,
+    });
+    setProviderData({
+      ...data,
+      stage: { controls, raycaster, renderer, render },
+    });
+  }, [canvasRef, ready, data]);
+
   return (
-    <OrionDataContext.Provider value={data}>
-      {!ready && <LoadingBar />}
+    <OrionDataContext.Provider value={providerData}>
+      {!ready && !providerData.stage && <LoadingBar />}
       {ready && children}
+      <AbsoluteCanvas ref={canvasRef} />
     </OrionDataContext.Provider>
   );
 };
@@ -66,6 +95,7 @@ const FetchOffline = ({ children }) => {
     byTopic,
     byYear,
   };
+
   delete data.current.byCountry;
   delete data.current.byTopic;
   delete data.current.byYear;
