@@ -32,7 +32,7 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
 
     // this will eventually changed based on
     // citations or other metrics
-    attributes.opacity.push(Math.random());
+    attributes.opacity.push(opacityMap.get(id));
     attributes.visible.push(1);
 
     attributes.size.push(120 + Math.random() * 50);
@@ -89,7 +89,7 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
 
     blending: THREE.NormalBlending,
     // do we depend on draw order or coordinates in order to calculate depth?
-    depthTest: false,
+    depthTest: true,
     depthWrite: true,
     // fog: true,
     alphaTest: 0.1,

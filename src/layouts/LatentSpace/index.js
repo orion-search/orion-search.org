@@ -3,23 +3,30 @@ import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { Fragment, useRef, useState, useEffect } from "react";
 import { schemeCategory10 } from "d3";
-import { Query } from "@apollo/react-components";
-
-import { Row, Column } from "../../components/shared/layout";
-import { accessors, formatThousands } from "../../utils";
-import { PAPER_METADATA } from "../../queries";
+import { useLocation } from "react-router-dom";
 
 import { MultiItemSearch } from "../../components/shared/search";
-import Filters from "./Filters";
+import { Button } from "../../components/shared/button";
+import { Row, Column } from "../../components/shared/layout";
+import { accessors } from "../../utils";
+import Summary from "./Summary";
 
 import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
 
-const LatentSpace = ({ data, papers }) => {
-  const [selectedPaperIds, setSelectedPaperIds] = useState([]);
+const LatentSpace = ({ data }) => {
+  const preselectedIds = useRef(useLocation().state?.filters.ids || []);
+
+  const [selectedPaperIds, setSelectedPaperIds] = useState(
+    preselectedIds.current
+  );
   const canvasRef = useRef(null);
   const selectionBoxRef = useRef(null);
   const particles = useRef(null);
+
+  // Parse initially filtered papers
+  const filterInitial = selectedPaperIds;
+  console.log(filterInitial);
 
   const layout = useRef({
     nodes: data.map((item) => {
@@ -34,19 +41,6 @@ const LatentSpace = ({ data, papers }) => {
     }),
   });
 
-  const updateVizAttributes = ({ ids, colors }) => {
-    ids.length && particles.current && particles.current.filterPapers(ids);
-    particles.current && particles.current.rotation(false);
-
-    if (!colors) return;
-
-    if (colors.length) {
-      particles.current && particles.current.colorPapers(colors);
-    } else {
-      particles.current && particles.current.resetColors();
-    }
-  };
-
   const updateSelectedPapers = (ids) => {
     setSelectedPaperIds(ids);
   };
@@ -56,9 +50,13 @@ const LatentSpace = ({ data, papers }) => {
     particles.current = new ParticleContainerLatentSpace({
       canvas: canvasRef.current,
       layout: layout.current,
+      filtered: [],
       selectionBoxRef: selectionBoxRef.current,
       selectionCallback: updateSelectedPapers,
     });
+
+    preselectedIds.current.length &&
+      particles.current.filter(preselectedIds.current);
   }, [canvasRef]);
 
   return (
@@ -100,35 +98,21 @@ const LatentSpace = ({ data, papers }) => {
             onChange={updateVizAttributes}
           /> */}
           <Row>
+            <Button
+              onClick={() =>
+                particles.current && particles.current.resetFilters()
+              }
+            >
+              Reset Filters
+            </Button>
+          </Row>
+          <Row>
             <Summary paperIds={selectedPaperIds} />
           </Row>
         </Column>
       </div>
     </Fragment>
   );
-};
-
-const Summary = ({ paperIds }) => {
-  const p = formatThousands(paperIds.length);
-  if (!paperIds.length) return null;
-  return (
-    <Query query={PAPER_METADATA} variables={{ ids: paperIds.slice(0, 20) }}>
-      {({ loading, error, data }) => {
-        if (loading) return null;
-        if (error) throw error;
-        if (!data.papers) return null;
-        return (
-          <ul>
-            <li>{`Showing 20/${p} papers -> EXPLORE CLUSTER`}</li>
-            {data.papers.map((p) => (
-              <li key={`${p.id}`}>{p.title}</li>
-            ))}
-          </ul>
-        );
-      }}
-    </Query>
-  );
-  // return <div>{`Showing ${p} papers from`}</div>;
 };
 
 export default cold(LatentSpace);
