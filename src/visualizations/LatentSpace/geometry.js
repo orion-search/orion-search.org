@@ -32,7 +32,7 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
 
     // this will eventually changed based on
     // citations or other metrics
-    attributes.opacity.push(Math.random());
+    attributes.opacity.push(opacityMap.get(id));
     attributes.visible.push(1);
 
     attributes.size.push(120 + Math.random() * 50);

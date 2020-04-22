@@ -3,9 +3,10 @@ import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { Fragment, useRef, useState, useEffect } from "react";
 import { schemeCategory10 } from "d3";
+import { useLocation } from "react-router-dom";
 
 import { MultiItemSearch } from "../../components/shared/search";
-
+import { Button } from "../../components/shared/button";
 import { Row, Column } from "../../components/shared/layout";
 import { accessors } from "../../utils";
 import Summary from "./Summary";
@@ -13,11 +14,19 @@ import Summary from "./Summary";
 import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 import { AbsoluteCanvas } from "../../components/shared/renderer";
 
-const LatentSpace = ({ data, papers }) => {
-  const [selectedPaperIds, setSelectedPaperIds] = useState([]);
+const LatentSpace = ({ data }) => {
+  const preselectedIds = useRef(useLocation().state?.filters.ids || []);
+
+  const [selectedPaperIds, setSelectedPaperIds] = useState(
+    preselectedIds.current
+  );
   const canvasRef = useRef(null);
   const selectionBoxRef = useRef(null);
   const particles = useRef(null);
+
+  // Parse initially filtered papers
+  const filterInitial = selectedPaperIds;
+  console.log(filterInitial);
 
   const layout = useRef({
     nodes: data.map((item) => {
@@ -32,19 +41,6 @@ const LatentSpace = ({ data, papers }) => {
     }),
   });
 
-  const updateVizAttributes = ({ ids, colors }) => {
-    ids.length && particles.current && particles.current.filterPapers(ids);
-    particles.current && particles.current.rotation(false);
-
-    if (!colors) return;
-
-    if (colors.length) {
-      particles.current && particles.current.colorPapers(colors);
-    } else {
-      particles.current && particles.current.resetColors();
-    }
-  };
-
   const updateSelectedPapers = (ids) => {
     setSelectedPaperIds(ids);
   };
@@ -54,9 +50,13 @@ const LatentSpace = ({ data, papers }) => {
     particles.current = new ParticleContainerLatentSpace({
       canvas: canvasRef.current,
       layout: layout.current,
+      filtered: [],
       selectionBoxRef: selectionBoxRef.current,
       selectionCallback: updateSelectedPapers,
     });
+
+    preselectedIds.current.length &&
+      particles.current.filter(preselectedIds.current);
   }, [canvasRef]);
 
   return (
@@ -97,6 +97,15 @@ const LatentSpace = ({ data, papers }) => {
             ]}
             onChange={updateVizAttributes}
           /> */}
+          <Row>
+            <Button
+              onClick={() =>
+                particles.current && particles.current.resetFilters()
+              }
+            >
+              Reset Filters
+            </Button>
+          </Row>
           <Row>
             <Summary paperIds={selectedPaperIds} />
           </Row>

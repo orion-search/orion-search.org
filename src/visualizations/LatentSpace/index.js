@@ -1,3 +1,6 @@
+/**
+ * @todo add Bloom Filter on meshSelected
+ */
 import * as THREE from "three";
 import { extent } from "d3";
 
@@ -5,7 +8,6 @@ import { nodes, cursor } from "./geometry";
 import { Selection } from "./interactions";
 import { Navigation } from "./navigation";
 
-import { accessors } from "../../utils";
 import Renderer3D from "../Renderer3D";
 
 export class ParticleContainerLatentSpace extends Renderer3D {
@@ -15,13 +17,11 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   layout;
   mesh; // for meshes
   meshSelected; // for selected nodes
-  rotate = true;
-  searchMode = false;
   searchThreshold = 500;
   selection;
 
-  // maps
-  color = new Map();
+  // maps for O(1) property access
+  colorMap = new Map();
   opacityMap = new Map();
   visibilityMap = new Map();
 
@@ -29,15 +29,20 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     super({ canvas });
 
     this.layout = layout;
-    this.transform = new THREE.Object3D();
+
+    // camera transformations
+    const [, farClippingPlane] = extent(this.layout.nodes, (d) => d.z);
+
+    // store node IDs for
+    this.layout.nodes.forEach((n) => {
+      // @todo this should be parameterized (citations?)
+      this.opacityMap.set(n.id, 0.2);
+    });
 
     // this callback is called when the selection is finished.
     // in our case it notifies the parent Component to obtain
     // information on selected papers
     this.selectionCallback = selectionCallback;
-
-    // camera transformations
-    const [, farClippingPlane] = extent(this.layout.nodes, (d) => d.z);
 
     this.camera.far = farClippingPlane * 20;
     this.camera.position.z = 15000;
@@ -97,16 +102,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       this.mesh.rotation.y -= rotationAmount;
       this.meshSelected.rotation.y -= rotationAmount;
     }
-    //  if (this.rotate) {
-    //    this.mesh.rotation.y += 0.001;
-    //    this.meshSelected.rotation.y += 0.001;
-    //  }
 
     this.render();
-  }
-
-  rotation(shouldRotate) {
-    this.rotate = shouldRotate;
   }
 
   destroy() {
@@ -114,10 +111,9 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   }
 
   initKeyListeners() {
+    console.log(this);
     document.addEventListener("keyup", this.keyFunctions.bind(this));
   }
-
-  goTo(id) {}
 
   // Selection Interactions
   // =======================
@@ -132,10 +128,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   }
 
   onSelectionEnd({ selected }, updateParent = false) {
-    // const intersection = this.raycaster.intersectObject(this.mesh);
     if (!selected.idx.length) return;
 
-    // if (intersection.length > 0) {
     const srcAttributes = {
       position: this.mesh.geometry.getAttribute("position"),
       size: this.mesh.geometry.getAttribute("size"),
@@ -146,13 +140,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
       size: this.meshSelected.geometry.getAttribute("size"),
     };
 
-    // this.cursor.position.copy(intersection[0].point);
-
-    // Copy intersected attributes to interaction mesh
-    // for (const [idx, intersected] of intersection.entries()) {
     for (const [idx, index] of selected.idx.entries()) {
-      // const { index } = intersected;
-
       destAttributes.position.copyAt(idx, srcAttributes.position, index);
       destAttributes.size.copyAt(idx, srcAttributes.size, index);
     }
@@ -160,10 +148,7 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     destAttributes.position.needsUpdate = true;
     destAttributes.size.needsUpdate = true;
 
-    // this.meshSelected.geometry.setDrawRange(0, intersection.length);
     this.meshSelected.geometry.setDrawRange(0, selected.idx.length);
-
-    this.mesh.geometry.attributes.customColor.needsUpdate = true;
 
     // Updates parent state, to find metadata on selected items
     // Ideally this should be prior to setting draw range on mesh
@@ -186,14 +171,8 @@ export class ParticleContainerLatentSpace extends Renderer3D {
 
   keyFunctions(e) {
     switch (e.code) {
-      case "KeyS":
-        // Toggle interactive search mode
-        this.searchMode = !this.searchMode;
-        // disables camera, enables search
-        break;
       case "KeyR":
         // Toggles rotation
-        this.rotate = !this.rotate;
         break;
       case "BracketRight":
         // Increase search radius
@@ -244,7 +223,10 @@ export class ParticleContainerLatentSpace extends Renderer3D {
   }
 
   addNodes() {
-    const { geometry, material } = nodes({ data: this.layout.nodes });
+    const { geometry, material } = nodes({
+      data: this.layout.nodes,
+      opacityMap: this.opacityMap,
+    });
     this.geometry = geometry;
     this.material = material;
 
@@ -280,68 +262,39 @@ export class ParticleContainerLatentSpace extends Renderer3D {
     this.scene.add(this.meshSelected);
   }
 
-  // filters papers by IDs
-  // @todo: this could be done in a web worker
-  // @todo this should also handle coloring
-  filterPapers(ids) {
-    console.log("filtering papers");
-    console.groupCollapsed("Updating attributes for filterPapers");
-    console.time("Updating opacity attributes");
+  resetFilters() {
+    this.filter([]);
+    this.resetSelection();
+  }
 
-    if (!ids) {
-      this.visibilityMap.forEach((val, key, map) => map.set(key, 1.0));
+  resetSelection() {
+    this.meshSelected.geometry.setDrawRange(0, 0);
+    this.selectionCallback([]);
+  }
+
+  filter(ids) {
+    const opacities = new Map(this.opacityMap);
+
+    if (!ids.length) {
+      // Exit filtered state
+      this.mesh.geometry.getAttribute("opacity").array = Float32Array.from(
+        opacities.values()
+      );
     } else {
-      this.visibilityMap.forEach((val, key, map) => map.set(key, 0.0));
+      // Enter filtered state
+      // Fade out unselected particles
+      opacities.forEach((val, key, map) => map.set(key, 0.05));
+
+      // Selected particles get their original opacity
       ids.forEach((id) => {
-        this.visibilityMap.has(id) && this.visibilityMap.set(id, 1.0);
+        if (!opacities.has(id)) console.log("no id in opacities");
+        opacities.has(id) && opacities.set(id, 1);
       });
+      this.mesh.geometry.getAttribute("opacity").array = Float32Array.from(
+        opacities.values()
+      );
     }
 
-    this.geometry.attributes.visible.set(
-      Float32Array.from(this.visibilityMap.values()),
-      0
-    );
-
-    console.timeEnd("Updating opacity attributes");
-    console.groupEnd("Updating attributes for filterPapers");
-    this.geometry.attributes.visible.needsUpdate = true;
-  }
-
-  // takes an array of {color, id}
-  colorPapers(papers) {
-    console.groupCollapsed("Updating color attributes");
-    console.time("Updating color attributes");
-    const colors = this.geometry.attributes.customColor.array;
-
-    const color = new THREE.Color();
-
-    const nodes = this.layout.nodes.map((d) => accessors.types.id(d));
-
-    papers.forEach((p) => {
-      let idx3 = nodes.indexOf(p.id) * 3;
-      color.set(p.color);
-      colors[idx3] = color.r;
-      colors[idx3 + 1] = color.g;
-      colors[idx3 + 2] = color.b;
-    });
-
-    console.timeEnd("Updating color attributes");
-    console.groupEnd("Updating color attributes");
-    this.geometry.attributes.customColor.needsUpdate = true;
-  }
-
-  resetColors() {
-    console.groupCollapsed("Resetting color attributes");
-    console.time("Resetting color attributes");
-    const colors = this.geometry.attributes.customColor.array;
-    const color = new THREE.Color();
-    color.set(0xffffff);
-    for (let i = 0; i < colors.length; i += 3) {
-      colors[i] = color.r;
-      colors[i + 1] = color.g;
-      colors[i + 2] = color.b;
-    }
-    console.timeEnd("Resetting color attributes");
-    console.groupEnd("Resetting color attributes");
+    this.mesh.geometry.getAttribute("opacity").needsUpdate = true;
   }
 }
