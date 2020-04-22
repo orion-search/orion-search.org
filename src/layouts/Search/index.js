@@ -13,18 +13,13 @@ const isSearchType = (type) => (currentSearch) => currentSearch === type;
 const isKeywordSearch = isSearchType("Keyword");
 const isAbstractSearch = isSearchType("Abstract");
 
-const Search = ({ ...props }) => {
-  // console.log(props, initialPapers);
-  console.log(props);
-  let initialPapers = props.location?.state?.papers || [];
-  // if (props.location.state.papers)
+const Search = ({ papers = [] }) => {
   const [query, setQuery] = useState("");
-  // const [papers, setPapers] = useState([]);
   const [ids, setIds] = useState(
-    initialPapers ? initialPapers.map((p) => accessors.types.id(p)) : []
+    papers ? papers.map((p) => accessors.types.id(p)) : []
   );
   const [searchMode, setSearchMode] = useState(
-    initialPapers ? `Keyword` : `Abstract`
+    papers.length ? `Keyword` : `Abstract`
   );
 
   useEffect(() => {
