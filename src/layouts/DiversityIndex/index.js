@@ -8,7 +8,7 @@ import React, { // eslint-disable-line no-unused-vars
   useEffect,
   useState,
   useLayoutEffect,
-  useCallback
+  useCallback,
 } from "react";
 import { scaleLinear, scaleOrdinal, extent } from "d3";
 // import { useOrionData } from "../../OrionData.context";
@@ -36,35 +36,33 @@ const DiversityIndex = ({ data }) => {
     margins: {
       top: 40,
       bottom: 200,
-      perGroup: 100
+      perGroup: 100,
     },
     labels: {
-      width: 100
+      width: 100,
     },
     pointSegment: {
       widthRatio: 0.8,
-      height: 50 // perGroup / 2
-    }
+      height: 50, // perGroup / 2
+    },
   };
 
   const generateScales = useCallback(() => {
     console.log("grouping accessor", groupingAccessor);
-    const groups = [...new Set(data.map(d => d[groupingAccessor]))];
+    const groups = [...new Set(data.map((d) => d[groupingAccessor]))];
     return {
       x: scaleLinear()
-        .domain(extent(data, d => d[xAccessor]))
+        .domain(extent(data, (d) => d[xAccessor]))
         .range([0, layout.pointSegment.widthRatio * canvasWidthRef.current]),
-      y: scaleLinear()
-        .domain([0, 1])
-        .range([layout.pointSegment.height, 0]),
+      y: scaleLinear().domain([0, 1]).range([layout.pointSegment.height, 0]),
       category: scaleOrdinal(
         groups,
         groups.map((g, i) => i * layout.margins.perGroup)
       ),
-      filterFunc: d => accessors.types.year(d) === year,
-      groupFunc: d => d[groupingAccessor],
-      xFunc: d => +d[xAccessor],
-      yFunc: d => +d[yAccessor]
+      filterFunc: (d) => accessors.types.year(d) === year,
+      groupFunc: (d) => d[groupingAccessor],
+      xFunc: (d) => +d[xAccessor],
+      yFunc: (d) => +d[yAccessor],
     };
   }, [data, xAccessor, yAccessor, layout, groupingAccessor, year]);
 
@@ -73,22 +71,28 @@ const DiversityIndex = ({ data }) => {
     console.log("LAYOUT EFFECT");
     const {
       width: canvasWidth,
-      y: canvasY
+      y: canvasY,
       // height: canvasHeight
     } = canvasRef.current.getBoundingClientRect();
     console.log(canvasWidth);
 
     canvasWidthRef.current = canvasWidth;
 
-    canvasContainerRef.current.style.height = `${window.innerHeight -
-      canvasY}px`;
+    canvasContainerRef.current.style.height = `${
+      window.innerHeight - canvasY
+    }px`;
     // canvasRef.current.style.height = `${window.innerHeight -
     // canvasRef.current.offsetTop}px`;
 
     viz.current = new DiversityIndexVisualization({
       canvas: canvasRef.current,
-      hudCanvas: canvasHUDRef.current
+      hudCanvas: canvasHUDRef.current,
     });
+
+    // add HUD canvas
+    return function cleanup() {
+      // return canvas to original size
+    };
   }, []);
 
   useEffect(() => {
@@ -103,8 +107,8 @@ const DiversityIndex = ({ data }) => {
   return (
     <Fragment>
       <Filters
-        onChangeGrouping={e => setGroupingAccessor(e.target.value)}
-        onChangeYear={e => setYear(+e.target.value)}
+        onChangeGrouping={(e) => setGroupingAccessor(e.target.value)}
+        onChangeYear={(e) => setYear(+e.target.value)}
         year={year}
         groupingAccessor={groupingAccessor}
       />

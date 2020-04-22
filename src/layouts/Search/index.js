@@ -16,7 +16,7 @@ const isAbstractSearch = isSearchType("Abstract");
 const Search = ({ ...props }) => {
   // console.log(props, initialPapers);
   console.log(props);
-  let initialPapers = props.location.state?.papers || [];
+  let initialPapers = props.location?.state?.papers || [];
   // if (props.location.state.papers)
   const [query, setQuery] = useState("");
   // const [papers, setPapers] = useState([]);

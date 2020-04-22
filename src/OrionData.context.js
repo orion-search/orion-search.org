@@ -15,6 +15,7 @@ import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
 import cachedData from "./data/data.json";
+import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 
 const OrionDataContext = createContext({});
 
@@ -59,27 +60,48 @@ const FetchOnline = ({ children }) => {
 
 const LoadingOrChildren = ({ ready, children, data }) => {
   const canvasRef = useRef(null);
-  const [providerData, setProviderData] = useState({
-    ...data,
-  });
+  const [providerData, setProviderData] = useState(null);
   // const [providerData, setProviderData] = useState(seedData)
 
   useLayoutEffect(() => {
     if (!ready) return;
     console.info("Mounting App");
-    const { controls, raycaster, renderer, render } = initApp({
+    const { controls, raycaster, renderer, render, views } = initApp({
       canvas: canvasRef.current,
     });
+
+    // initial render of visualizations
+    views.particles.viz = ParticleContainerLatentSpace({
+      camera: views.particles.camera,
+      controls,
+      layout: {
+        nodes: data.vectors.map((item) => {
+          const [x, y, z] = accessors.types.vector3d(item);
+          const id = accessors.types.id(item);
+          return {
+            x: x * 1000,
+            y: y * 1000,
+            z: z * 1000,
+            id,
+          };
+        }),
+      },
+      raycaster,
+      renderer,
+      scene: views.particles.scene,
+      selectionCallback: () => {},
+    });
+
     setProviderData({
       ...data,
-      stage: { controls, raycaster, renderer, render },
+      stage: { controls, raycaster, renderer, render, views },
     });
   }, [canvasRef, ready, data]);
 
   return (
     <OrionDataContext.Provider value={providerData}>
-      {!ready && !providerData.stage && <LoadingBar />}
-      {ready && children}
+      {!ready && !providerData && <LoadingBar />}
+      {ready && providerData && children}
       <AbsoluteCanvas ref={canvasRef} />
     </OrionDataContext.Provider>
   );

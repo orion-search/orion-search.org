@@ -33,38 +33,48 @@ export const initApp = ({ canvas }) => {
   renderer.setSize(width, height);
   renderer.setPixelRatio(window.devicePixelRatio);
 
-  let aspectRatio = window.innerWidth / window.height;
+  let aspectRatio = window.innerWidth / window.innerHeight;
   let mouse = new Vector2();
   let raycaster = new Raycaster();
 
-  const particleCamera = new PerspectiveCamera(27, aspectRatio, 0.001, 35000);
-  particleCamera.position.z = 750;
+  // const visualizations = {
+  //   diversity: {
+  //     camera: new OrthographicCamera(0, width, 0, height, 0, 30),
+  //     scene: new Scene(),
+  //   },
+  //   particles: {
+  //     camera: new PerspectiveCamera(27, aspectRatio, 0.001, 35000),
+  //     scene: new Scene(),
+  //   },
+  // };
 
-  const diversityCamera = new OrthographicCamera(0, width, 0, height, 0, 30);
-  const visualizations = {
+  // const views = [
+  //   { name: "Particle_View", ...visualizations.diversity },
+  //   { name: "Diversity_View", ...visualizations.particles },
+  // ];
+
+  const views = {
     diversity: {
-      camera: particleCamera,
+      camera: new OrthographicCamera(0, width, 0, height, 0, 30),
       scene: new Scene(),
+      viz: {}, // holds pre-rendered visualization
+      // ...visualizations.diversity,
     },
     particles: {
-      camera: diversityCamera,
+      camera: new PerspectiveCamera(27, aspectRatio, 0.001, 35000),
       scene: new Scene(),
+      viz: {}, // holds pre-rendered visualization
+      // ...visualizations.particles,
     },
   };
-
-  const controls = new OrbitControls(visualizations.particles.camera, canvas);
-
-  const views = [
-    { name: "Particle_View", ...visualizations.diversity },
-    { name: "Diversity_View", ...visualizations.particles },
-  ];
+  const controls = new OrbitControls(views.particles.camera, canvas);
 
   window.addEventListener("resize", () => {
-    views.forEach((view) => {
-      view.camera.aspect = window.innerWidth / window.innerHeight;
-      view.camera.updateProjectionMatrix();
-    });
-    console.log("resize");
+    for (let [scene] of Object.entries(views)) {
+      views[scene].camera.aspect = window.innerWidth / window.innerHeight;
+      views[scene].camera.updateProjectionMatrix();
+    }
+    console.log("resize", renderer);
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
@@ -81,13 +91,14 @@ export const initApp = ({ canvas }) => {
     renderer,
     render: (viewName) => {
       // don't render any scenes
-      if (!viewName) return () => {};
+      if (!viewName || !views[viewName]) return () => {};
 
-      const v = views.find((v) => v["name"] === viewName);
+      const v = views[viewName];
       return () => {
         raycaster.setFromCamera(mouse, v.camera);
         renderer.render(v.scene, v.camera);
       };
     },
+    views,
   };
 };
