@@ -12,7 +12,7 @@ class DiversityIndex extends Renderer2D {
     super({ canvas });
 
     this.groups = {
-      points: new THREE.Group()
+      points: new THREE.Group(),
     };
 
     // get access to HUD canvas context
@@ -43,13 +43,13 @@ class DiversityIndex extends Renderer2D {
   }
 
   setData(data) {
-    this.data = data.filter(d => this.scales.filterFunc(d));
-    this.nodes = this.data.map(d => ({
+    this.data = data.filter((d) => this.scales.filterFunc(d));
+    this.nodes = this.data.map((d) => ({
       x: this.scales.x(this.scales.xFunc(d)),
       y:
         this.scales.category(this.scales.groupFunc(d)) +
         this.scales.y(this.scales.yFunc(d)),
-      r: Math.random() * 10 + 2
+      r: Math.random() * 10 + 2,
     }));
 
     this.updateForceLayout(this.nodes);
@@ -63,7 +63,7 @@ class DiversityIndex extends Renderer2D {
   initForceLayout() {
     this.forceLayout = ForceLayout({
       nodes: [],
-      links: []
+      links: [],
     });
   }
 
@@ -83,7 +83,7 @@ class DiversityIndex extends Renderer2D {
   }
 
   initScrollListeners() {
-    this.canvas.addEventListener("wheel", e => {
+    this.canvas.addEventListener("wheel", (e) => {
       e.preventDefault();
       this.scroll(e.deltaY);
     });
@@ -148,7 +148,7 @@ class DiversityIndex extends Renderer2D {
       position: [],
       color: [],
       size: [],
-      opacity: []
+      opacity: [],
     };
 
     var color = new THREE.Color();
@@ -188,11 +188,11 @@ class DiversityIndex extends Renderer2D {
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         color: {
-          value: new THREE.Color(0xffffff)
+          value: new THREE.Color(0xffffff),
         },
         noDepth: {
-          value: true
-        }
+          value: true,
+        },
       },
 
       vertexShader: pointVS,
@@ -200,14 +200,14 @@ class DiversityIndex extends Renderer2D {
 
       blending: THREE.AdditiveBlending,
       depthTest: false,
-      transparent: true
+      transparent: true,
     });
     const points = new THREE.Points(this.geometry, this.material);
     this.groups.points.add(points);
     this.groups.points.position.x = this.width * 0.2;
     this.bbox = {
       max: new THREE.Box3().setFromObject(this.scene).max,
-      min: new THREE.Box3().setFromObject(this.scene).min
+      min: new THREE.Box3().setFromObject(this.scene).min,
     };
     this.geometry = points;
   }

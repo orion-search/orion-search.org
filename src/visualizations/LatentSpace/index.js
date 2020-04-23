@@ -229,10 +229,6 @@ export function ParticleContainerLatentSpace({
     render();
   };
 
-  const stopAnimation = () => {
-    animationId && cancelAnimationFrame(animationId);
-  };
-
   const show = () => {
     animationId && cancelAnimationFrame(animationId);
     // scene.visible = true;
@@ -253,7 +249,6 @@ export function ParticleContainerLatentSpace({
 
   return {
     animate,
-    stopAnimation,
     filter,
     render,
     resetFilters,
