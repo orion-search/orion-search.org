@@ -1,3 +1,10 @@
+/**
+ * @todo circle radius should be relative to DPR and should
+ * change when moving from hi DPR screen to low
+ *
+ * @todo raycaster hover invokes callback
+ */
+
 import * as THREE from "three";
 import { extent, scaleLinear, scaleOrdinal } from "d3";
 
@@ -7,7 +14,6 @@ import theme from "../../styles";
 import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
-  hudCanvas,
   camera,
   renderer,
   scene,
@@ -21,7 +27,9 @@ export function DiversityIndex({
   drawSecondCanvas = false,
 }) {
   let animationId;
-  let ctx;
+
+  let hudElm;
+
   let bbox;
   let forceLayout;
 
@@ -35,14 +43,6 @@ export function DiversityIndex({
   };
   scene.add(groups.points);
 
-  // get access to HUD canvas context
-  if (drawSecondCanvas) {
-    hudCanvas.width = width;
-    hudCanvas.height = height;
-    ctx = hudCanvas.getContext("2d");
-    ctx.scale(window.devicePixelRatio || 1, window.devicePixelRatio || 1);
-  }
-
   const animate = () => {
     animationId = requestAnimationFrame(animate);
 
@@ -51,6 +51,7 @@ export function DiversityIndex({
   };
 
   const hide = () => {
+    removeHUD();
     renderer.clear(true, true, false);
     animationId && cancelAnimationFrame(animationId);
   };
@@ -72,14 +73,12 @@ export function DiversityIndex({
     nodes = data.map((d) => ({
       x: scales.x(dimensions.x(d)),
       y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
+      // y: scales.category(dimensions.group(d)),
       r: Math.random() * 10 + 2,
     }));
 
     updateForceLayout(nodes);
 
-    if (drawSecondCanvas) {
-      drawLabels();
-    }
     draw();
   };
 
@@ -116,25 +115,44 @@ export function DiversityIndex({
     }
   };
 
+  const categories = () => {
+    return scales.category.domain().map((category) => ({
+      category,
+      y: scales.category(category),
+    }));
+  };
+
+  const HUD = (a) => {
+    hudElm = a;
+  };
+
   // const setScales = (s) => {
   //   scales = s;
   // };
   const setScales = () => {
+    // @todo Fix the hardcoded .97 value that corresponds
+    // to page layout side padding
     const groups = [...new Set(data.map(dimensions.group))];
     scales = {
       x: scaleLinear()
         .domain(extent(data, dimensions.x))
-        .range([0, layout.pointSegment.widthRatio * width]),
-      y: scaleLinear().domain([0, 1]).range([layout.pointSegment.height, 0]),
+        .range([0, layout.pointSegment.widthRatio * width * 0.97]),
+      y: scaleLinear()
+        .domain(extent(data, dimensions.y))
+        .range([
+          layout.pointSegment.height / 2,
+          -layout.pointSegment.height / 2,
+        ]),
       category: scaleOrdinal(
         groups,
-        groups.map((g, i) => i * layout.margins.perGroup)
+        groups.map((g, i) => layout.margins.top + i * layout.margins.perGroup)
       ),
       filterFunc: (d) => dimensions.filter,
       groupFunc: dimensions.group,
       xFunc: dimensions.x,
       yFunc: dimensions.y,
     };
+    console.log(scales, scales.category.domain());
   };
   // ====================================
 
@@ -153,29 +171,31 @@ export function DiversityIndex({
   const scrollTo = (yPos = 0) => {
     const yOffset = clamp(
       yPos,
-      bbox.min.y - layout.margins.top,
+      0,
       bbox.max.y + layout.margins.bottom - height
+      // bbox.min.y - layout.margins.top,
+      // bbox.max.y + layout.margins.bottom - height
     );
+    if (hudElm) {
+      hudElm.scrollTop = yOffset;
+    }
     camera.top = yOffset;
     camera.bottom = yOffset + height;
     camera.updateProjectionMatrix();
-
-    if (drawSecondCanvas) {
-      // scroll HUD canvas
-      const { a: scaleX, d: scaleY } = ctx.getTransform();
-      ctx.setTransform(scaleX, 0, 0, scaleY, 0, 0);
-      ctx.clearRect(0, 0, hudCanvas.width, hudCanvas.height);
-      ctx.translate(0, -yOffset / scaleY);
-      drawLabels();
-    }
 
     // @todo (optional) if simulation is running do something funky with vy
   };
   // ====================================
 
+  const removeHUD = () => {
+    // @todo remove actual HTML canvas element
+    // hudElm = null;
+  };
+
   // force layout-related ===============
   const destroy = () => {
     forceLayout.terminate();
+    removeHUD();
   };
 
   const initForceLayout = () => {
@@ -192,25 +212,9 @@ export function DiversityIndex({
   // ====================================
 
   // draw-related =======================
-  const drawLabels = () => {
-    const textFont = 12;
-    ctx.clearRect(0, 0, hudCanvas.width, hudCanvas.height);
-    scales.category.domain().forEach((category, i) => {
-      let labelBaseline =
-        i * layout.pointSegment.height + layout.margins.top / 2;
-      ctx.fillStyle = "white";
-      ctx.font = `bold ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
-      ctx.textBaseline = "middle";
-
-      ctx.fillText(`${category}`, 0, labelBaseline);
-
-      ctx.font = `normal ${theme.type.sizes.tiny} ${theme.type.fonts.regular}`;
-      ctx.fillText(`X papers / Explore`, 0, (labelBaseline += textFont));
-    });
-  };
-
   const draw = () => {
     // EXIT previous
+    console.groupCollapsed("diversity index draw");
     for (var i = groups.points.children.length - 1; i >= 0; i--) {
       groups.points.remove(groups.points.children[i]);
     }
@@ -222,6 +226,7 @@ export function DiversityIndex({
       max: new THREE.Box3().setFromObject(scene).max,
       min: new THREE.Box3().setFromObject(scene).min,
     };
+    console.groupEnd("diversity index draw");
   };
 
   const update = () => {
@@ -254,6 +259,8 @@ export function DiversityIndex({
   return {
     setData,
     hide,
+    HUD,
+    categories,
     show,
     x,
     y,

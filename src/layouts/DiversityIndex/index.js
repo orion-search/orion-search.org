@@ -16,6 +16,9 @@ import Filters from "./Filters";
 // import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 import { accessors } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
+import { AbsoluteCanvas, HUD } from "../../components/shared/renderer";
+import { LinkButton } from "../../components/shared/button";
+import { layout } from "../../visualizations/DiversityIndex/geometry";
 
 const DiversityIndex = ({ data }) => {
   const canvasRef = useRef(null);
@@ -37,21 +40,14 @@ const DiversityIndex = ({ data }) => {
       views: { diversity },
     },
   } = useOrionData();
-  console.log(diversity);
+  const [categories, setCategories] = useState(diversity.viz.categories());
+
+  // console.log(categories);
 
   useLayoutEffect(() => {
     console.log("LAYOUT EFFECT");
-    const {
-      width: canvasWidth,
-      y: canvasY,
-    } = canvasRef.current.getBoundingClientRect();
 
-    canvasWidthRef.current = canvasWidth;
-
-    canvasContainerRef.current.style.height = `${
-      window.innerHeight - canvasY
-    }px`;
-
+    diversity.viz.HUD(canvasHUDRef.current);
     diversity.viz.show();
 
     // viz.current = new DiversityIndexVisualization({
@@ -76,6 +72,8 @@ const DiversityIndex = ({ data }) => {
 
   useEffect(() => {
     diversity.viz.group((d) => accessors.types[groupingAccessor](d));
+    // console.log("setting categories");
+    setCategories(diversity.viz.categories());
   }, [diversity.viz, groupingAccessor]);
 
   useEffect(() => {
@@ -107,7 +105,7 @@ const DiversityIndex = ({ data }) => {
         year={year}
         groupingAccessor={groupingAccessor}
       />
-      <div
+      {/* <div
         css={css`
           display: flex;
           position: relative;
@@ -132,21 +130,61 @@ const DiversityIndex = ({ data }) => {
           `}
           ref={canvasRef}
         />
-        <canvas
-          css={css`
-            position: absolute;
-            pointer-events: none;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            &:focus {
-              outline: none;
-            }
-          `}
-          ref={canvasHUDRef}
-        />
-      </div>
+      </div> */}
+      <HUD
+        css={css`
+          // padding-top: ${layout.margins.top}px;
+          // padding-bottom: ${layout.margins.bottom}px;
+        `}
+        ref={canvasHUDRef}
+      >
+        {diversity.viz.categories().map(({ category, y: offsetTop }, i) => {
+          return (
+            <div
+              key={`category-label-${category}`}
+              css={css`
+                position: absolute;
+                // top: ${i * 100}px;
+                top: ${
+                  // diversity.viz.scales.category(category)
+                  // offsetTop - layout.pointSegment.height / 2
+                  offsetTop - layout.pointSegment.height / 2
+
+                  // layout.margins.top + i * (layout.margins.perGroup - 20)
+                }px;
+                left: 3vw;
+                color: white;
+                padding-bottom: ${layout.margins.bottom}px;
+                // margin: ${layout.margins.perGroup / 4}px 0;
+              `}
+            >
+              <div
+                css={css`
+                  position: relative;
+                  border-bottom: 1px solid white;
+                  top: ${layout.pointSegment.height / 2}px;
+                  width: 77vw;
+                  left: 17vw;
+                `}
+              ></div>
+              <div>{category}</div>
+              <div>
+                μ={Math.random().toFixed(2)} / σ={Math.random().toFixed(2)} / Ν=
+                {~~(Math.random() * 1300)}
+              </div>
+              <button>Explore Cluster</button>
+              {/* <p>Explore</p> */}
+              {/* <LinkButton
+                css={css`
+                  margin: 0;
+                `}
+              >
+                Explore cluster
+              </LinkButton> */}
+            </div>
+          );
+        })}
+      </HUD>
     </Fragment>
   );
 };

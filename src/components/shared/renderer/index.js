@@ -21,6 +21,22 @@ export const AbsoluteCanvas = styled.canvas`
   user-select: none;
 `;
 
+export const HUD = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -10;
+
+  overflow: hidden;
+  // overflow-y: scroll;
+  pointer-events: none;
+  // scroll-behavior: unset;
+
+  user-select: none;
+`;
+
 /**
  * Kicks off THREE app boilerplate
  */
@@ -57,7 +73,7 @@ export const initApp = ({ canvas }) => {
 
   const views = {
     diversity: {
-      camera: new OrthographicCamera(0, width, 0, height, 0, 30),
+      camera: new OrthographicCamera(0, width, 0, height, 0, 1),
       scene: new Scene(),
       viz: {}, // holds pre-rendered visualization
       // ...visualizations.diversity,

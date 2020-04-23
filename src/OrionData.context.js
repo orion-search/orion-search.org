@@ -23,7 +23,6 @@ const OrionDataContext = createContext({});
 const FetchOnline = ({ children }) => {
   const data = useRef();
   const [ready, setReady] = useState(false);
-  console.log(accessors);
 
   useQuery(SEED_DATA, {
     onError: (e) => {
@@ -143,8 +142,8 @@ export const OrionDataProvider = ({ children }) => {
   return (
     <>
       {process.env.NODE_ENV === "development" && (
-        // <FetchOnline>{children}</FetchOnline>
-        <FetchOffline>{children}</FetchOffline>
+        <FetchOnline>{children}</FetchOnline>
+        // <FetchOffline>{children}</FetchOffline>
       )}
       {process.env.NODE_ENV === "production" && (
         <FetchOnline>{children}</FetchOnline>
