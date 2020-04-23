@@ -1,68 +1,51 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
-import { Fragment, useRef, useState, useEffect } from "react";
-import { schemeCategory10 } from "d3";
-import { useLocation } from "react-router-dom";
+import { useState, useEffect } from "react";
+// import { schemeCategory10 } from "d3";
 
-import { MultiItemSearch } from "../../components/shared/search";
+// import { MultiItemSearch } from "../../components/shared/search";
 import { Button } from "../../components/shared/button";
 import { Row, Column } from "../../components/shared/layout";
-import { accessors } from "../../utils";
+// import { accessors } from "../../utils";
 import Summary from "./Summary";
 
-import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
-import { AbsoluteCanvas } from "../../components/shared/renderer";
+// import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
+// import { AbsoluteCanvas } from "../../components/shared/renderer";
+import { PageLayout } from "../../components/shared/layout";
+import { useOrionData } from "../../OrionData.context";
 
-const LatentSpace = ({ data }) => {
-  const preselectedIds = useRef(useLocation().state?.filters.ids || []);
+const LatentSpace = ({ papers = [] }) => {
+  const {
+    stage: {
+      views: { particles },
+    },
+  } = useOrionData();
 
-  const [selectedPaperIds, setSelectedPaperIds] = useState(
-    preselectedIds.current
-  );
-  const canvasRef = useRef(null);
-  const selectionBoxRef = useRef(null);
-  const particles = useRef(null);
-
-  // Parse initially filtered papers
-  const filterInitial = selectedPaperIds;
-  console.log(filterInitial);
-
-  const layout = useRef({
-    nodes: data.map((item) => {
-      const [x, y, z] = accessors.types.vector3d(item);
-      const id = accessors.types.id(item);
-      return {
-        x: x * 1000,
-        y: y * 1000,
-        z: z * 1000,
-        id,
-      };
-    }),
-  });
+  const [selectedPaperIds, setSelectedPaperIds] = useState(papers);
 
   const updateSelectedPapers = (ids) => {
+    // particles.viz.filter([]);
     setSelectedPaperIds(ids);
   };
 
   useEffect(() => {
-    console.log("new particle container");
-    particles.current = new ParticleContainerLatentSpace({
-      canvas: canvasRef.current,
-      layout: layout.current,
-      filtered: [],
-      selectionBoxRef: selectionBoxRef.current,
-      selectionCallback: updateSelectedPapers,
-    });
+    particles.viz.show();
+    particles.viz.setParticleSelectionCallback(updateSelectedPapers);
+    particles.viz.filter(papers);
 
-    preselectedIds.current.length &&
-      particles.current.filter(preselectedIds.current);
-  }, [canvasRef]);
+    return function cleanup() {
+      particles.viz.hide();
+    };
+  }, [particles.viz, papers]);
+
+  // useEffect(() => {
+  //   console.log("FILTERING");
+  //   particles.viz.filter(selectedPaperIds);
+  // }, [selectedPaperIds, particles.viz]);
 
   return (
-    <Fragment>
-      <AbsoluteCanvas ref={canvasRef} />
-      {/* <SelectionBoxWrapper ref={selectionBoxRef} /> */}
+    <PageLayout>
       <div
         css={css`
           position: absolute;
@@ -98,11 +81,7 @@ const LatentSpace = ({ data }) => {
             onChange={updateVizAttributes}
           /> */}
           <Row>
-            <Button
-              onClick={() =>
-                particles.current && particles.current.resetFilters()
-              }
-            >
+            <Button onClick={() => particles.viz.resetFilters()}>
               Reset Filters
             </Button>
           </Row>
@@ -111,7 +90,7 @@ const LatentSpace = ({ data }) => {
           </Row>
         </Column>
       </div>
-    </Fragment>
+    </PageLayout>
   );
 };
 

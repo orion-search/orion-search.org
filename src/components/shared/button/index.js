@@ -33,6 +33,7 @@ export const Button = styled("button")`
   text-transform: uppercase;
 
   outline: none;
+  user-select: none;
 
   &:hover {
     background: ${(props) => props.theme.colors.white};

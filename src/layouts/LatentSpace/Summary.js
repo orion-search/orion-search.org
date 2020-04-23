@@ -31,7 +31,6 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
         if (!data.papers) return null;
 
         const sortedPapers = data.papers.sort(sortCitationsDesc);
-        console.log(sortedPapers);
 
         // sort by descending citations
         return (

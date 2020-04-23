@@ -8,8 +8,8 @@ import { useLayoutEffect } from "react";
 const Wrapper = styled("div")`
   overflow: scroll;
   box-sizing: border-box;
-  margin: -${props => props.theme.spacing.normal};
-  padding: ${props =>
+  margin: -${(props) => props.theme.spacing.normal};
+  padding: ${(props) =>
     `${props.theme.spacing.normal} ${props.theme.spacing.large} 0 0`};
 
   ${blurEdges};
@@ -25,7 +25,7 @@ const Results = ({ data }) => {
 
   return (
     <Wrapper ref={wrapperRef}>
-      {data.map(p => (
+      {data.map((p) => (
         <Paper key={`paper-${p.title}`} data={p} />
       ))}
     </Wrapper>

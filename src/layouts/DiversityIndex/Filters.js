@@ -11,12 +11,15 @@ const Filters = ({
   onChangeGrouping = () => {},
   onChangeYear = () => {},
   year,
-  groupingAccessor
+  groupingAccessor,
 }) => {
   return (
     <Row
-      css={props => css`
-        width: fit-content;
+      css={(props) => css`
+        // width: fit-content;
+        margin: 0;
+        width: 100%;
+        backdrop-filter: blur(2px) brightness(20%);
         border-bottom: 1px solid white;
         align-items: center;
       `}
