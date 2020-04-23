@@ -17,6 +17,8 @@ export const AbsoluteCanvas = styled.canvas`
   width: 100vw;
   height: 100vh;
   z-index: -100;
+
+  user-select: none;
 `;
 
 /**

@@ -4,11 +4,9 @@
 import * as THREE from "three";
 import { extent } from "d3";
 
-import { nodes, cursor } from "./geometry";
+import { nodes } from "./geometry";
 import { Selection } from "./interactions";
 import { Navigation } from "./navigation";
-
-import Renderer3D from "../Renderer3D";
 
 export function ParticleContainerLatentSpace({
   camera,

@@ -13,7 +13,7 @@ import Search from "./layouts/Search";
 import { urls } from "./utils";
 
 function App() {
-  const { stage } = useOrionData();
+  const { stage, diversity } = useOrionData();
 
   return (
     <Switch>
@@ -24,7 +24,7 @@ function App() {
         render={() => {
           stage.views.particles.viz.hide();
 
-          return <Diversity />;
+          return <Diversity data={diversity} />;
         }}
       />
       <Route

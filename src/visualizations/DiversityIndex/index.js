@@ -1,24 +1,31 @@
 import * as THREE from "three";
+import { extent, scaleLinear, scaleOrdinal } from "d3";
 
-import { clamp } from "../../utils";
+import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
 import theme from "../../styles";
-import { scatterplotMesh } from "./geometry";
+import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
   hudCanvas,
   camera,
   renderer,
   scene,
-  drawSecondCanvas,
+  data: unfilteredData = [],
+  dimensions = {
+    x: (d) => accessors.types.diversity(d),
+    y: (d) => accessors.types.femaleShare(d),
+    group: (d) => accessors.types.topic(d),
+    filter: (d) => accessors.types.year(d) === 2019,
+  },
+  drawSecondCanvas = false,
 }) {
   let animationId;
-  let hudCanvas;
   let ctx;
   let bbox;
   let forceLayout;
-  let layout; // aligning spacing across canvases
 
+  let data; // essentially the filteredData
   let scales;
   let nodes;
 
@@ -55,11 +62,16 @@ export function DiversityIndex({
   };
 
   // setters ============================
-  const setData = (data) => {
-    data = data.filter((d) => scales.filterFunc(d));
+  const setData = (_) => {
+    // Setting data updates the scales as well
+    unfilteredData = _;
+    data = unfilteredData.filter(dimensions.filter);
+
+    setScales();
+
     nodes = data.map((d) => ({
-      x: scales.x(scales.xFunc(d)),
-      y: scales.category(scales.groupFunc(d)) + scales.y(scales.yFunc(d)),
+      x: scales.x(dimensions.x(d)),
+      y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
       r: Math.random() * 10 + 2,
     }));
 
@@ -71,12 +83,58 @@ export function DiversityIndex({
     draw();
   };
 
-  const setLayout = (l) => {
-    layout = l;
+  const x = (a) => {
+    if (a) {
+      dimensions.x = a;
+      setScales();
+      setData(unfilteredData);
+    }
   };
 
-  const setScales = (s) => {
-    scales = s;
+  const y = (a) => {
+    if (a) {
+      dimensions.y = a;
+      setScales();
+      setData(unfilteredData);
+    }
+  };
+
+  const group = (a) => {
+    if (a && typeof a === "function") {
+      dimensions.group = a;
+      setScales();
+      setData(unfilteredData);
+    }
+  };
+
+  const filter = (a) => {
+    if (a && typeof a === "function") {
+      dimensions.filter = a;
+      data = unfilteredData.filter(dimensions.filter);
+      setScales();
+      setData(unfilteredData);
+    }
+  };
+
+  // const setScales = (s) => {
+  //   scales = s;
+  // };
+  const setScales = () => {
+    const groups = [...new Set(data.map(dimensions.group))];
+    scales = {
+      x: scaleLinear()
+        .domain(extent(data, dimensions.x))
+        .range([0, layout.pointSegment.widthRatio * width]),
+      y: scaleLinear().domain([0, 1]).range([layout.pointSegment.height, 0]),
+      category: scaleOrdinal(
+        groups,
+        groups.map((g, i) => i * layout.margins.perGroup)
+      ),
+      filterFunc: (d) => dimensions.filter,
+      groupFunc: dimensions.group,
+      xFunc: dimensions.x,
+      yFunc: dimensions.y,
+    };
   };
   // ====================================
 
@@ -191,13 +249,15 @@ export function DiversityIndex({
 
   initForceLayout();
   initScrollListeners();
+  setData(unfilteredData);
 
   return {
-    animate,
-    hide,
     setData,
-    setLayout,
-    setScales,
+    hide,
     show,
+    x,
+    y,
+    filter,
+    group,
   };
 }

@@ -4,25 +4,25 @@ import { Fragment } from "react";
 
 import React, { // eslint-disable-line no-unused-vars
   useRef,
-  useDebugValue,
+  // useDebugValue,
   useEffect,
   useState,
   useLayoutEffect,
-  useCallback,
+  // useCallback,
 } from "react";
-import { scaleLinear, scaleOrdinal, extent } from "d3";
-// import { useOrionData } from "../../OrionData.context";
+// import { scaleLinear, scaleOrdinal, extent, group } from "d3";
 
 import Filters from "./Filters";
-import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
+// import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 import { accessors } from "../../utils";
+import { useOrionData } from "../../OrionData.context";
 
 const DiversityIndex = ({ data }) => {
   const canvasRef = useRef(null);
   const canvasHUDRef = useRef(null);
   const canvasContainerRef = useRef(null);
 
-  const viz = useRef(null);
+  // const viz = useRef(null);
   const canvasWidthRef = useRef(null);
 
   const [groupingAccessor, setGroupingAccessor] = useState(
@@ -32,77 +32,72 @@ const DiversityIndex = ({ data }) => {
   const [yAccessor] = useState(accessors.names.femaleShare);
   const [year, setYear] = useState(2019);
 
-  const layout = {
-    margins: {
-      top: 40,
-      bottom: 200,
-      perGroup: 100,
+  const {
+    stage: {
+      views: { diversity },
     },
-    labels: {
-      width: 100,
-    },
-    pointSegment: {
-      widthRatio: 0.8,
-      height: 50, // perGroup / 2
-    },
-  };
+  } = useOrionData();
+  console.log(diversity);
 
-  const generateScales = useCallback(() => {
-    console.log("grouping accessor", groupingAccessor);
-    const groups = [...new Set(data.map((d) => d[groupingAccessor]))];
-    return {
-      x: scaleLinear()
-        .domain(extent(data, (d) => d[xAccessor]))
-        .range([0, layout.pointSegment.widthRatio * canvasWidthRef.current]),
-      y: scaleLinear().domain([0, 1]).range([layout.pointSegment.height, 0]),
-      category: scaleOrdinal(
-        groups,
-        groups.map((g, i) => i * layout.margins.perGroup)
-      ),
-      filterFunc: (d) => accessors.types.year(d) === year,
-      groupFunc: (d) => d[groupingAccessor],
-      xFunc: (d) => +d[xAccessor],
-      yFunc: (d) => +d[yAccessor],
-    };
-  }, [data, xAccessor, yAccessor, layout, groupingAccessor, year]);
-
-  useDebugValue(canvasRef);
   useLayoutEffect(() => {
     console.log("LAYOUT EFFECT");
     const {
       width: canvasWidth,
       y: canvasY,
-      // height: canvasHeight
     } = canvasRef.current.getBoundingClientRect();
-    console.log(canvasWidth);
 
     canvasWidthRef.current = canvasWidth;
 
     canvasContainerRef.current.style.height = `${
       window.innerHeight - canvasY
     }px`;
-    // canvasRef.current.style.height = `${window.innerHeight -
-    // canvasRef.current.offsetTop}px`;
 
-    viz.current = new DiversityIndexVisualization({
-      canvas: canvasRef.current,
-      hudCanvas: canvasHUDRef.current,
-    });
+    diversity.viz.show();
+
+    // viz.current = new DiversityIndexVisualization({
+    //   canvas: canvasRef.current,
+    //   hudCanvas: canvasHUDRef.current,
+    // });
 
     // add HUD canvas
     return function cleanup() {
+      diversity.viz.hide();
       // return canvas to original size
     };
-  }, []);
+  }, [diversity.viz]);
 
   useEffect(() => {
-    console.log("re-drawing");
-    if (!viz.current) return;
+    diversity.viz.x((d) => accessors.types[xAccessor](d));
+  }, [diversity.viz, xAccessor]);
 
-    viz.current.setScales(generateScales());
-    viz.current.setLayout(layout);
-    viz.current.setData(data);
-  });
+  useEffect(() => {
+    diversity.viz.y((d) => accessors.types[yAccessor](d));
+  }, [diversity.viz, yAccessor]);
+
+  useEffect(() => {
+    diversity.viz.group((d) => accessors.types[groupingAccessor](d));
+  }, [diversity.viz, groupingAccessor]);
+
+  useEffect(() => {
+    // our filter is hardcoded /
+    // @todo make n-dimensional filtering
+    // debugger;
+    diversity.viz.filter((d) => accessors.types.year(d) === year);
+  }, [diversity.viz, year]);
+
+  useEffect(() => {
+    console.log("calling .setData()");
+    data.length && diversity.viz.setData(data);
+  }, [diversity.viz, data]);
+
+  // useEffect(() => {
+  //   console.log("re-drawing");
+  //   if (!viz.current) return;
+
+  //   viz.current.setScales(generateScales());
+  //   // viz.current.setLayout(layout);
+  //   viz.current.setData(data);
+  // });
 
   return (
     <Fragment>

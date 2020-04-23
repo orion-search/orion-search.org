@@ -16,6 +16,7 @@ import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
 import cachedData from "./data/data.json";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
+import { DiversityIndex } from "./visualizations/DiversityIndex";
 
 const OrionDataContext = createContext({});
 
@@ -90,6 +91,15 @@ const LoadingOrChildren = ({ ready, children, data }) => {
       renderer,
       scene: views.particles.scene,
       selectionCallback: () => {},
+    });
+
+    views.diversity.viz = DiversityIndex({
+      camera: views.diversity.camera,
+      data: data.diversity,
+      // dimensions: add defaults
+      drawSecondCanvas: false,
+      renderer,
+      scene: views.diversity.scene,
     });
 
     setProviderData({

@@ -8,7 +8,22 @@ import {
 } from "three";
 
 import pointVS from "../../shaders/point.vs";
-import pointFS from ".././shaders/point.fs";
+import pointFS from "../../shaders/point.fs";
+
+export const layout = {
+  margins: {
+    top: 200,
+    bottom: 200,
+    perGroup: 100,
+  },
+  labels: {
+    width: 100,
+  },
+  pointSegment: {
+    widthRatio: 0.8,
+    height: 50, // perGroup / 2
+  },
+};
 
 export const scatterplotMesh = (nodes) => {
   const geometry = new BufferGeometry();
@@ -68,5 +83,7 @@ export const scatterplotMesh = (nodes) => {
     transparent: true,
   });
 
-  return Points(geometry, material);
+  console.log(geometry, material);
+
+  return new Points(geometry, material);
 };
