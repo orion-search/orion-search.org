@@ -79,8 +79,8 @@ const DiversityIndex = ({ data }) => {
   useEffect(() => {
     // our filter is hardcoded /
     // @todo make n-dimensional filtering
-    // debugger;
     diversity.viz.filter((d) => accessors.types.year(d) === year);
+    setCategories(diversity.viz.categories());
   }, [diversity.viz, year]);
 
   useEffect(() => {
@@ -138,7 +138,7 @@ const DiversityIndex = ({ data }) => {
         `}
         ref={canvasHUDRef}
       >
-        {diversity.viz.categories().map(({ category, y: offsetTop }, i) => {
+        {categories.map(({ category, y: offsetTop }, i) => {
           return (
             <div
               key={`category-label-${category}`}
@@ -162,6 +162,7 @@ const DiversityIndex = ({ data }) => {
                 css={css`
                   position: relative;
                   border-bottom: 1px solid white;
+                  opacity: 0.5;
                   top: ${layout.pointSegment.height / 2}px;
                   width: 77vw;
                   left: 17vw;

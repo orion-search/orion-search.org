@@ -51,12 +51,15 @@ export function DiversityIndex({
   };
 
   const hide = () => {
+    renderer.domElement.removeEventListener("wheel", onScroll);
     removeHUD();
     renderer.clear(true, true, false);
     animationId && cancelAnimationFrame(animationId);
   };
 
   const show = () => {
+    // initScrollListeners();
+    renderer.domElement.addEventListener("wheel", onScroll);
     animationId && cancelAnimationFrame(animationId);
     // scene.visible = true;
     animate();
@@ -74,7 +77,7 @@ export function DiversityIndex({
       x: scales.x(dimensions.x(d)),
       y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
       // y: scales.category(dimensions.group(d)),
-      r: Math.random() * 10 + 2,
+      r: Math.random() * 10 + 5,
     }));
 
     updateForceLayout(nodes);
@@ -85,7 +88,6 @@ export function DiversityIndex({
   const x = (a) => {
     if (a) {
       dimensions.x = a;
-      setScales();
       setData(unfilteredData);
     }
   };
@@ -93,7 +95,6 @@ export function DiversityIndex({
   const y = (a) => {
     if (a) {
       dimensions.y = a;
-      setScales();
       setData(unfilteredData);
     }
   };
@@ -101,7 +102,6 @@ export function DiversityIndex({
   const group = (a) => {
     if (a && typeof a === "function") {
       dimensions.group = a;
-      setScales();
       setData(unfilteredData);
     }
   };
@@ -109,8 +109,7 @@ export function DiversityIndex({
   const filter = (a) => {
     if (a && typeof a === "function") {
       dimensions.filter = a;
-      data = unfilteredData.filter(dimensions.filter);
-      setScales();
+      // data = unfilteredData.filter(dimensions.filter);
       setData(unfilteredData);
     }
   };
@@ -157,11 +156,9 @@ export function DiversityIndex({
   // ====================================
 
   // scroll-based actions ===============
-  const initScrollListeners = () => {
-    renderer.domElement.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      scroll(e.deltaY);
-    });
+  const onScroll = (e) => {
+    e.preventDefault();
+    scroll(e.deltaY);
   };
 
   const scroll = (yDelta = 0) => {
@@ -253,7 +250,7 @@ export function DiversityIndex({
   // ====================================
 
   initForceLayout();
-  initScrollListeners();
+  // initScrollListeners();
   setData(unfilteredData);
 
   return {

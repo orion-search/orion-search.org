@@ -228,6 +228,7 @@ export function ParticleContainerLatentSpace({
   };
 
   const show = () => {
+    controls.enabled = false;
     animationId && cancelAnimationFrame(animationId);
     // scene.visible = true;
     animate();
@@ -239,6 +240,7 @@ export function ParticleContainerLatentSpace({
     renderer.clear(true, true, false);
     console.log("STOPPING ANIMATION", animationId);
     animationId && cancelAnimationFrame(animationId);
+    controls.enabled = false;
   };
 
   addNodes();
