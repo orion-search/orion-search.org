@@ -7,7 +7,7 @@ import DiversityIndex from "../../layouts/DiversityIndex";
 import { useOrionData } from "../../OrionData.context";
 
 const Diversity = () => {
-  const diversity = useOrionData().diversity;
+  const { diversity } = useOrionData();
 
   return (
     <PageLayout

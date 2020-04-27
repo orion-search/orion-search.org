@@ -7,12 +7,15 @@ import { Row } from "../../components/shared/layout";
 import { formatDate, parseDate, fadeInUp } from "../../utils";
 
 const Wrapper = styled(animated.div)`
-  border-bottom: ${props => `2px solid ${props.theme.colors.white}`};
+  border-bottom: ${(props) =>
+    props.border
+      ? `${props.border}px solid ${props.theme.colors.white}`
+      : `none`};
   flex-wrap: wrap;
-  padding: ${props => `${props.theme.spacing.huge}`} 0;
+  padding: ${(props) => `${props.theme.spacing[props.pv || "none"]}`} 0;
   box-sizing: border-box;
 
-  &:first-child {
+  &:first-of-type {
     padding-top: 0;
   }
 `;
@@ -23,28 +26,28 @@ const Flex = styled("div")`
 
 const Title = styled(Flex)`
   display: flex;
-  font-size: ${props => `${props.theme.type.sizes.huge}`};
-  margin: ${props => `${props.theme.type.sizes.normal}`} 0;
+  font-size: ${(props) => `${props.theme.type.sizes[props.size || "huge"]}`};
+  margin: ${(props) => `${props.theme.type.sizes.normal}`} 0;
 `;
 
 const Authors = styled(Flex)`
   display: flex;
   flex-wrap: wrap;
-  font-size: ${props => `${props.theme.type.sizes.normal}`};
+  font-size: ${(props) => `${props.theme.type.sizes.normal}`};
 `;
 
 const Author = styled("div")`
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
-  margin-right: ${props => `${props.theme.spacing.large}`};
+  margin-right: ${(props) => `${props.theme.spacing.large}`};
   &:last-child {
     margin-right: 0;
   }
 `;
 
 const Date = styled(Flex)`
-  margin-right: ${props => `${props.theme.spacing.huge}`};
+  margin-right: ${(props) => `${props.theme.spacing.huge}`};
 `;
 
 const Citations = styled(Flex)``;
@@ -56,11 +59,11 @@ const Topics = styled(Flex)``;
 const Topic = styled(Flex)`
   cursor: pointer;
   font-weight: bold;
-  margin-right: ${props => `${props.theme.spacing.large}`};
-  background-color: ${props => `${props.theme.colors.white}`};
-  color: ${props => `${props.theme.colors.black}`};
+  margin-right: ${(props) => `${props.theme.spacing.large}`};
+  background-color: ${(props) => `${props.theme.colors.white}`};
+  color: ${(props) => `${props.theme.colors.black}`};
   box-sizing: border-box;
-  padding: ${props =>
+  padding: ${(props) =>
     `${props.theme.spacing.tiny} ${props.theme.spacing.small}`};
   &:last-child {
     margin-right: 0;
@@ -70,12 +73,39 @@ const Topic = styled(Flex)`
 const MAX_AUTHORS = 20;
 const MAX_TOPICS = 4;
 
+export const PaperReducedDetail = ({ data }) => {
+  const wrapperAnimation = useSpring(fadeInUp);
+  const { title, date, citations } = data;
+  const dateString = formatDate(parseDate(date));
+
+  return (
+    <Wrapper border={1} pv={"small"} style={wrapperAnimation}>
+      <Row
+        mv={"none"}
+        css={css`
+          justify-content: start;
+        `}
+      >
+        <Date>{dateString}</Date>
+        <Citations>
+          {citations
+            ? citations > 1
+              ? `${citations} citations`
+              : `${citations} citation`
+            : `Not yet cited`}
+        </Citations>
+      </Row>
+      <Title size={"normal"}>{title}</Title>
+    </Wrapper>
+  );
+};
+
 const Paper = ({ data }) => {
   const wrapperAnimation = useSpring(fadeInUp);
   const { title, date, authors, topics, citations, publisher } = data;
   const dateString = formatDate(parseDate(date));
   return (
-    <Wrapper style={wrapperAnimation}>
+    <Wrapper border={2} pv={"huge"} border style={wrapperAnimation}>
       <Row
         css={css`
           justify-content: start;
@@ -102,7 +132,7 @@ const Paper = ({ data }) => {
           )}
         </Authors>
       </Row>
-      <Title>{title}</Title>
+      <Title size={"huge"}>{title}</Title>
       <Row>
         <Topics>
           {topics.map(

@@ -88,15 +88,16 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
       // })
     )
     .subscribe(filters => {
-      console.log(filters);
-      console.groupCollapsed("web worker computations");
+      // console.log(filters);
+      // console.groupCollapsed("web worker computations");
       console.time("web worker computations");
 
       crossFilterSubscriber.current = spawnIntersectionWorker(filters);
 
       crossFilterSubscriber.current.compute().then(ids => {
         console.timeEnd("web worker computations");
-        console.groupEnd("web worker computations");
+        // console.groupEnd("web worker computations");
+
         onChange({
           ids,
           colors: filters[0].length
