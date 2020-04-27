@@ -16,17 +16,11 @@ import Filters from "./Filters";
 // import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
 import { accessors } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
-import { AbsoluteCanvas, HUD } from "../../components/shared/renderer";
-import { LinkButton } from "../../components/shared/button";
+import { HUD } from "../../components/shared/renderer";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
 
 const DiversityIndex = ({ data }) => {
-  const canvasRef = useRef(null);
   const canvasHUDRef = useRef(null);
-  const canvasContainerRef = useRef(null);
-
-  // const viz = useRef(null);
-  const canvasWidthRef = useRef(null);
 
   const [groupingAccessor, setGroupingAccessor] = useState(
     accessors.names.topic
@@ -131,31 +125,21 @@ const DiversityIndex = ({ data }) => {
           ref={canvasRef}
         />
       </div> */}
-      <HUD
-        css={css`
-          // padding-top: ${layout.margins.top}px;
-          // padding-bottom: ${layout.margins.bottom}px;
-        `}
-        ref={canvasHUDRef}
-      >
+      <HUD ref={canvasHUDRef}>
         {categories.map(({ category, y: offsetTop }, i) => {
           return (
             <div
               key={`category-label-${category}`}
               css={css`
                 position: absolute;
-                // top: ${i * 100}px;
-                top: ${
-                  // diversity.viz.scales.category(category)
-                  // offsetTop - layout.pointSegment.height / 2
-                  offsetTop - layout.pointSegment.height / 2
+                top: ${// diversity.viz.scales.category(category)
+                // offsetTop - layout.pointSegment.height / 2
+                offsetTop - layout.pointSegment.height / 2}px;
 
-                  // layout.margins.top + i * (layout.margins.perGroup - 20)
-                }px;
+                // layout.margins.top + i * (layout.margins.perGroup - 20)
                 left: 3vw;
                 color: white;
                 padding-bottom: ${layout.margins.bottom}px;
-                // margin: ${layout.margins.perGroup / 4}px 0;
               `}
             >
               <div
