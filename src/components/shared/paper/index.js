@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 import { css, jsx } from "@emotion/core";
 import { useSpring, animated } from "react-spring";
 
-import { Row } from "../../components/shared/layout";
-import { formatDate, parseDate, fadeInUp } from "../../utils";
+import { Row } from "../layout";
+import { formatDate, parseDate, fadeInUp } from "../../../utils";
 
 const Wrapper = styled(animated.div)`
   border-bottom: ${(props) =>
@@ -105,7 +105,7 @@ const Paper = ({ data }) => {
   const { title, date, authors, topics, citations, publisher } = data;
   const dateString = formatDate(parseDate(date));
   return (
-    <Wrapper border={2} pv={"huge"} border style={wrapperAnimation}>
+    <Wrapper border={2} pv={"huge"} style={wrapperAnimation}>
       <Row
         css={css`
           justify-content: start;

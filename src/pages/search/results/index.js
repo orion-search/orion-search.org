@@ -1,11 +1,16 @@
-import React, { useEffect, useCallback, useState } from "react";
-import { PageLayout, Row, Column, Title } from "../../components/shared/layout";
 import { Query } from "@apollo/react-components";
+import React, { useEffect, useCallback, useState } from "react";
+import {
+  PageLayout,
+  Row,
+  Column,
+  Title,
+} from "../../../components/shared/layout";
 
-import { accessors, urls } from "../../utils";
-import Toggle from "../../components/shared/toggle";
-import { LinkButton } from "../../components/shared/button";
-import { PAPER_METADATA } from "../../queries";
+import { accessors, urls } from "../../../utils";
+import Toggle from "../../../components/shared/toggle";
+import { LinkButton } from "../../../components/shared/button";
+import { PAPER_METADATA } from "../../../queries";
 import Panel from "./Panel";
 import Results from "./Results";
 

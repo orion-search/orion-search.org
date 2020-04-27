@@ -136,7 +136,6 @@ const DiversityIndex = ({ data }) => {
                 // offsetTop - layout.pointSegment.height / 2
                 offsetTop - layout.pointSegment.height / 2}px;
 
-                // layout.margins.top + i * (layout.margins.perGroup - 20)
                 left: 3vw;
                 color: white;
                 padding-bottom: ${layout.margins.bottom}px;

@@ -10,7 +10,7 @@ import {
 import { PAPER_METADATA } from "../../queries";
 
 import { LinkButton } from "../../components/shared/button";
-import { PaperReducedDetail } from "../Search/Paper";
+import { PaperReducedDetail } from "../../components/shared/paper";
 
 const Summary = ({ paperIds, showPapers = 5 }) => {
   if (!paperIds.length) return null;
@@ -39,7 +39,7 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
               {`Showing ${showPapers} of ${p} papers -> `}
               <LinkButton
                 to={{
-                  pathname: urls.search,
+                  pathname: urls.search.results,
                   state: {
                     papers: sortedPapers,
                   },

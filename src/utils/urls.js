@@ -5,5 +5,9 @@ export const urls = {
   profile: "/profile",
   profileCountry: "/profile/country",
   profileTopic: "/profile/topic",
-  search: "/search"
+  // search: "/search"
+  search: {
+    landing: "/search",
+    results: "/search/results",
+  },
 };

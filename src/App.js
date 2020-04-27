@@ -8,8 +8,8 @@ import Diversity from "./pages/diversity/";
 import LatentSpace from "./layouts/LatentSpace";
 import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
-// import Search from "./pages/search/";
-import Search from "./layouts/Search";
+import SearchResults from "./pages/search/results";
+// import Search from "./layouts/Search";
 import { urls } from "./utils";
 
 function App() {
@@ -37,10 +37,20 @@ function App() {
       />
       <Route path={urls.profile} component={Profile} />
       <Route
-        path={urls.search}
+        exact
+        path={urls.search.landing}
+        render={() => {
+          stage.views.particles.viz.hide();
+          stage.views.diversity.viz.hide();
+          return null;
+        }}
+      />
+      <Route
+        exact
+        path={urls.search.results}
         render={({ location }) => {
           stage.views.particles.viz.hide();
-          return <Search papers={location?.state?.papers || []} />;
+          return <SearchResults papers={location?.state?.papers || []} />;
         }}
       />
     </Switch>

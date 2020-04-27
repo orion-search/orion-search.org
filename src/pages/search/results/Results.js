@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import Paper from "./Paper";
-import { blurEdges } from "../../components/shared/layout";
+import Paper from "../../../components/shared/paper";
+import { blurEdges } from "../../../components/shared/layout";
 
 import styled from "@emotion/styled";
 import { useLayoutEffect } from "react";

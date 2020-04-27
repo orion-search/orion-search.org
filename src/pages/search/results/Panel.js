@@ -3,8 +3,8 @@ import styled from "@emotion/styled";
 import { jsx } from "@emotion/core";
 import { useRef, useLayoutEffect } from "react";
 
-import { Row, Column } from "../../components/shared/layout";
-import Toggle from "../../components/shared/toggle";
+import { Row, Column } from "../../../components/shared/layout";
+import Toggle from "../../../components/shared/toggle";
 import Input from "./Input";
 
 const Option = styled("div")`
