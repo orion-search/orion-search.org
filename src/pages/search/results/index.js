@@ -1,3 +1,8 @@
+/**
+ * @todo no need to double-fetch paper metadata,
+ * when the paper prop is there
+ */
+
 import { Query } from "@apollo/react-components";
 import React, { useEffect, useCallback, useState } from "react";
 import {
@@ -11,8 +16,8 @@ import { accessors, urls } from "../../../utils";
 import Toggle from "../../../components/shared/toggle";
 import { LinkButton } from "../../../components/shared/button";
 import { PAPER_METADATA } from "../../../queries";
-import Panel from "./Panel";
-import Results from "./Results";
+import Panel from "../Panel";
+import Results from "../Results";
 
 const isSearchType = (type) => (currentSearch) => currentSearch === type;
 const isKeywordSearch = isSearchType("Keyword");

@@ -9,7 +9,7 @@ import LatentSpace from "./layouts/LatentSpace";
 import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
 import SearchResults from "./pages/search/results";
-// import Search from "./layouts/Search";
+import Search from "./pages/search";
 import { urls } from "./utils";
 
 function App() {
@@ -38,21 +38,21 @@ function App() {
       <Route path={urls.profile} component={Profile} />
       <Route
         exact
-        path={urls.search.landing}
-        render={() => {
+        path={[urls.search.landing, urls.search.results]}
+        render={({ location }) => {
           stage.views.particles.viz.hide();
           stage.views.diversity.viz.hide();
-          return null;
+          return <Search papers={location?.state?.papers || []} />;
         }}
       />
-      <Route
+      {/* <Route
         exact
         path={urls.search.results}
         render={({ location }) => {
           stage.views.particles.viz.hide();
           return <SearchResults papers={location?.state?.papers || []} />;
         }}
-      />
+      /> */}
     </Switch>
   );
 }

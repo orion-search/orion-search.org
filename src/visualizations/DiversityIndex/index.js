@@ -151,7 +151,6 @@ export function DiversityIndex({
       xFunc: dimensions.x,
       yFunc: dimensions.y,
     };
-    console.log(scales, scales.category.domain());
   };
   // ====================================
 
