@@ -3,37 +3,41 @@
 
 import styled from "@emotion/styled";
 import { jsx } from "@emotion/core";
-import { Fragment, useRef, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect } from "react";
 
-import { Row, Column } from "../../components/shared/layout";
-import Toggle from "../../components/shared/toggle";
-import Input from "./results/Input";
+import { Column } from "../../components/shared/layout";
+// import Toggle from "../../components/shared/toggle";
+import Input from "../../components/shared/input";
 
-const Option = styled("div")`
-  margin-top: ${(props) => props.theme.spacing.large};
+// const Option = styled("div")`
+//   margin-top: ${(props) => props.theme.spacing.large};
+// `;
+
+let SearchBar = styled(Input)`
+  font-size: ${(props) => `${props.theme.type.sizes.large}`};
 `;
 
-const FilterOptions = ({ onChange = () => {} }) => (
-  <>
-    <Option>
-      Sort papers by{": "}
-      <Toggle
-        values={["citations", "date", "relevance"]}
-        selected={"relevance"}
-        onChange={(value) => console.log(value)}
-      />
-    </Option>
-    <Option>
-      Show{": "}
-      <Toggle
-        values={[25, 50, 100]}
-        selected={100}
-        onChange={(value) => console.log(value)}
-      />{" "}
-      results
-    </Option>
-  </>
-);
+// const FilterOptions = ({ onChange = () => {} }) => (
+//   <>
+//     <Option>
+//       Sort papers by{": "}
+//       <Toggle
+//         values={["citations", "date", "relevance"]}
+//         selected={"relevance"}
+//         onChange={(value) => console.log(value)}
+//       />
+//     </Option>
+//     <Option>
+//       Show{": "}
+//       <Toggle
+//         values={[25, 50, 100]}
+//         selected={100}
+//         onChange={(value) => console.log(value)}
+//       />{" "}
+//       results
+//     </Option>
+//   </>
+// );
 
 const Panel = ({
   type,
@@ -67,8 +71,8 @@ const Panel = ({
         search (FAISS), to retrieve the most semantically similar abstracts to
         the one provided.
       </Row> */}
-      <Input
-        rows={5}
+      <SearchBar
+        rows={2}
         placeholder={"Search for academic papers..."}
         ref={searchRef}
       />

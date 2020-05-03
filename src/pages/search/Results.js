@@ -3,21 +3,21 @@ import styled from "@emotion/styled";
 
 import Paper from "../../components/shared/paper";
 import Toggle from "../../components/shared/toggle";
-import { blurEdges } from "../../components/shared/layout";
+// import { blurEdges } from "../../components/shared/layout";
 import { LinkButton } from "../../components/shared/button";
 import { clamp, urls, accessors } from "../../utils";
 
 // import { useLayoutEffect } from "react";
 
-const Wrapper = styled("div")`
-  overflow: scroll;
-  box-sizing: border-box;
-  margin: -${(props) => props.theme.spacing.normal};
-  padding: ${(props) =>
-    `${props.theme.spacing.normal} ${props.theme.spacing.large} 0 0`};
+// const Wrapper = styled("div")`
+//   overflow: scroll;
+//   box-sizing: border-box;
+//   margin: -${(props) => props.theme.spacing.normal};
+//   padding: ${(props) =>
+//     `${props.theme.spacing.normal} ${props.theme.spacing.large} 0 0`};
 
-  ${blurEdges};
-`;
+//   ${blurEdges};
+// `;
 
 const PaginationWrapper = styled("div")`
   margin: ${(props) => props.theme.spacing.normal} 0;
@@ -91,7 +91,7 @@ const Results = ({ data, numResults = 100, resultsPerPage = 10 }) => {
           },
         }}
       >
-        EXPLORE CLUSTER
+        Explore Cluster
       </LinkButton>
       <PaginationBar />
       {data.slice(offset, offset + resultsPerPage).map((p) => (

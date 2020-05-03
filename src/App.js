@@ -8,7 +8,7 @@ import Diversity from "./pages/diversity/";
 import LatentSpace from "./layouts/LatentSpace";
 import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
-import SearchResults from "./pages/search/results";
+// import SearchResults from "./pages/search/results";
 import Search from "./pages/search";
 import { urls } from "./utils";
 

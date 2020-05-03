@@ -12,7 +12,7 @@ import { urls, accessors } from "../../utils";
 export const searchModes = [
   `Abstract`,
   `Keyword`,
-  `Topic Intersection (experimental)`,
+  // `Topic Intersection (experimental)`,
 ];
 
 export default ({ papers }) => {
@@ -28,17 +28,26 @@ export default ({ papers }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (query === "" || searchMode === `Keyword`) return;
-    fetch(
-      `${process.env.REACT_APP_ORION_SEARCH_URL}/vector-search?query=${query}&results=${numResults}`
-    )
-      .then((d) => d.json())
-      .then((data) => {
-        console.log(data);
-        history.push(urls.search.results, {
-          papers: data["I"].map((d) => ({ id: parseInt(d) })),
-        });
-      });
+    if (query === ``) return;
+
+    switch (searchMode) {
+      case `Abstract`:
+        fetch(
+          `${process.env.REACT_APP_ORION_ABSTRACT_SEARCH_URL}?query=${query}&results=${numResults}`
+        )
+          .then((d) => d.json())
+          .then((data) => {
+            console.log(data);
+            history.push(urls.search.results, {
+              papers: data["I"].map((d) => ({ id: parseInt(d) })),
+            });
+          });
+        break;
+      case `Keyword`:
+        break;
+      default:
+        break;
+    }
   }, [history, numResults, query, searchMode]);
 
   const onSearchEnter = useCallback((value) => {
