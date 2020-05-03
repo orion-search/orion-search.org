@@ -1,10 +1,11 @@
-import React, { useRef, useLayoutEffect, useState } from "react";
+import React, { useRef, useLayoutEffect, useCallback, useState } from "react";
 import styled from "@emotion/styled";
 
 import Paper from "../../components/shared/paper";
+import Toggle from "../../components/shared/toggle";
 import { blurEdges } from "../../components/shared/layout";
-import { clamp } from "../../utils";
-import { useCallback } from "react";
+import { LinkButton } from "../../components/shared/button";
+import { clamp, urls, accessors } from "../../utils";
 
 // import { useLayoutEffect } from "react";
 
@@ -16,6 +17,11 @@ const Wrapper = styled("div")`
     `${props.theme.spacing.normal} ${props.theme.spacing.large} 0 0`};
 
   ${blurEdges};
+`;
+
+const PaginationWrapper = styled("div")`
+  margin: ${(props) => props.theme.spacing.normal} 0;
+  font-size: ${(props) => props.theme.type.sizes.huge};
 `;
 
 const Results = ({ data, numResults = 100, resultsPerPage = 10 }) => {
@@ -42,6 +48,14 @@ const Results = ({ data, numResults = 100, resultsPerPage = 10 }) => {
     [offset, resultsPerPage, numResults]
   );
 
+  const goToPage = useCallback(
+    (e) => {
+      console.log((e - 1) * resultsPerPage);
+      setOffset((e - 1) * resultsPerPage);
+    },
+    [resultsPerPage]
+  );
+
   useLayoutEffect(() => {
     document.addEventListener("keyup", onChangeOffset);
     //   const { y } = wrapperRef.current.getBoundingClientRect();
@@ -51,11 +65,39 @@ const Results = ({ data, numResults = 100, resultsPerPage = 10 }) => {
     };
   }, [onChangeOffset]);
 
+  const PaginationBar = () => (
+    <PaginationWrapper>
+      Page {` `}
+      <Toggle
+        values={Array(Math.ceil(numResults / resultsPerPage))
+          .fill(0)
+          .map((d, i) => i + 1)}
+        selected={parseInt(offset / resultsPerPage + 1)}
+        separator={"/"}
+        onChange={goToPage}
+      />
+    </PaginationWrapper>
+  );
+
   return (
     <div ref={wrapperRef}>
+      <LinkButton
+        to={{
+          pathname: urls.explore,
+          state: {
+            filters: {
+              ids: data.map((d) => accessors.types.id(d)),
+            },
+          },
+        }}
+      >
+        EXPLORE CLUSTER
+      </LinkButton>
+      <PaginationBar />
       {data.slice(offset, offset + resultsPerPage).map((p) => (
         <Paper key={`paper-${p.title}`} data={p} />
       ))}
+      <PaginationBar />
     </div>
   );
 };

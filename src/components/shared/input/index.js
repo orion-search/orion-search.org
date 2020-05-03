@@ -17,4 +17,16 @@ const Input = styled("input")`
     ${(props) => `calc(${props.theme.spacing.normal} / 2)`} 0;
 `;
 
-export default Input;
+const TextArea = styled("textarea")`
+  background: transparent;
+  outline: none;
+  border: none;
+  border-width: 0 0 2px 0;
+  border-bottom: 2px solid ${(props) => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.white};
+  resize: none;
+
+  margin: ${(props) => `${props.theme.spacing.small}`} 0px !important;
+`;
+
+export default TextArea;

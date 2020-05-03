@@ -54,25 +54,26 @@ const Search = ({ papers = [] }) => {
       <Title>
         Search by{" "}
         <Toggle
-          values={["Abstract", "Keyword", "Topic Intersection (experimental)"]}
+          values={["Abstract", "Keyword"]}
           selected={searchMode}
           onChange={(value) => setSearchMode(value)}
         />
       </Title>
-      {isKeywordSearch(searchMode) && (
-        <LinkButton
-          to={{
-            pathname: urls.explore,
-            state: {
-              filters: {
-                ids,
-              },
+      {/* { */}
+      // isKeywordSearch(searchMode) &&
+      <LinkButton
+        to={{
+          pathname: urls.explore,
+          state: {
+            filters: {
+              ids,
             },
-          }}
-        >
-          EXPLORE CLUSTER
-        </LinkButton>
-      )}
+          },
+        }}
+      >
+        EXPLORE CLUSTER
+      </LinkButton>
+      // }
       <Row>
         <Panel type={searchMode} onSearch={onSearchEnter} />
         <Column width={2.5 / 4}>

@@ -67,8 +67,12 @@ const Panel = ({
         search (FAISS), to retrieve the most semantically similar abstracts to
         the one provided.
       </Row> */}
-      <Input placeholder={"Search for academic papers..."} ref={searchRef} />
-      {expanded && <FilterOptions />}
+      <Input
+        rows={5}
+        placeholder={"Search for academic papers..."}
+        ref={searchRef}
+      />
+      {/* {expanded && <FilterOptions />} */}
     </Column>
   );
 };
