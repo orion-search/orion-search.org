@@ -17,7 +17,7 @@ export const searchModes = [
 
 export default ({ papers }) => {
   const [query, setQuery] = useState(``);
-  const [numResults, setNumResults] = useState(100);
+  const [numResults] = useState(100);
   // const [ids, setIds] = useState(
   //   papers ? papers.map((p) => accessors.types.id(p)) : []
   // );

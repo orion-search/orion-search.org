@@ -10,7 +10,6 @@ import { extent, scaleLinear, scaleOrdinal } from "d3";
 
 import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
-import theme from "../../styles";
 import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
@@ -189,10 +188,10 @@ export function DiversityIndex({
   };
 
   // force layout-related ===============
-  const destroy = () => {
-    forceLayout.terminate();
-    removeHUD();
-  };
+  // const destroy = () => {
+  //   forceLayout.terminate();
+  //   removeHUD();
+  // };
 
   const initForceLayout = () => {
     forceLayout = ForceLayout({

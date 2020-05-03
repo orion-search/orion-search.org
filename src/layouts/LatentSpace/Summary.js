@@ -1,12 +1,7 @@
 import React, { Fragment } from "react";
 import { Query } from "@apollo/react-components";
 
-import {
-  formatThousands,
-  sortCitationsDesc,
-  urls,
-  accessors,
-} from "../../utils";
+import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
 import { LinkButton } from "../../components/shared/button";
