@@ -54,6 +54,7 @@ export const initApp = ({ canvas }) => {
   let aspectRatio = window.innerWidth / window.innerHeight;
   let mouse = new Vector2();
   let raycaster = new Raycaster();
+  raycaster.params.Points.threshold = 10;
 
   // const visualizations = {
   //   diversity: {
@@ -105,6 +106,7 @@ export const initApp = ({ canvas }) => {
 
   return {
     controls,
+    mouse,
     raycaster,
     renderer,
     render: (viewName) => {

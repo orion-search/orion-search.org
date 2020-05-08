@@ -66,7 +66,7 @@ const LoadingOrChildren = ({ ready, children, data }) => {
   useLayoutEffect(() => {
     if (!ready) return;
     console.info("Mounting App");
-    const { controls, raycaster, renderer, render, views } = initApp({
+    const { controls, mouse, raycaster, renderer, render, views } = initApp({
       canvas: canvasRef.current,
     });
 
@@ -97,6 +97,8 @@ const LoadingOrChildren = ({ ready, children, data }) => {
       data: data.diversity,
       // dimensions: add defaults
       drawSecondCanvas: false,
+      mouse,
+      raycaster,
       renderer,
       scene: views.diversity.scene,
     });

@@ -14,6 +14,8 @@ import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
   camera,
+  mouse,
+  raycaster,
   renderer,
   scene,
   data: unfilteredData = [],
@@ -225,7 +227,10 @@ export function DiversityIndex({
   };
 
   const update = () => {
+    raycaster.setFromCamera(mouse, camera);
+    // console.log(raycaster.intersectObjects(groups.points.children), mouse);
     if (forceLayout && forceLayout.elapsedTicks < 120) {
+      console.log(raycaster);
       forceLayout.tick(1).then(({ nodes: newNodes }) => {
         forceLayout.elapsedTicks++;
         nodes = newNodes;
