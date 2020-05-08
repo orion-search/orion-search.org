@@ -19,7 +19,7 @@ export function ParticleContainerLatentSpace({
 }) {
   let mesh; // for meshes
   let meshSelected; // for selected nodes
-  let searchThreshold = 500;
+  // let searchThreshold = 500;
   let selection;
   let particleSelectionCallback = (ids) => {};
   const setParticleSelectionCallback = (f) => {

@@ -1,5 +1,6 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import styled from "@emotion/styled";
 import { Fragment } from "react";
 
 import React, { // eslint-disable-line no-unused-vars
@@ -14,7 +15,7 @@ import React, { // eslint-disable-line no-unused-vars
 
 import Filters from "./Filters";
 // import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
-import { accessors } from "../../utils";
+import { accessors, formatPercentage } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
@@ -28,7 +29,7 @@ const DiversityIndex = ({ data }) => {
   const [xAccessor] = useState(accessors.names.diversity);
   const [yAccessor] = useState(accessors.names.femaleShare);
   const [year, setYear] = useState(2019);
-
+  const [tooltip, setTooltip] = useState(null);
   const {
     stage: {
       views: { diversity },
@@ -43,6 +44,18 @@ const DiversityIndex = ({ data }) => {
 
     diversity.viz.HUD(canvasHUDRef.current);
     diversity.viz.show();
+
+    // set on hover callback (for tooltips)
+    diversity.viz.onHover(({ data, coords }) => {
+      console.log("Hovered", data, coords);
+      if (data !== tooltip?.data) {
+        if (!data) {
+          setTooltip(null);
+        } else {
+          setTooltip({ data, coords });
+        }
+      }
+    });
 
     // viz.current = new DiversityIndexVisualization({
     //   canvas: canvasRef.current,
@@ -153,8 +166,8 @@ const DiversityIndex = ({ data }) => {
               ></div>
               <div>{category}</div>
               <div>
-                μ={Math.random().toFixed(2)} / σ={Math.random().toFixed(2)} / Ν=
-                {~~(Math.random() * 1300)}
+                μ={(0.5).toFixed(2)} / σ={(0.5).toFixed(2)} / Ν=
+                {~~(0.5 * 1300)}
               </div>
               <button>Explore Cluster</button>
               {/* <p>Explore</p> */}
@@ -169,7 +182,43 @@ const DiversityIndex = ({ data }) => {
           );
         })}
       </HUD>
+      {tooltip && <Tooltip data={tooltip.data} coords={tooltip.coords} />}
     </Fragment>
+  );
+};
+
+const Tooltip = ({ data, coords }) => {
+  const Wrapper = styled("div")`
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: ${coords.y - 20}px;
+    left: ${coords.x}px;
+    padding: ${(props) => `${props.theme.spacing.small}`};
+  `;
+
+  // country: "United States";
+  // diversity: 8.1120724593453;
+  // femaleShare: 0.326654022667931;
+  // rca: 0.717834352976026;
+  // topic: "Ecology";
+  // year: "2019";
+
+  return (
+    <Wrapper
+    // css={css`
+    //   background-color: rgba(0, 0, 0, 0.4);
+    //   position: absolute;
+    //   top: ${coords.y - 20}px;
+    //   left: ${coords.x}px;
+    // `}
+    >
+      <div>Country: {data.country}</div>
+      <div>Topic: {data.topic}</div>
+      <div>Revealed Comparative Advantage: {data.rca.toFixed(2)}</div>
+      <div>Female Share of Research: {formatPercentage(data.femaleShare)}</div>
+      <div>Year: {data.year}</div>
+    </Wrapper>
   );
 };
 

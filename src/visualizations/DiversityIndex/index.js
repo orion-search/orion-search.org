@@ -38,6 +38,10 @@ export function DiversityIndex({
   let scales;
   let nodes;
 
+  // for highlighting
+  let onHoverCallback = () => {};
+  let highlightedNode;
+
   let { width, height } = renderer.domElement.getBoundingClientRect();
   let groups = {
     points: new THREE.Group(),
@@ -52,6 +56,7 @@ export function DiversityIndex({
   };
 
   const hide = () => {
+    onHoverCallback = () => {};
     renderer.domElement.removeEventListener("wheel", onScroll);
     removeHUD();
     renderer.clear(true, true, false);
@@ -155,6 +160,14 @@ export function DiversityIndex({
   };
   // ====================================
 
+  // set on hover behavior callback
+  // this is called when the raycaster detects intersection
+  const onHover = (cb) => {
+    if (cb) {
+      onHoverCallback = cb;
+    }
+  };
+
   // scroll-based actions ===============
   const onScroll = (e) => {
     e.preventDefault();
@@ -229,8 +242,22 @@ export function DiversityIndex({
   const update = () => {
     raycaster.setFromCamera(mouse, camera);
     // console.log(raycaster.intersectObjects(groups.points.children), mouse);
+    if (raycaster.intersectObjects(groups.points.children).length) {
+      if (!highlightedNode) {
+        const bubble = raycaster.intersectObjects(groups.points.children)[0];
+        highlightedNode = bubble;
+        onHoverCallback({
+          data: data[bubble.index],
+          coords: { x: bubble.point.x, y: bubble.point.y - camera.top },
+        });
+      }
+    } else {
+      highlightedNode = null;
+      onHoverCallback({ data: null });
+    }
+
+    // only run force layout in first 120 ticks
     if (forceLayout && forceLayout.elapsedTicks < 120) {
-      console.log(raycaster);
       forceLayout.tick(1).then(({ nodes: newNodes }) => {
         forceLayout.elapsedTicks++;
         nodes = newNodes;
@@ -257,6 +284,7 @@ export function DiversityIndex({
   setData(unfilteredData);
 
   return {
+    onHover,
     setData,
     hide,
     HUD,
