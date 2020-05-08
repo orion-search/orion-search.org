@@ -252,8 +252,8 @@ export function DiversityIndex({
         });
       }
     } else {
+      highlightedNode !== null && onHoverCallback({ data: null });
       highlightedNode = null;
-      onHoverCallback({ data: null });
     }
 
     // only run force layout in first 120 ticks

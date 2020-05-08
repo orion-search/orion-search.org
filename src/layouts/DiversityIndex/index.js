@@ -2,6 +2,8 @@
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { Fragment } from "react";
+import { useSpring, animated } from "react-spring";
+import { useHistory } from "react-router-dom";
 
 import React, { // eslint-disable-line no-unused-vars
   useRef,
@@ -15,7 +17,7 @@ import React, { // eslint-disable-line no-unused-vars
 
 import Filters from "./Filters";
 // import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
-import { accessors, formatPercentage } from "../../utils";
+import { accessors, fadeIn, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
@@ -36,26 +38,36 @@ const DiversityIndex = ({ data }) => {
     },
   } = useOrionData();
   const [categories, setCategories] = useState(diversity.viz.categories());
+  const history = useHistory();
 
   // console.log(categories);
+
+  const handleEvent = ({ type, data }) => {
+    switch (type) {
+      case "visitCluster":
+        break;
+      default:
+        break;
+    }
+  };
+
+  // set on hover callback (for tooltips)
+  diversity.viz.onHover(({ data, coords }) => {
+    console.log("Hovered", data, coords);
+    if (data !== tooltip?.data) {
+      if (!data) {
+        setTooltip(null);
+      } else {
+        setTooltip({ data, coords });
+      }
+    }
+  });
 
   useLayoutEffect(() => {
     console.log("LAYOUT EFFECT");
 
     diversity.viz.HUD(canvasHUDRef.current);
     diversity.viz.show();
-
-    // set on hover callback (for tooltips)
-    diversity.viz.onHover(({ data, coords }) => {
-      console.log("Hovered", data, coords);
-      if (data !== tooltip?.data) {
-        if (!data) {
-          setTooltip(null);
-        } else {
-          setTooltip({ data, coords });
-        }
-      }
-    });
 
     // viz.current = new DiversityIndexVisualization({
     //   canvas: canvasRef.current,
@@ -188,31 +200,19 @@ const DiversityIndex = ({ data }) => {
 };
 
 const Tooltip = ({ data, coords }) => {
-  const Wrapper = styled("div")`
+  const Wrapper = styled(animated.div)`
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.6);
     position: absolute;
     top: ${coords.y - 20}px;
-    left: ${coords.x}px;
+    left: ${coords.x + (coords.x > window.innerWidth / 2 ? -100 : 10)}px;
     padding: ${(props) => `${props.theme.spacing.small}`};
   `;
 
-  // country: "United States";
-  // diversity: 8.1120724593453;
-  // femaleShare: 0.326654022667931;
-  // rca: 0.717834352976026;
-  // topic: "Ecology";
-  // year: "2019";
+  const wrapperAnimation = useSpring(fadeIn);
 
   return (
-    <Wrapper
-    // css={css`
-    //   background-color: rgba(0, 0, 0, 0.4);
-    //   position: absolute;
-    //   top: ${coords.y - 20}px;
-    //   left: ${coords.x}px;
-    // `}
-    >
+    <Wrapper style={wrapperAnimation}>
       <div>Country: {data.country}</div>
       <div>Topic: {data.topic}</div>
       <div>Revealed Comparative Advantage: {data.rca.toFixed(2)}</div>

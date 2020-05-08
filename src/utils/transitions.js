@@ -29,10 +29,10 @@ export const fadeInUp = {
 };
 
 export const fadeIn = {
-  from: { opacity: 0.5 },
+  from: { opacity: 0 },
   to: { opacity: 1 },
   config: {
-    duration: durations.medium,
+    duration: durations.short,
   },
 };
 
