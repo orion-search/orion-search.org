@@ -20,6 +20,7 @@ import Filters from "./Filters";
 import { accessors, fadeIn, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
+import { SmallButton } from "../../components/shared/button";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
 
 const DiversityIndex = ({ data }) => {
@@ -42,9 +43,15 @@ const DiversityIndex = ({ data }) => {
 
   // console.log(categories);
 
-  const handleEvent = ({ type, data }) => {
+  const handleEvent = ({ type, data }, e) => {
     switch (type) {
       case "visitCluster":
+        console.log(type, data, e);
+        history.push(urls.explore, {
+          filters: {
+            [groupingAccessor]: data,
+          },
+        });
         break;
       default:
         break;
@@ -177,11 +184,22 @@ const DiversityIndex = ({ data }) => {
                 `}
               ></div>
               <div>{category}</div>
-              <div>
+              {/* <div>
                 μ={(0.5).toFixed(2)} / σ={(0.5).toFixed(2)} / Ν=
                 {~~(0.5 * 1300)}
-              </div>
-              <button>Explore Cluster</button>
+              </div> */}
+              <SmallButton
+                data-filter-link={category}
+                onClick={(e) =>
+                  handleEvent({
+                    type: "visitCluster",
+                    data: e.target.dataset.filterLink,
+                  })
+                }
+              >
+                Explore Cluster in 3D
+              </SmallButton>
+              {/* <button>Explore Cluster in 3D</button> */}
               {/* <p>Explore</p> */}
               {/* <LinkButton
                 css={css`
