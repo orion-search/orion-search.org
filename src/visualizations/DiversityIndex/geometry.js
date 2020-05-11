@@ -12,7 +12,7 @@ import pointFS from "../../shaders/point.fs";
 
 export const layout = {
   margins: {
-    top: 0.2 * window.innerHeight,
+    top: 0.25 * window.innerHeight,
     bottom: 100,
     perGroup: 200,
   },
@@ -20,7 +20,7 @@ export const layout = {
     width: 100,
   },
   pointSegment: {
-    widthRatio: 0.8,
+    widthRatio: 0.7,
     height: 50, // perGroup / 2
   },
 };

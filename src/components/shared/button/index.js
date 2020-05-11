@@ -47,9 +47,12 @@ export const Button = styled("button")`
 `;
 
 export const SmallButton = styled(Button)`
-  padding: ${(props) => `calc(${props.theme.spacing.small})`}
+  padding: ${(props) => `calc(${props.theme.spacing.tiny})`}
     ${(props) => props.theme.spacing.small};
   font-size: ${(props) => props.theme.type.sizes.tiny};
+  border-right: none;
+  border-top: none;
+  border-bottom: none;
   pointer-events: initial;
 `;
 

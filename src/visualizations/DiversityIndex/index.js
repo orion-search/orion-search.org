@@ -251,7 +251,6 @@ export function DiversityIndex({
         !highlightedNode ||
         intersectedObjects[0].index !== highlightedNode.index
       ) {
-        console.log("bla");
         const bubble = intersectedObjects[0];
         highlightedNode = bubble;
         onHoverCallback({

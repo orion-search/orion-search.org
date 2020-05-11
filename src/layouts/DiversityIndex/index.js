@@ -2,13 +2,13 @@
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 import { Fragment } from "react";
-import { useSpring, animated } from "react-spring";
+import { animated } from "react-spring";
 import { useHistory } from "react-router-dom";
 
 import React, { useRef, useEffect, useState, useLayoutEffect } from "react"; // eslint-disable-line no-unused-vars
 
 import Filters, { filterOptions } from "./Filters";
-import { accessors, fadeIn, formatPercentage, urls } from "../../utils";
+import { accessors, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
 import { SmallButton } from "../../components/shared/button";
@@ -137,7 +137,13 @@ const DiversityIndex = ({ data }) => {
                   left: 17vw;
                 `}
               ></div>
-              <div>{category}</div>
+              <div
+                css={css`
+                  max-width: 10vw;
+                `}
+              >
+                {category}
+              </div>
               {/* <div>
                 μ={(0.5).toFixed(2)} / σ={(0.5).toFixed(2)} / Ν=
                 {~~(0.5 * 1300)}
@@ -172,10 +178,12 @@ const Tooltip = ({ data, coords }) => {
     padding: ${(props) => `${props.theme.spacing.small}`};
   `;
 
-  const wrapperAnimation = useSpring(fadeIn);
+  // const wrapperAnimation = useSpring(fadeIn);
 
   return (
-    <Wrapper style={wrapperAnimation}>
+    <Wrapper
+    // style={wrapperAnimation}
+    >
       <div>Country: {data.country}</div>
       <div>Topic: {data.topic}</div>
       <div>Revealed Comparative Advantage: {data.rca.toFixed(2)}</div>

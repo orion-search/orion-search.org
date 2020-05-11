@@ -28,7 +28,6 @@ export const NavBarWrapper = styled("div")`
   box-sizing: border-box;
   align-items: center;
   align-self: center;
-  font-weight: bold;
 
   user-select: none;
 
@@ -50,7 +49,7 @@ export const NavItem = styled(({ highlighted, ...props }) => (
 const navURLs = [
   {
     to: urls.diversity,
-    name: "Diversity Index",
+    name: "Metrics",
   },
   {
     to: urls.explore,
