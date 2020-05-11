@@ -49,7 +49,7 @@ const DiversityIndex = ({ data }) => {
         console.log(type, data, e);
         history.push(urls.explore, {
           filters: {
-            [groupingAccessor]: data,
+            [groupingAccessor]: [data],
           },
         });
         break;
