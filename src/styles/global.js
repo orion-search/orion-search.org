@@ -1,29 +1,43 @@
-import { injectGlobal } from "emotion";
-
-import MatterLight from "../assets/fonts/Matter-Light.otf";
-import MatterRegular from "../assets/fonts/Matter-Regular.otf";
-import MatterBold from "../assets/fonts/Matter-Bold.otf";
-import MatterHeavy from "../assets/fonts/Matter-Heavy.otf";
+import MatterLight from "../assets/fonts/Matter-Light.woff2";
+import MatterRegular from "../assets/fonts/Matter-Regular.woff2";
+import MatterBold from "../assets/fonts/Matter-Bold.woff2";
+import MatterHeavy from "../assets/fonts/Matter-Heavy.woff2";
 
 import theme from ".";
 
-export default injectGlobal`
+export default `
+@font-face {
+  font-family: 'Matter';
+  font-style: normal;
+  src: url(${MatterRegular}) format('woff2');
+}
 
 @font-face {
   font-family: 'Matter';
   font-style: normal;
-  src: url(${MatterLight}) format('opentype') font-weight-lighter,
-  url(${MatterRegular}) format('opentype') font-weight-normal,
-  url(${MatterBold}) format('opentype') font-weight-bold,
-  url(${MatterHeavy}) format('opentype') font-weight-bolder;
+  font-weight: 300;
+  src: url(${MatterLight}) format('woff2');
+}
+
+@font-face {
+  font-family: 'Matter';
+  font-style: normal;
+  font-weight: 700;
+  src: url(${MatterBold}) format('woff2');
+}
+
+@font-face {
+  font-family: 'Matter';
+  font-style: normal;
+  font-weight: 800;
+  src: url(${MatterHeavy}) format('woff2');
 }
 
 body {
   margin: 0;
   background-color: ${theme.colors.black};
   color: ${theme.colors.white};
-  font-family: "Matter",
-  // font-weight: lighter;
+  font-family: "Matter", "Helvetica Neue", "Helvetica",  sans-serif;
 }
 
 p {

@@ -6,10 +6,10 @@ import { Router } from "react-router";
 
 import { client } from "./utils/apollo";
 import { ThemeProvider } from "emotion-theming";
-import { Global } from "@emotion/core";
+import { Global, css } from "@emotion/core";
 
 import theme from "./styles";
-import "./styles/global";
+import GlobalStyles from "./styles/global";
 import App from "./App";
 import { OrionDataProvider } from "./OrionData.context";
 
@@ -20,11 +20,9 @@ export const history = createBrowserHistory();
     <ApolloProvider client={client}>
       <ThemeProvider theme={theme}>
         <Global
-          styles={{
-            body: {
-              fontFamily: "Matter"
-            }
-          }}
+          styles={css`
+            ${GlobalStyles}
+          `}
         />
         <OrionDataProvider>
           <Router history={history}>
