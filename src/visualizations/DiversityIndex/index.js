@@ -10,6 +10,7 @@ import { extent, scaleLinear, scaleOrdinal } from "d3";
 
 import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
+import { filterOptions } from "../../layouts/DiversityIndex/Filters";
 import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
@@ -23,7 +24,7 @@ export function DiversityIndex({
     x: (d) => accessors.types.diversity(d),
     y: (d) => accessors.types.femaleShare(d),
     group: (d) => accessors.types.topic(d),
-    filter: (d) => accessors.types.year(d) === 2019,
+    filter: (d) => accessors.types.year(d) === filterOptions.time[0],
   },
   drawSecondCanvas = false,
 }) {
@@ -241,10 +242,17 @@ export function DiversityIndex({
 
   const update = () => {
     raycaster.setFromCamera(mouse, camera);
-    // console.log(raycaster.intersectObjects(groups.points.children), mouse);
-    if (raycaster.intersectObjects(groups.points.children).length) {
-      if (!highlightedNode) {
-        const bubble = raycaster.intersectObjects(groups.points.children)[0];
+    // console.log(intersectedObjects, mouse);
+    const intersectedObjects = raycaster.intersectObjects(
+      groups.points.children
+    );
+    if (intersectedObjects.length) {
+      if (
+        !highlightedNode ||
+        intersectedObjects[0].index !== highlightedNode.index
+      ) {
+        console.log("bla");
+        const bubble = intersectedObjects[0];
         highlightedNode = bubble;
         onHoverCallback({
           data: data[bubble.index],

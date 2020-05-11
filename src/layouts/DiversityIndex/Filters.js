@@ -1,42 +1,73 @@
 /** @jsx jsx */
+/** @jsxFrag Fragment */
 import { css, jsx } from "@emotion/core";
+import { Fragment } from "react"; // eslint-disable-line no-unused-vars
 
-import { Row } from "../../components/shared/layout";
-import Dropdown from "../../components/shared/dropdown";
+import { Column, Row } from "../../components/shared/layout";
+import Toggle from "../../components/shared/toggle";
+import { accessors } from "../../utils/accessors";
 
-const groupings = ["topic", "country"];
+// const groupings = ["topic", "country"];
+
+// these should be data-driven
+export const filterOptions = {
+  groupings: [accessors.names.topic, accessors.names.country],
+  time: [2019, 2018, 2017, 2016],
+  x: [accessors.names.diversity, accessors.names.rca],
+  y: [
+    accessors.names.femaleShare,
+    accessors.names.rca,
+    accessors.names.diversity,
+  ],
+};
 
 // contains all the filters
 const Filters = ({
-  onChangeGrouping = () => {},
-  onChangeYear = () => {},
-  year,
   groupingAccessor,
+  onChangeGrouping = () => {},
+  onChangeX = () => {},
+  onChangeY = () => {},
+  onChangeYear = () => {},
+  x = filterOptions.x[0],
+  y = filterOptions.y[0],
+  year,
 }) => {
   return (
     <Row
       css={(props) => css`
-        // width: fit-content;
-        margin: 0;
-        width: 100%;
+        padding: ${props.spacing.small} 5vw;
+        margin: 0 -5vw;
         backdrop-filter: blur(2px) brightness(20%);
         border-bottom: 1px solid white;
-        align-items: center;
+        justify-content: flex-start;
       `}
     >
-      Explore diversity by{" "}
-      <Dropdown
-        values={groupings}
-        selected={groupingAccessor}
-        onChange={onChangeGrouping}
-      />
-      in
-      <Dropdown
-        values={[2016, 2017, 2018, 2019]}
-        selected={year}
-        onChange={onChangeYear}
-      />
-      {/* <Legend /> */}
+      <Column width={1 / 4}>
+        {/* Explore diversity by{" "} */}
+        <Toggle
+          values={filterOptions.groupings}
+          selected={groupingAccessor}
+          onChange={onChangeGrouping}
+        />
+        {"  "}
+        {/* in{"  "} */}
+        <Toggle
+          values={filterOptions.time}
+          selected={year}
+          onChange={onChangeYear}
+        />
+        {/* <Legend /> */}
+      </Column>
+      <Column width={1 / 3}>
+        <div>
+          {`x-axis: `}
+          <Toggle values={filterOptions.x} selected={x} onChange={onChangeX} />
+        </div>
+        <div>
+          {`y-axis: `}
+          <Toggle values={filterOptions.y} selected={y} onChange={onChangeY} />
+        </div>
+      </Column>
     </Row>
   );
 };

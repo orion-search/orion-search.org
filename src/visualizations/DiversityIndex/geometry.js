@@ -12,9 +12,9 @@ import pointFS from "../../shaders/point.fs";
 
 export const layout = {
   margins: {
-    top: 0.15 * window.innerHeight,
+    top: 0.2 * window.innerHeight,
     bottom: 100,
-    perGroup: 100,
+    perGroup: 200,
   },
   labels: {
     width: 100,

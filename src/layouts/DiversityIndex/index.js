@@ -5,18 +5,9 @@ import { Fragment } from "react";
 import { useSpring, animated } from "react-spring";
 import { useHistory } from "react-router-dom";
 
-import React, { // eslint-disable-line no-unused-vars
-  useRef,
-  // useDebugValue,
-  useEffect,
-  useState,
-  useLayoutEffect,
-  // useCallback,
-} from "react";
-// import { scaleLinear, scaleOrdinal, extent, group } from "d3";
+import React, { useRef, useEffect, useState, useLayoutEffect } from "react"; // eslint-disable-line no-unused-vars
 
-import Filters from "./Filters";
-// import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
+import Filters, { filterOptions } from "./Filters";
 import { accessors, fadeIn, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
@@ -27,11 +18,12 @@ const DiversityIndex = ({ data }) => {
   const canvasHUDRef = useRef(null);
 
   const [groupingAccessor, setGroupingAccessor] = useState(
-    accessors.names.topic
+    // accessors.names.topic
+    filterOptions.groupings[0]
   );
-  const [xAccessor] = useState(accessors.names.diversity);
-  const [yAccessor] = useState(accessors.names.femaleShare);
-  const [year, setYear] = useState(2019);
+  const [xAccessor, setXAccessor] = useState(filterOptions.x[0]);
+  const [yAccessor, setYAccessor] = useState(filterOptions.y[0]);
+  const [year, setYear] = useState(filterOptions.time[0]);
   const [tooltip, setTooltip] = useState(null);
   const {
     stage: {
@@ -76,11 +68,6 @@ const DiversityIndex = ({ data }) => {
     diversity.viz.HUD(canvasHUDRef.current);
     diversity.viz.show();
 
-    // viz.current = new DiversityIndexVisualization({
-    //   canvas: canvasRef.current,
-    //   hudCanvas: canvasHUDRef.current,
-    // });
-
     // add HUD canvas
     return function cleanup() {
       diversity.viz.hide();
@@ -114,49 +101,18 @@ const DiversityIndex = ({ data }) => {
     data.length && diversity.viz.setData(data);
   }, [diversity.viz, data]);
 
-  // useEffect(() => {
-  //   console.log("re-drawing");
-  //   if (!viz.current) return;
-
-  //   viz.current.setScales(generateScales());
-  //   // viz.current.setLayout(layout);
-  //   viz.current.setData(data);
-  // });
-
   return (
     <Fragment>
       <Filters
-        onChangeGrouping={(e) => setGroupingAccessor(e.target.value)}
-        onChangeYear={(e) => setYear(+e.target.value)}
-        year={year}
         groupingAccessor={groupingAccessor}
+        onChangeGrouping={(e) => setGroupingAccessor(e)}
+        onChangeX={(e) => setXAccessor(e)}
+        onChangeY={(e) => setYAccessor(e)}
+        onChangeYear={(e) => setYear(+e)}
+        x={xAccessor}
+        y={yAccessor}
+        year={year}
       />
-      {/* <div
-        css={css`
-          display: flex;
-          position: relative;
-
-          mask-image: linear-gradient(
-            to bottom,
-            rgba(0, 0, 0, 0),
-            rgba(0, 0, 0, 1) 6%,
-            rgba(0, 0, 0, 1) 94%,
-            rgba(0, 0, 0, 0) 100%
-          );
-        `}
-        ref={canvasContainerRef}
-      >
-        <canvas
-          css={css`
-            width: 100%;
-            height: 100%;
-            &:focus {
-              outline: none;
-            }
-          `}
-          ref={canvasRef}
-        />
-      </div> */}
       <HUD ref={canvasHUDRef}>
         {categories.map(({ category, y: offsetTop }, i) => {
           return (
@@ -164,9 +120,7 @@ const DiversityIndex = ({ data }) => {
               key={`category-label-${category}`}
               css={css`
                 position: absolute;
-                top: ${// diversity.viz.scales.category(category)
-                // offsetTop - layout.pointSegment.height / 2
-                offsetTop - layout.pointSegment.height / 2}px;
+                top: ${offsetTop - layout.pointSegment.height / 2}px;
 
                 left: 3vw;
                 color: white;
@@ -199,15 +153,6 @@ const DiversityIndex = ({ data }) => {
               >
                 Explore Cluster in 3D
               </SmallButton>
-              {/* <button>Explore Cluster in 3D</button> */}
-              {/* <p>Explore</p> */}
-              {/* <LinkButton
-                css={css`
-                  margin: 0;
-                `}
-              >
-                Explore cluster
-              </LinkButton> */}
             </div>
           );
         })}
@@ -222,7 +167,7 @@ const Tooltip = ({ data, coords }) => {
     pointer-events: none;
     background-color: rgba(0, 0, 0, 0.6);
     position: absolute;
-    top: ${coords.y - 20}px;
+    top: ${coords.y + 20}px;
     left: ${coords.x + (coords.x > window.innerWidth / 2 ? -100 : 10)}px;
     padding: ${(props) => `${props.theme.spacing.small}`};
   `;
