@@ -19,7 +19,7 @@ export function ParticleContainerLatentSpace({
 }) {
   let mesh; // for meshes
   let meshSelected; // for selected nodes
-  let searchThreshold = 500;
+  // let searchThreshold = 500;
   let selection;
   let particleSelectionCallback = (ids) => {};
   const setParticleSelectionCallback = (f) => {
@@ -44,7 +44,6 @@ export function ParticleContainerLatentSpace({
   camera.position.z = 15000;
   camera.updateProjectionMatrix();
 
-  raycaster.params.Points.threshold = searchThreshold;
   renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
 
   const navigation = new Navigation({

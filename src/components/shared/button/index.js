@@ -46,6 +46,13 @@ export const Button = styled("button")`
   }
 `;
 
+export const SmallButton = styled(Button)`
+  padding: ${(props) => `calc(${props.theme.spacing.small})`}
+    ${(props) => props.theme.spacing.small};
+  font-size: ${(props) => props.theme.type.sizes.tiny};
+  pointer-events: initial;
+`;
+
 export const LinkButton = ({ children, to, onMouseDown, inactive }) => (
   <Wrapper inactive={inactive}>
     <Link to={to} onMouseDown={onMouseDown}>

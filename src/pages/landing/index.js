@@ -45,7 +45,7 @@ const Landing = () => {
           Explore Topic
         </LinkButton>
 
-        <LinkButton to={urls.search}>Search by Abstract</LinkButton>
+        <LinkButton to={urls.search.landing}>Search by Abstract</LinkButton>
       </Row>
     </PageLayout>
   );

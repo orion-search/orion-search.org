@@ -2,7 +2,7 @@
  * @file a multimodal toggle component
  */
 
-import React, { useState, Fragment } from "react";
+import React, { useCallback, Fragment } from "react";
 import PropTypes from "prop-types";
 import styled from "@emotion/styled";
 import { useSprings, animated } from "react-spring";
@@ -17,19 +17,23 @@ const AnimatedOption = styled(animated.span)`
   cursor: pointer;
 `;
 
-const Toggle = ({ values, selected, onChange = () => {} }) => {
-  const [active, setActive] = useState(selected);
+const Toggle = ({ values, selected, separator = "/", onChange = () => {} }) => {
+  // const [active, setActive] = useState(selected);
+  // console.log("selected", active);
   const springs = useSprings(
     values.length,
-    values.map(option => ({
-      opacity: option === active ? 1 : 0.35
+    values.map((option) => ({
+      opacity: option === selected ? 1 : 0.35,
     }))
   );
 
-  const onToggleChange = option => {
-    onChange(option);
-    setActive(option);
-  };
+  const onToggleChange = useCallback(
+    (option) => {
+      onChange(option);
+      // setActive(option);
+    },
+    [onChange]
+  );
 
   return (
     <Wrapper>
@@ -41,7 +45,7 @@ const Toggle = ({ values, selected, onChange = () => {} }) => {
           >
             {`${values[i]} `}
           </AnimatedOption>
-          {i < values.length - 1 ? "/ " : ""}
+          {i < values.length - 1 ? `${separator} ` : ""}
         </Fragment>
       ))}
     </Wrapper>
@@ -49,7 +53,7 @@ const Toggle = ({ values, selected, onChange = () => {} }) => {
 };
 
 Toggle.propTypes = {
-  values: PropTypes.array
+  values: PropTypes.array,
 };
 
 export default Toggle;

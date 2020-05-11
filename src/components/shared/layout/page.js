@@ -57,7 +57,7 @@ const navURLs = [
     name: "Explore Papers",
   },
   {
-    to: urls.search,
+    to: urls.search.landing,
     name: "Search",
   },
 ];

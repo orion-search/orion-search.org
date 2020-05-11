@@ -10,11 +10,12 @@ import { extent, scaleLinear, scaleOrdinal } from "d3";
 
 import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
-import theme from "../../styles";
 import { scatterplotMesh, layout } from "./geometry";
 
 export function DiversityIndex({
   camera,
+  mouse,
+  raycaster,
   renderer,
   scene,
   data: unfilteredData = [],
@@ -37,6 +38,10 @@ export function DiversityIndex({
   let scales;
   let nodes;
 
+  // for highlighting
+  let onHoverCallback = () => {};
+  let highlightedNode;
+
   let { width, height } = renderer.domElement.getBoundingClientRect();
   let groups = {
     points: new THREE.Group(),
@@ -51,6 +56,7 @@ export function DiversityIndex({
   };
 
   const hide = () => {
+    onHoverCallback = () => {};
     renderer.domElement.removeEventListener("wheel", onScroll);
     removeHUD();
     renderer.clear(true, true, false);
@@ -151,9 +157,16 @@ export function DiversityIndex({
       xFunc: dimensions.x,
       yFunc: dimensions.y,
     };
-    console.log(scales, scales.category.domain());
   };
   // ====================================
+
+  // set on hover behavior callback
+  // this is called when the raycaster detects intersection
+  const onHover = (cb) => {
+    if (cb) {
+      onHoverCallback = cb;
+    }
+  };
 
   // scroll-based actions ===============
   const onScroll = (e) => {
@@ -190,10 +203,10 @@ export function DiversityIndex({
   };
 
   // force layout-related ===============
-  const destroy = () => {
-    forceLayout.terminate();
-    removeHUD();
-  };
+  // const destroy = () => {
+  //   forceLayout.terminate();
+  //   removeHUD();
+  // };
 
   const initForceLayout = () => {
     forceLayout = ForceLayout({
@@ -227,6 +240,23 @@ export function DiversityIndex({
   };
 
   const update = () => {
+    raycaster.setFromCamera(mouse, camera);
+    // console.log(raycaster.intersectObjects(groups.points.children), mouse);
+    if (raycaster.intersectObjects(groups.points.children).length) {
+      if (!highlightedNode) {
+        const bubble = raycaster.intersectObjects(groups.points.children)[0];
+        highlightedNode = bubble;
+        onHoverCallback({
+          data: data[bubble.index],
+          coords: { x: bubble.point.x, y: bubble.point.y - camera.top },
+        });
+      }
+    } else {
+      highlightedNode !== null && onHoverCallback({ data: null });
+      highlightedNode = null;
+    }
+
+    // only run force layout in first 120 ticks
     if (forceLayout && forceLayout.elapsedTicks < 120) {
       forceLayout.tick(1).then(({ nodes: newNodes }) => {
         forceLayout.elapsedTicks++;
@@ -254,6 +284,7 @@ export function DiversityIndex({
   setData(unfilteredData);
 
   return {
+    onHover,
     setData,
     hide,
     HUD,
