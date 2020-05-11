@@ -17,6 +17,7 @@ import { SEED_DATA } from "./queries";
 import cachedData from "./data/data.json";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
+import CrossFilter from "./workers/subscribers/crossfilter";
 
 const OrionDataContext = createContext({});
 
@@ -105,6 +106,7 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 
     setProviderData({
       ...data,
+      crossfilter: new CrossFilter({ dimensions: [] }),
       stage: { controls, raycaster, renderer, render, views },
     });
   }, [canvasRef, ready, data]);

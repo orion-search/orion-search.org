@@ -10,10 +10,10 @@ import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
 // import SearchResults from "./pages/search/results";
 import Search from "./pages/search";
-import { urls } from "./utils";
+import { accessors, urls } from "./utils";
 
 function App() {
-  const { stage, diversity } = useOrionData();
+  const { stage, diversity, crossfilter, papers } = useOrionData();
 
   return (
     <Switch>
@@ -31,8 +31,40 @@ function App() {
         exact
         path={[urls.explore]}
         render={({ location }) => {
+          // const {} = location.state.filters
+          console.log(location.state);
+          let filteredPaperIds = location?.state?.filters?.ids || [];
+          if (location?.state?.filters?.ids) {
+            filteredPaperIds = location.state.filters.ids;
+          } else if (location?.state?.filters) {
+            const { ids, ...filterDimensions } = location?.state?.filters;
+            const idsByDimension = Object.keys(
+              filterDimensions
+            ).map((dimension) =>
+              filterDimensions[dimension].flatMap(
+                (filterValue) =>
+                  papers[accessors.filters[dimension]].find(
+                    (p) => p[accessors.names[dimension]] === filterValue
+                  )[accessors.names.ids]
+              )
+            );
+            console.log(
+              "Filtering on dimensions",
+              filterDimensions,
+              idsByDimension
+            );
+            filteredPaperIds = idsByDimension[0];
+            // if (idsByDimension.length > 1) {
+            //   crossfilter.dimensions(
+            //     idsByDimension
+            //   );
+            //   crossfilter.compute().then(data => {
+            //     // do something
+            //   })
+            // }
+          }
           stage.views.particles.viz.show();
-          return <LatentSpace papers={location?.state?.filters?.ids || []} />;
+          return <LatentSpace papers={filteredPaperIds} />;
         }}
       />
       <Route path={urls.profile} component={Profile} />

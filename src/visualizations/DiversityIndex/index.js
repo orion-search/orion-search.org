@@ -240,7 +240,6 @@ export function DiversityIndex({
   };
 
   const update = () => {
-    console.log("UPDATE");
     raycaster.setFromCamera(mouse, camera);
     // console.log(raycaster.intersectObjects(groups.points.children), mouse);
     if (raycaster.intersectObjects(groups.points.children).length) {
