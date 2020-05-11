@@ -1,6 +1,9 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
+import styled from "@emotion/styled";
 import { Fragment } from "react";
+import { useSpring, animated } from "react-spring";
+import { useHistory } from "react-router-dom";
 
 import React, { // eslint-disable-line no-unused-vars
   useRef,
@@ -14,9 +17,10 @@ import React, { // eslint-disable-line no-unused-vars
 
 import Filters from "./Filters";
 // import DiversityIndexVisualization from "../../visualizations/DiversityIndex";
-import { accessors } from "../../utils";
+import { accessors, fadeIn, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
+import { SmallButton } from "../../components/shared/button";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
 
 const DiversityIndex = ({ data }) => {
@@ -28,15 +32,43 @@ const DiversityIndex = ({ data }) => {
   const [xAccessor] = useState(accessors.names.diversity);
   const [yAccessor] = useState(accessors.names.femaleShare);
   const [year, setYear] = useState(2019);
-
+  const [tooltip, setTooltip] = useState(null);
   const {
     stage: {
       views: { diversity },
     },
   } = useOrionData();
   const [categories, setCategories] = useState(diversity.viz.categories());
+  const history = useHistory();
 
   // console.log(categories);
+
+  const handleEvent = ({ type, data }, e) => {
+    switch (type) {
+      case "visitCluster":
+        console.log(type, data, e);
+        history.push(urls.explore, {
+          filters: {
+            [groupingAccessor]: [data],
+          },
+        });
+        break;
+      default:
+        break;
+    }
+  };
+
+  // set on hover callback (for tooltips)
+  diversity.viz.onHover(({ data, coords }) => {
+    console.log("Hovered", data, coords);
+    if (data !== tooltip?.data) {
+      if (!data) {
+        setTooltip(null);
+      } else {
+        setTooltip({ data, coords });
+      }
+    }
+  });
 
   useLayoutEffect(() => {
     console.log("LAYOUT EFFECT");
@@ -152,11 +184,22 @@ const DiversityIndex = ({ data }) => {
                 `}
               ></div>
               <div>{category}</div>
-              <div>
-                μ={Math.random().toFixed(2)} / σ={Math.random().toFixed(2)} / Ν=
-                {~~(Math.random() * 1300)}
-              </div>
-              <button>Explore Cluster</button>
+              {/* <div>
+                μ={(0.5).toFixed(2)} / σ={(0.5).toFixed(2)} / Ν=
+                {~~(0.5 * 1300)}
+              </div> */}
+              <SmallButton
+                data-filter-link={category}
+                onClick={(e) =>
+                  handleEvent({
+                    type: "visitCluster",
+                    data: e.target.dataset.filterLink,
+                  })
+                }
+              >
+                Explore Cluster in 3D
+              </SmallButton>
+              {/* <button>Explore Cluster in 3D</button> */}
               {/* <p>Explore</p> */}
               {/* <LinkButton
                 css={css`
@@ -169,7 +212,31 @@ const DiversityIndex = ({ data }) => {
           );
         })}
       </HUD>
+      {tooltip && <Tooltip data={tooltip.data} coords={tooltip.coords} />}
     </Fragment>
+  );
+};
+
+const Tooltip = ({ data, coords }) => {
+  const Wrapper = styled(animated.div)`
+    pointer-events: none;
+    background-color: rgba(0, 0, 0, 0.6);
+    position: absolute;
+    top: ${coords.y - 20}px;
+    left: ${coords.x + (coords.x > window.innerWidth / 2 ? -100 : 10)}px;
+    padding: ${(props) => `${props.theme.spacing.small}`};
+  `;
+
+  const wrapperAnimation = useSpring(fadeIn);
+
+  return (
+    <Wrapper style={wrapperAnimation}>
+      <div>Country: {data.country}</div>
+      <div>Topic: {data.topic}</div>
+      <div>Revealed Comparative Advantage: {data.rca.toFixed(2)}</div>
+      <div>Female Share of Research: {formatPercentage(data.femaleShare)}</div>
+      <div>Year: {data.year}</div>
+    </Wrapper>
   );
 };
 
