@@ -20,7 +20,7 @@ export const layout = {
     width: 100,
   },
   pointSegment: {
-    widthRatio: 0.7,
+    widthRatio: 0.8,
     height: 50, // perGroup / 2
   },
 };

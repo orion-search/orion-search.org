@@ -27,6 +27,7 @@
     "d3-brush": "^1.1.5",
     "emotion": "^10.0.27",
     "emotion-theming": "^10.0.27",
+    "facepaint": "^1.2.1",
     "graphql": "^14.5.8",
     "history": "^4.10.1",
     "isomorphic-fetch": "^2.2.1",
