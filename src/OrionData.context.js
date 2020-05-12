@@ -14,7 +14,7 @@ import { AbsoluteCanvas, initApp } from "./components/shared/renderer";
 import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import cachedData from "./data/data.json";
+// import cachedData from "./data/data.json";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
 import CrossFilter from "./workers/subscribers/crossfilter";
@@ -121,33 +121,33 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 };
 
 // eslint-disable-next-line
-const FetchOffline = ({ children }) => {
-  const data = useRef();
-  const { byCountry, byTopic, byYear } = cachedData.data;
-  data.current = cachedData.data;
-  data.current.papers = {
-    byCountry,
-    byTopic,
-    byYear,
-  };
+// const FetchOffline = ({ children }) => {
+//   const data = useRef();
+//   const { byCountry, byTopic, byYear } = cachedData.data;
+//   data.current = cachedData.data;
+//   data.current.papers = {
+//     byCountry,
+//     byTopic,
+//     byYear,
+//   };
 
-  delete data.current.byCountry;
-  delete data.current.byTopic;
-  delete data.current.byYear;
+//   delete data.current.byCountry;
+//   delete data.current.byTopic;
+//   delete data.current.byYear;
 
-  return (
-    <LoadingOrChildren ready={true} data={data.current}>
-      {children}
-    </LoadingOrChildren>
-  );
-};
+//   return (
+//     <LoadingOrChildren ready={true} data={data.current}>
+//       {children}
+//     </LoadingOrChildren>
+//   );
+// };
 
 export const OrionDataProvider = ({ children }) => {
   return (
     <>
       {process.env.NODE_ENV === "development" && (
-        // <FetchOnline>{children}</FetchOnline>
-        <FetchOffline>{children}</FetchOffline>
+        <FetchOnline>{children}</FetchOnline>
+        // <FetchOffline>{children}</FetchOffline>
       )}
       {process.env.NODE_ENV === "production" && (
         <FetchOnline>{children}</FetchOnline>
