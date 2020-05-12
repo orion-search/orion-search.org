@@ -14,10 +14,11 @@ import { AbsoluteCanvas, initApp } from "./components/shared/renderer";
 import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-import cachedData from "./data/data.json";
+// import cachedData from "./data/data.json";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
 import CrossFilter from "./workers/subscribers/crossfilter";
+import { useEffect } from "react";
 
 const OrionDataContext = createContext({});
 
@@ -122,24 +123,31 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 
 // eslint-disable-next-line
 const FetchOffline = ({ children }) => {
+  const [cachedDataLoaded, setCachedDataLoaded] = useState(false);
   const data = useRef();
-  const { byCountry, byTopic, byYear } = cachedData.data;
-  data.current = cachedData.data;
-  data.current.papers = {
-    byCountry,
-    byTopic,
-    byYear,
-  };
+  useEffect(() => {
+    import("./data/data.json").then((cachedData) => {
+      const { byCountry, byTopic, byYear } = cachedData.data;
+      data.current = cachedData.data;
+      data.current.papers = {
+        byCountry,
+        byTopic,
+        byYear,
+      };
 
-  delete data.current.byCountry;
-  delete data.current.byTopic;
-  delete data.current.byYear;
+      delete data.current.byCountry;
+      delete data.current.byTopic;
+      delete data.current.byYear;
 
-  return (
+      setCachedDataLoaded(true);
+    });
+  }, []);
+
+  return cachedDataLoaded ? (
     <LoadingOrChildren ready={true} data={data.current}>
       {children}
     </LoadingOrChildren>
-  );
+  ) : null;
 };
 
 export const OrionDataProvider = ({ children }) => {
