@@ -15,6 +15,9 @@ export const searchModes = [
   // `Topic Intersection (experimental)`,
 ];
 
+const isAbstractSearch = (mode) => mode === searchModes[0];
+const isEmptyQuery = (query) => query === ``;
+
 export default ({ papers }) => {
   const [query, setQuery] = useState(``);
   const [numResults] = useState(100);
@@ -28,26 +31,20 @@ export default ({ papers }) => {
   const { pathname } = useLocation();
 
   useEffect(() => {
-    if (query === ``) return;
+    if (isEmptyQuery(query)) return;
 
-    switch (searchMode) {
-      case `Abstract`:
-        fetch(
-          `${process.env.REACT_APP_ORION_ABSTRACT_SEARCH_URL}?query=${query}&results=${numResults}`
-        )
-          .then((d) => d.json())
-          .then((data) => {
-            console.log(data);
-            history.push(urls.search.results, {
-              papers: data["I"].map((d) => ({ id: parseInt(d) })),
-            });
-          });
-        break;
-      case `Keyword`:
-        break;
-      default:
-        break;
-    }
+    const searchUrl = isAbstractSearch(searchMode)
+      ? `${process.env.REACT_APP_ORION_ABSTRACT_SEARCH_URL}?query=${query}&results=${numResults}`
+      : `${process.env.REACT_APP_ORION_KEYWORD_SEARCH_URL}?query=${query}&results=${numResults}`;
+
+    fetch(searchUrl)
+      .then((d) => d.json())
+      .then((data) => {
+        console.log(data);
+        history.push(urls.search.results, {
+          papers: data["I"].map((d) => ({ id: parseInt(d) })),
+        });
+      });
   }, [history, numResults, query, searchMode]);
 
   const onSearchEnter = useCallback((value) => {
