@@ -8,6 +8,7 @@ import { LinkButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
 
 const Summary = ({ paperIds, showPapers = 5 }) => {
+  // const [topTopics, setTopTopics] = useState(topTopics);
   if (!paperIds.length) return null;
 
   const p = formatThousands(paperIds.length);
@@ -32,6 +33,7 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
           <Fragment>
             <div>
               {`Showing ${showPapers} of ${p} papers -> `}
+              <TopTopics papers={data.papers} />
               <LinkButton
                 to={{
                   pathname: urls.search.results,
@@ -50,6 +52,42 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
         );
       }}
     </Query>
+  );
+};
+
+const TopTopics = ({ papers }) => {
+  const topTopics = papers.reduce((histogram, paper) => {
+    for (let topic of paper.topics) {
+      let {
+        topic: { name },
+      } = topic;
+
+      if (histogram.get(name)) {
+        histogram.set(name, histogram.get(name) + 1);
+      } else {
+        histogram.set(name, 1);
+      }
+    }
+    return histogram;
+  }, new Map());
+
+  // yield sorted values
+  topTopics[Symbol.iterator] = function* () {
+    yield* [...this.entries()].sort((a, b) => b[1] - a[1]);
+  };
+
+  return (
+    <div>
+      {[...topTopics].map(([topic, count], i) => {
+        if (i > 10) return null;
+        return (
+          <div key={`top-topics-${i}-${count}`}>
+            <div>{topic}</div>
+            <div>{count}</div>
+          </div>
+        );
+      })}
+    </div>
   );
 };
 

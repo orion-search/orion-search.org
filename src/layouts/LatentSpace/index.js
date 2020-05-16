@@ -81,9 +81,11 @@ const LatentSpace = ({ papers = [] }) => {
             onChange={updateVizAttributes}
           /> */}
           <Row>
-            <Button onClick={() => particles.viz.resetFilters()}>
-              Reset Filters
-            </Button>
+            {selectedPaperIds.length ? (
+              <Button onClick={() => particles.viz.resetFilters()}>
+                Reset Filters
+              </Button>
+            ) : null}
           </Row>
           <Row>
             <Summary paperIds={selectedPaperIds} />
