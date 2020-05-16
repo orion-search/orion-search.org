@@ -14,7 +14,6 @@ import { AbsoluteCanvas, initApp } from "./components/shared/renderer";
 import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
-// import cachedData from "./data/data.json";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
 import CrossFilter from "./workers/subscribers/crossfilter";
