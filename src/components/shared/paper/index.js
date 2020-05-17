@@ -80,6 +80,16 @@ export const PaperReducedDetail = ({ data }) => {
 
   return (
     <Wrapper border={1} pv={"small"} style={wrapperAnimation}>
+      <Title
+        css={(props) =>
+          css`
+            margin: ${props.spacing.tiny} 0;
+          `
+        }
+        size={"normal"}
+      >
+        {title}
+      </Title>
       <Row
         mv={"none"}
         css={css`
@@ -95,7 +105,6 @@ export const PaperReducedDetail = ({ data }) => {
             : `Not yet cited`}
         </Citations>
       </Row>
-      <Title size={"normal"}>{title}</Title>
     </Wrapper>
   );
 };

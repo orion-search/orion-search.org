@@ -5,10 +5,10 @@ import { useState, useEffect } from "react";
 // import { schemeCategory10 } from "d3";
 
 // import { MultiItemSearch } from "../../components/shared/search";
-import { Button } from "../../components/shared/button";
 import { Row, Column } from "../../components/shared/layout";
 // import { accessors } from "../../utils";
 import Summary from "./Summary";
+import Explainer from "./Explainer";
 
 // import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 // import { AbsoluteCanvas } from "../../components/shared/renderer";
@@ -80,15 +80,16 @@ const LatentSpace = ({ papers = [] }) => {
             ]}
             onChange={updateVizAttributes}
           /> */}
+
           <Row>
             {selectedPaperIds.length ? (
-              <Button onClick={() => particles.viz.resetFilters()}>
-                Reset Filters
-              </Button>
-            ) : null}
-          </Row>
-          <Row>
-            <Summary paperIds={selectedPaperIds} />
+              <Summary
+                paperIds={selectedPaperIds}
+                onFilterReset={() => particles.viz.resetFilters()}
+              />
+            ) : (
+              <Explainer />
+            )}
           </Row>
         </Column>
       </div>
