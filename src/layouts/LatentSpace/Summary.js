@@ -1,9 +1,14 @@
-import React, { Fragment } from "react";
+/** @jsx jsx */
+
+import { Fragment } from "react";
+import { css, jsx } from "@emotion/core";
 import { Query } from "@apollo/react-components";
+import { scaleLog, extent } from "d3";
 
 import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
+import { Flex } from "../../components/shared/layout";
 import { LinkButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
 
@@ -45,9 +50,15 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
                 EXPLORE CLUSTER
               </LinkButton>
             </div>
-            {sortedPapers.slice(0, showPapers).map((p) => (
-              <PaperReducedDetail key={`paper-title-${p.title}`} data={p} />
-            ))}
+            <div
+              css={css`
+                pointer-events: none;
+              `}
+            >
+              {sortedPapers.slice(0, showPapers).map((p) => (
+                <PaperReducedDetail key={`paper-title-${p.title}`} data={p} />
+              ))}
+            </div>
           </Fragment>
         );
       }}
@@ -55,7 +66,7 @@ const Summary = ({ paperIds, showPapers = 5 }) => {
   );
 };
 
-const TopTopics = ({ papers }) => {
+const TopTopics = ({ papers, maxTopics = 10 }) => {
   const topTopics = papers.reduce((histogram, paper) => {
     for (let topic of paper.topics) {
       let {
@@ -78,16 +89,40 @@ const TopTopics = ({ papers }) => {
 
   return (
     <div>
-      {[...topTopics].map(([topic, count], i) => {
-        if (i > 10) return null;
+      <WordCloud histogram={[...topTopics]} />
+    </div>
+  );
+};
+
+const WordCloud = ({ histogram, numEntries = 10 }) => {
+  const data = histogram.slice(0, numEntries);
+  const size = scaleLog()
+    .domain(extent(data, (d) => d[1]))
+    .range([14, 32]);
+  console.log(data);
+
+  console.log(data.map(([key, val]) => [key, size(val)]));
+
+  return (
+    <Flex
+      css={css`
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: baseline;
+        pointer-events: none;
+      `}
+    >
+      {data.map(([topic, count], i) => {
         return (
-          <div key={`top-topics-${i}-${count}`}>
-            <div>{topic}</div>
-            <div>{count}</div>
+          <div
+            key={`top-topics-${i}-${count}`}
+            style={{ fontSize: `${size(count)}px` }}
+          >
+            {topic}
           </div>
         );
       })}
-    </div>
+    </Flex>
   );
 };
 
