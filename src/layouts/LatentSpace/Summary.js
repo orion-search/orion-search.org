@@ -10,7 +10,7 @@ import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
 import { Flex, Row } from "../../components/shared/layout";
-import { LinkButton, MediumButton } from "../../components/shared/button";
+import { MediumButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
 
 const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
@@ -63,8 +63,6 @@ const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
             <div
               css={(props) => css`
                 pointer-events: none;
-                // border-left: ${props.spacing.tiny} solid ${props.colors.white};
-                // padding-left: ${props.spacing.normal};
               `}
             >
               {sortedPapers.slice(0, showPapers).map((p) => (

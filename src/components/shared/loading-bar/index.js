@@ -10,7 +10,7 @@ import { fadeInUp } from "../../../utils";
 import { css, jsx } from "@emotion/core";
 
 const Wrapper = styled(animated.div)`
-  font-size: ${props => `${props.theme.type.sizes.huge}`};
+  font-size: ${(props) => `${props.theme.type.sizes.huge}`};
   display: flex;
   height: 100vh;
   width: 100vw;
@@ -27,14 +27,12 @@ const LoadingBar = () => {
   return (
     <Wrapper
       css={css`
-        font-size: ${props => `${props.theme.type.sizes.huge}`};
+        font-size: ${(props) => `${props.theme.type.sizes.huge}`};
       `}
       style={wrapperAnimation}
     >
       <div>Downloading latent space /</div>
-      <div>
-        Downloading diversity index @ {navigator.connection.downlink}Mbps
-      </div>
+      <div>Downloading diversity index</div>
     </Wrapper>
   );
 };

@@ -6,7 +6,8 @@ import { useState, useEffect } from "react";
 
 // import { MultiItemSearch } from "../../components/shared/search";
 import { Row, Column } from "../../components/shared/layout";
-// import { accessors } from "../../utils";
+import { MultiItemSearch } from "../../components/shared/search";
+import { accessors } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
 
@@ -14,12 +15,14 @@ import Explainer from "./Explainer";
 // import { AbsoluteCanvas } from "../../components/shared/renderer";
 import { PageLayout } from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
+import { schemeCategory10 } from "d3";
 
 const LatentSpace = ({ papers = [] }) => {
   const {
     stage: {
       views: { particles },
     },
+    papers: { byCountry, byTopic, byYear },
   } = useOrionData();
 
   const [selectedPaperIds, setSelectedPaperIds] = useState(papers);
@@ -43,6 +46,10 @@ const LatentSpace = ({ papers = [] }) => {
   //   console.log("FILTERING");
   //   particles.viz.filter(selectedPaperIds);
   // }, [selectedPaperIds, particles.viz]);
+
+  console.log(
+    [accessors.filters.country].map((p) => accessors.types.country(p))
+  );
 
   return (
     <PageLayout>
@@ -91,6 +98,33 @@ const LatentSpace = ({ papers = [] }) => {
               <Explainer />
             )}
           </Row>
+        </Column>
+      </div>
+      <div
+        css={css`
+          position: absolute;
+          top: 60px;
+          left: 40%;
+          width: 60%;
+        `}
+      >
+        <Column>
+          <MultiItemSearch
+            colorScheme={schemeCategory10}
+            dataset={byCountry.map((p) => accessors.types.country(p))}
+            placeholder={"Search by country..."}
+            // title={"Country"}
+            onChange={() => {}}
+            onHover={() => {}}
+          />
+          <MultiItemSearch
+            colorScheme={schemeCategory10}
+            dataset={byTopic.map((p) => accessors.types.topic(p))}
+            placeholder={"Search by Topic..."}
+            // title={"Country"}
+            onChange={() => {}}
+            onHover={() => {}}
+          />
         </Column>
       </div>
     </PageLayout>
