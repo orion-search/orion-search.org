@@ -33,6 +33,7 @@ function App() {
         render={({ location }) => {
           // const {} = location.state.filters
           console.log(location.state);
+          let filters = { topic: [], country: [] };
           let filteredPaperIds = location?.state?.filters?.ids || [];
           if (location?.state?.filters?.ids) {
             filteredPaperIds = location.state.filters.ids;
@@ -54,6 +55,7 @@ function App() {
               idsByDimension
             );
             filteredPaperIds = idsByDimension[0];
+            filters = filterDimensions;
             // if (idsByDimension.length > 1) {
             //   crossfilter.dimensions(
             //     idsByDimension
@@ -64,7 +66,7 @@ function App() {
             // }
           }
           stage.views.particles.viz.show();
-          return <LatentSpace papers={filteredPaperIds} />;
+          return <LatentSpace papers={filteredPaperIds} filters={filters} />;
         }}
       />
       <Route path={urls.profile} component={Profile} />
