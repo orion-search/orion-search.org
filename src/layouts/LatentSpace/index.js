@@ -106,6 +106,7 @@ const LatentSpace = ({ papers = [], filters }) => {
             placeholder: "Search by Country...",
             selected: filters.country,
             title: "Country",
+            accessor: "country",
           },
           {
             data: byTopic.map((p) => accessors.types.topic(p)),
@@ -113,6 +114,7 @@ const LatentSpace = ({ papers = [], filters }) => {
             placeholder: "Search by Topic...",
             selected: filters.topic,
             title: "Topic",
+            accessor: "topic",
           },
         ]}
       />
@@ -150,6 +152,9 @@ const Filters = ({ dimensions }) => {
               ? dimension.selected.map((d) => ({ value: d, label: d }))
               : []
           }
+          // onChange={(e) => {
+          //   console.log(e, "onChange");
+          // }}
           options={dimension.data.map((d) => ({ value: d, label: d }))}
           placeholder={dimension.placeholder}
         />
