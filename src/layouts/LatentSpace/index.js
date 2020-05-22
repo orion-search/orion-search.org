@@ -1,6 +1,7 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Select from "react-select";
 import styled from "@emotion/styled";
@@ -9,7 +10,7 @@ import styled from "@emotion/styled";
 // import { MultiItemSearch } from "../../components/shared/search";
 import { Row, Column } from "../../components/shared/layout";
 import { MultiItemSearch } from "../../components/shared/search";
-import { accessors } from "../../utils";
+import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
 
@@ -129,7 +130,15 @@ const Filters = ({ dimensions }) => {
     font-size: ${(props) => props.theme.type.sizes.normal};
   `;
 
-  console.log(dimensions);
+  const history = useHistory();
+
+  // keep track of filter state
+  const filters = dimensions.map((d) => ({
+    [d.accessor]: d.filter,
+  }));
+
+  console.log(filters);
+
   return (
     <Row
       css={css`
@@ -152,9 +161,16 @@ const Filters = ({ dimensions }) => {
               ? dimension.selected.map((d) => ({ value: d, label: d }))
               : []
           }
-          // onChange={(e) => {
-          //   console.log(e, "onChange");
-          // }}
+          onChange={(e) => {
+            history.push(urls.explore, {
+              filters: {
+                ...filters[0],
+                ...filters[1],
+                [dimension.accessor]: e ? e.map((_) => _.value) : [],
+              },
+            });
+            console.log(e, "onChange");
+          }}
           options={dimension.data.map((d) => ({ value: d, label: d }))}
           placeholder={dimension.placeholder}
         />
