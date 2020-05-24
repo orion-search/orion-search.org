@@ -66,7 +66,6 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 
   useLayoutEffect(() => {
     if (!ready) return;
-    console.info("Mounting App");
     const { controls, mouse, raycaster, renderer, render, views } = initApp({
       canvas: canvasRef.current,
     });

@@ -12,7 +12,6 @@ import { fromEvent } from "rxjs";
 import { filter } from "rxjs/operators";
 
 export default function CrossFilter({ dimensions = [] }) {
-  console.log("hello from CrossFilter");
   const worker = new Worker();
   const workerObservable = fromEvent(worker, "message");
   const computeObservable = workerObservable.pipe(
@@ -28,7 +27,6 @@ export default function CrossFilter({ dimensions = [] }) {
     compute: async () =>
       new Promise((resolve) => {
         computeObservable.subscribe(({ data: { type, data } }) => {
-          console.log("compute subscription", data);
           resolve(data);
         });
         worker.postMessage({

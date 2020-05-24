@@ -109,9 +109,6 @@ const WordCloud = ({ histogram, numEntries = 10 }) => {
   const size = scaleLog()
     .domain(extent(data, (d) => d[1]))
     .range([14, 32]);
-  console.log(data);
-
-  console.log(data.map(([key, val]) => [key, size(val)]));
 
   return (
     <Flex

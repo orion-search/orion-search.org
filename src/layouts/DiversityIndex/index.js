@@ -33,12 +33,9 @@ const DiversityIndex = ({ data }) => {
   const [categories, setCategories] = useState(diversity.viz.categories());
   const history = useHistory();
 
-  // console.log(categories);
-
   const handleEvent = ({ type, data }, e) => {
     switch (type) {
       case "visitCluster":
-        console.log(type, data, e);
         history.push(urls.explore, {
           filters: {
             [groupingAccessor]: [data],
@@ -52,7 +49,6 @@ const DiversityIndex = ({ data }) => {
 
   // set on hover callback (for tooltips)
   diversity.viz.onHover(({ data, coords }) => {
-    console.log("Hovered", data, coords);
     if (data !== tooltip?.data) {
       if (!data) {
         setTooltip(null);
@@ -63,8 +59,6 @@ const DiversityIndex = ({ data }) => {
   });
 
   useLayoutEffect(() => {
-    console.log("LAYOUT EFFECT");
-
     diversity.viz.HUD(canvasHUDRef.current);
     diversity.viz.show();
 
@@ -85,7 +79,6 @@ const DiversityIndex = ({ data }) => {
 
   useEffect(() => {
     diversity.viz.group((d) => accessors.types[groupingAccessor](d));
-    // console.log("setting categories");
     setCategories(diversity.viz.categories());
   }, [diversity.viz, groupingAccessor]);
 
@@ -97,7 +90,6 @@ const DiversityIndex = ({ data }) => {
   }, [diversity.viz, year]);
 
   useEffect(() => {
-    console.log("calling .setData()");
     data.length && diversity.viz.setData(data);
   }, [diversity.viz, data]);
 

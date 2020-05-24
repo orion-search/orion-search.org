@@ -26,48 +26,48 @@ import { Row } from "../../components/shared/layout";
 import { BehaviorSubject } from "rxjs";
 import {
   throttleTime,
-  skip
+  skip,
   // distinctUntilChanged
 } from "rxjs/operators";
 
 import CrossFilter from "../../workers/subscribers/crossfilter";
 
 const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
-  const filtersRef = useRef(dimensions.map(d => d.filter));
+  const filtersRef = useRef(dimensions.map((d) => d.filter));
   const filters_ = new BehaviorSubject();
   const filtersHover_ = new BehaviorSubject();
 
   const crossFilterSubscriber = useRef(null);
 
-  const onFilterComponentChange = ({ filterIdx, _ }) => value => {
+  const onFilterComponentChange = ({ filterIdx, _ }) => (value) => {
     filtersRef.current[filterIdx] = value;
     filters_.next(filtersRef.current);
   };
 
-  const onFilterComponentHover = ({ filterIdx, _ }) => value => {
+  const onFilterComponentHover = ({ filterIdx, _ }) => (value) => {
     filtersRef.current[filterIdx] = value;
     filtersHover_.next(filtersRef.current);
   };
 
-  const spawnIntersectionWorker = filters => {
+  const spawnIntersectionWorker = (filters) => {
     return CrossFilter({
       dimensions: dimensions.map((d, i) => ({
         accessorName: d.accessorName,
         data: d.data,
-        filter: filters[i]
-      }))
+        filter: filters[i],
+      })),
     });
   };
 
-  filtersHover_.pipe(skip(1)).subscribe(filters => {
+  filtersHover_.pipe(skip(1)).subscribe((filters) => {
     crossFilterSubscriber.current = spawnIntersectionWorker(filters);
 
-    crossFilterSubscriber.current.compute().then(ids => {
+    crossFilterSubscriber.current.compute().then((ids) => {
       console.timeEnd("web worker computations");
       console.groupEnd("web worker computations");
       onChange({
         ids,
-        colors: null
+        colors: null,
       });
       crossFilterSubscriber.current.terminate();
     });
@@ -80,21 +80,18 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
       throttleTime(1000)
       // pairwise()
       // distinctUntilChanged((prev, current) => {
-      //   console.log(prev, current);
       //   for (let i = 0; i < prev.length; i++) {
       //     if (prev[i].toString() !== current[i].toString()) return false;
       //   }
       //   return true;
       // })
     )
-    .subscribe(filters => {
-      // console.log(filters);
-      // console.groupCollapsed("web worker computations");
+    .subscribe((filters) => {
       console.time("web worker computations");
 
       crossFilterSubscriber.current = spawnIntersectionWorker(filters);
 
-      crossFilterSubscriber.current.compute().then(ids => {
+      crossFilterSubscriber.current.compute().then((ids) => {
         console.timeEnd("web worker computations");
         // console.groupEnd("web worker computations");
 
@@ -103,13 +100,13 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
           colors: filters[0].length
             ? filters[0].flatMap((d, idx) =>
                 dimensions[0].data
-                  .find(e => e[dimensions[0].accessorName] === d)
-                  .ids.map(id => ({
+                  .find((e) => e[dimensions[0].accessorName] === d)
+                  .ids.map((id) => ({
                     color: colorScheme[idx % colorScheme.length],
-                    id
+                    id,
                   }))
               )
-            : []
+            : [],
         });
         crossFilterSubscriber.current.terminate();
       });
@@ -123,7 +120,7 @@ const Filters = ({ colorScheme, ids, papers, dimensions, onChange }) => {
           <Row key={`${d.title}-row`}>
             <TagName
               colorScheme={filterIdx === 0 && colorScheme}
-              dataset={d.data.map(p => d.accessor(p))}
+              dataset={d.data.map((p) => d.accessor(p))}
               placeholder={d.placeholder}
               title={d.title}
               onChange={onFilterComponentChange({ filterIdx })}

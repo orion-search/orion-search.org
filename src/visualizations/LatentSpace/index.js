@@ -30,7 +30,6 @@ export function ParticleContainerLatentSpace({
 
   // maps for O(1) property access
   let opacityMap = new Map();
-  console.log(layout);
 
   const [, farClippingPlane] = extent(layout.nodes, (d) => d.z);
 
@@ -183,7 +182,6 @@ export function ParticleContainerLatentSpace({
 
       // Selected particles get their original opacity
       ids.forEach((id) => {
-        if (!opacities.has(id)) console.log("no id in opacities");
         opacities.has(id) && opacities.set(id, 1);
       });
       mesh.geometry.getAttribute("opacity").array = Float32Array.from(
@@ -208,7 +206,6 @@ export function ParticleContainerLatentSpace({
       // When SHIFT key is pressed, disable orbit controls and enable selection
       controls.enabled = false;
       selection.enabled = true;
-      console.log("disabling controls");
     } else {
       // When SHIFT key is released, enable orbit controls and disable selection
       selection.enabled = false;
@@ -237,7 +234,6 @@ export function ParticleContainerLatentSpace({
     // scene.visible = false;
     resetSelection(false);
     renderer.clear(true, true, false);
-    console.log("STOPPING ANIMATION", animationId);
     animationId && cancelAnimationFrame(animationId);
     controls.enabled = false;
   };

@@ -50,7 +50,6 @@ const Results = ({ data, numResults = 100, resultsPerPage = 10 }) => {
 
   const goToPage = useCallback(
     (e) => {
-      console.log((e - 1) * resultsPerPage);
       setOffset((e - 1) * resultsPerPage);
     },
     [resultsPerPage]

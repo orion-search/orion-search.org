@@ -40,7 +40,6 @@ export default ({ papers }) => {
     fetch(searchUrl)
       .then((d) => d.json())
       .then((data) => {
-        console.log(data);
         history.push(urls.search.results, {
           papers: data["I"].map((d) => ({ id: parseInt(d) })),
         });

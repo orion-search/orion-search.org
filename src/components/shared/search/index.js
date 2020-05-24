@@ -95,8 +95,6 @@ export const MultiItemSearch = ({
       // onChange([focusedSelection]);
       onHover([focusedSelection]);
     } else {
-      // console.log("changing");
-
       // no callback on first useState
       if (isInitialMount.current) {
         isInitialMount.current = false;

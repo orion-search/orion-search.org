@@ -12,7 +12,7 @@ const BrushContainer = styled("div")`
   width: 100%;
   height: 100px;
 
-  margin-bottom: ${props => props.theme.spacing.large};
+  margin-bottom: ${(props) => props.theme.spacing.large};
 `;
 
 const Timeline = ({ children }) => {
@@ -21,14 +21,12 @@ const Timeline = ({ children }) => {
   const svgRef = useRef(null);
   const chartRef = useRef(null);
 
-  function onBrushEnd(e) {
-    console.log("hello", e, event.selection);
-  }
+  function onBrushEnd(e) {}
 
   const brush = brushX()
     .extent([
       [0, 0],
-      [chartSize.width, chartSize.height]
+      [chartSize.width, chartSize.height],
     ])
     .on("end", onBrushEnd);
 
@@ -60,7 +58,7 @@ const Timeline = ({ children }) => {
                 svg: svgRef.current,
                 g: chartRef.current,
                 width: chartSize.width,
-                height: chartSize.height
+                height: chartSize.height,
               })}
           </g>
           <g ref={brushRef} />

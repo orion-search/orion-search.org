@@ -24,7 +24,6 @@ let SearchBar = styled(Input)`
 //       <Toggle
 //         values={["citations", "date", "relevance"]}
 //         selected={"relevance"}
-//         onChange={(value) => console.log(value)}
 //       />
 //     </Option>
 //     <Option>
@@ -32,7 +31,6 @@ let SearchBar = styled(Input)`
 //       <Toggle
 //         values={[25, 50, 100]}
 //         selected={100}
-//         onChange={(value) => console.log(value)}
 //       />{" "}
 //       results
 //     </Option>

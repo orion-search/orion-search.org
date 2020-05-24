@@ -9,7 +9,7 @@ import styled from "@emotion/styled";
 
 // import { MultiItemSearch } from "../../components/shared/search";
 import { Row, Column } from "../../components/shared/layout";
-import { MultiItemSearch } from "../../components/shared/search";
+// import { MultiItemSearch } from "../../components/shared/search";
 import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
@@ -18,14 +18,14 @@ import Explainer from "./Explainer";
 // import { AbsoluteCanvas } from "../../components/shared/renderer";
 import { PageLayout } from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
-import { schemeCategory10 } from "d3";
+// import { schemeCategory10 } from "d3";
 
 const LatentSpace = ({ papers = [], filters }) => {
   const {
     stage: {
       views: { particles },
     },
-    papers: { byCountry, byTopic, byYear },
+    papers: { byCountry, byTopic },
   } = useOrionData();
 
   const [selectedPaperIds, setSelectedPaperIds] = useState(papers);
@@ -46,7 +46,6 @@ const LatentSpace = ({ papers = [], filters }) => {
   }, [particles.viz, papers]);
 
   // useEffect(() => {
-  //   console.log("FILTERING");
   //   particles.viz.filter(selectedPaperIds);
   // }, [selectedPaperIds, particles.viz]);
 
@@ -103,7 +102,7 @@ const LatentSpace = ({ papers = [], filters }) => {
         dimensions={[
           {
             data: byCountry.map((p) => accessors.types.country(p)),
-            filter: [],
+            filter: filters.country || [],
             placeholder: "Search by Country...",
             selected: filters.country,
             title: "Country",
@@ -111,7 +110,7 @@ const LatentSpace = ({ papers = [], filters }) => {
           },
           {
             data: byTopic.map((p) => accessors.types.topic(p)),
-            filter: [],
+            filter: filters.topic || [],
             placeholder: "Search by Topic...",
             selected: filters.topic,
             title: "Topic",
@@ -137,8 +136,6 @@ const Filters = ({ dimensions }) => {
     [d.accessor]: d.filter,
   }));
 
-  console.log(filters);
-
   return (
     <Row
       css={css`
@@ -149,7 +146,6 @@ const Filters = ({ dimensions }) => {
         justify-content: space-between;
       `}
     >
-      {/* <Column width={1 / 3}> */}
       {dimensions.map((dimension) => (
         <Filter
           closeMenuOnSelect={false}
@@ -169,13 +165,11 @@ const Filters = ({ dimensions }) => {
                 [dimension.accessor]: e ? e.map((_) => _.value) : [],
               },
             });
-            console.log(e, "onChange");
           }}
           options={dimension.data.map((d) => ({ value: d, label: d }))}
           placeholder={dimension.placeholder}
         />
       ))}
-      {/* </Column> */}
     </Row>
   );
 };
