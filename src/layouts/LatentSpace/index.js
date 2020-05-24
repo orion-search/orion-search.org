@@ -5,20 +5,14 @@ import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Select from "react-select";
 import styled from "@emotion/styled";
-// import { schemeCategory10 } from "d3";
 
-// import { MultiItemSearch } from "../../components/shared/search";
 import { Row, Column } from "../../components/shared/layout";
-// import { MultiItemSearch } from "../../components/shared/search";
 import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
 
-// import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
-// import { AbsoluteCanvas } from "../../components/shared/renderer";
 import { PageLayout } from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
-// import { schemeCategory10 } from "d3";
 
 const LatentSpace = ({ papers = [], filters }) => {
   const {
@@ -59,33 +53,6 @@ const LatentSpace = ({ papers = [], filters }) => {
         `}
       >
         <Column>
-          {/* <Filters
-            colorScheme={schemeCategory10}
-            papers={papers}
-            ids={layout.current.nodes.map((o) => accessors.types.id(o))}
-            dimensions={[
-              {
-                accessor: accessors.types.country,
-                accessorName: accessors.names.country,
-                component: MultiItemSearch,
-                data: papers[accessors.filters.country],
-                filter: [],
-                placeholder: "Search by Country...",
-                title: "Country",
-              },
-              {
-                accessor: accessors.types.topic,
-                accessorName: accessors.names.topic,
-                component: MultiItemSearch,
-                data: papers[accessors.filters.topic],
-                filter: [],
-                placeholder: "Search by Topic...",
-                title: "Topic",
-              },
-            ]}
-            onChange={updateVizAttributes}
-          /> */}
-
           <Row>
             {selectedPaperIds.length ? (
               <Summary

@@ -16,7 +16,6 @@ import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
-import CrossFilter from "./workers/subscribers/crossfilter";
 import { useEffect } from "react";
 
 const OrionDataContext = createContext({});
@@ -105,7 +104,6 @@ const LoadingOrChildren = ({ ready, children, data }) => {
 
     setProviderData({
       ...data,
-      crossfilter: new CrossFilter({ dimensions: [] }),
       stage: { controls, raycaster, renderer, render, views },
     });
   }, [canvasRef, ready, data]);
