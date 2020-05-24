@@ -15,6 +15,7 @@ import Input from "../../components/shared/input";
 
 let SearchBar = styled(Input)`
   font-size: ${(props) => `${props.theme.type.sizes.large}`};
+  font-family: ${(props) => props.theme.type.fonts.regular};
 `;
 
 // const FilterOptions = ({ onChange = () => {} }) => (
