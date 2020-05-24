@@ -7,7 +7,7 @@ import { useOrionData } from "./OrionData.context";
 import Diversity from "./pages/diversity/";
 // import Explore from "./pages/explore/";
 import LatentSpace from "./layouts/LatentSpace";
-import Landing from "./pages/landing/";
+// import Landing from "./pages/landing/";
 import Profile from "./pages/profile/";
 // import SearchResults from "./pages/search/results";
 import Search from "./pages/search";
@@ -18,7 +18,7 @@ function App() {
 
   return (
     <Switch>
-      <Route exact path={[urls.root]} component={Landing} />
+      {/* <Route exact path={[urls.root]} component={Landing} /> */}
       <Route
         exact
         path={[urls.diversity]}
@@ -71,7 +71,7 @@ function App() {
       <Route path={urls.profile} component={Profile} />
       <Route
         exact
-        path={[urls.search.landing, urls.search.results]}
+        path={[urls.root, urls.search.landing, urls.search.results]}
         render={({ location }) => {
           stage.views.particles.viz.hide();
           stage.views.diversity.viz.hide();

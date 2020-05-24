@@ -67,4 +67,11 @@ export default {
     large: `${spacingBaseSize * 1.5}${spacingUnit}`,
     huge: `${spacingBaseSize * 2}${spacingUnit}`,
   },
+
+  layout: {
+    page: {
+      side: `3vw`,
+      bottom: `5vh`,
+    },
+  },
 };

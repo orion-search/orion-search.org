@@ -1,11 +1,12 @@
 export const urls = {
-  root: "/",
+  about: "/about",
   diversity: "/diversity",
   explore: "/explore",
+  faq: "/faq",
   profile: "/profile",
   profileCountry: "/profile/country",
   profileTopic: "/profile/topic",
-  // search: "/search"
+  root: "/",
   search: {
     landing: "/search",
     results: "/search/results",
