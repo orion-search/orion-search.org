@@ -5,15 +5,12 @@ import styled from "@emotion/styled";
 
 import NavigationBar from "./navigation";
 
-export const PageLayoutWrapper = styled("main")`
+const PageLayoutWrapper = styled("main")`
   width: 100%;
   position: relative;
   display: flex;
   flex-direction: column;
-  padding: ${(props) =>
-    `0 ${props.theme.layout.page.side} ${
-      props.noPaddingBottom ? `0` : props.theme.layout.page.bottom
-    } ${props.theme.layout.page.side}`};
+  padding: ${(props) => `0 ${props.theme.layout.page.side}`};
   box-sizing: border-box;
 `;
 

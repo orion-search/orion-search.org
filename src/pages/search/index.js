@@ -1,8 +1,8 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { Fragment, useEffect, useCallback, useState } from "react";
 import { Route, Switch, useHistory, useLocation } from "react-router-dom";
 import { Query } from "@apollo/react-components";
 
-import { PageLayout, Title } from "../../components/shared/layout";
+import { Title } from "../../components/shared/layout";
 import Toggle from "../../components/shared/toggle";
 import Panel from "./Panel";
 import Results from "./Results";
@@ -52,7 +52,7 @@ export default ({ papers }) => {
 
   // add Router Switch here
   return (
-    <PageLayout>
+    <Fragment>
       <Title>
         Search by{" "}
         <Toggle
@@ -84,7 +84,7 @@ export default ({ papers }) => {
           }}
         />
       </Switch>
-    </PageLayout>
+    </Fragment>
   );
 };
 
