@@ -31,9 +31,7 @@ export const HUD = styled.div`
   z-index: -10;
 
   overflow: hidden;
-  // overflow-y: scroll;
   pointer-events: none;
-  // scroll-behavior: unset;
 
   user-select: none;
 `;
@@ -56,22 +54,6 @@ export const initApp = ({ canvas }) => {
   let mouse = new Vector2();
   let raycaster = new Raycaster();
   raycaster.params.Points.threshold = 20;
-
-  // const visualizations = {
-  //   diversity: {
-  //     camera: new OrthographicCamera(0, width, 0, height, 0, 30),
-  //     scene: new Scene(),
-  //   },
-  //   particles: {
-  //     camera: new PerspectiveCamera(27, aspectRatio, 0.001, 35000),
-  //     scene: new Scene(),
-  //   },
-  // };
-
-  // const views = [
-  //   { name: "Particle_View", ...visualizations.diversity },
-  //   { name: "Diversity_View", ...visualizations.particles },
-  // ];
 
   const views = {
     diversity: {

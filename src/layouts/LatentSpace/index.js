@@ -1,8 +1,9 @@
 /** @jsx jsx */
+
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { useHistory } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { Fragment, useState, useEffect } from "react";
 import Select from "react-select";
 import styled from "@emotion/styled";
 
@@ -11,7 +12,6 @@ import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
 
-import { PageLayout } from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
 
 const LatentSpace = ({ papers = [], filters }) => {
@@ -44,7 +44,7 @@ const LatentSpace = ({ papers = [], filters }) => {
   // }, [selectedPaperIds, particles.viz]);
 
   return (
-    <PageLayout>
+    <Fragment>
       <div
         css={css`
           position: absolute;
@@ -85,7 +85,7 @@ const LatentSpace = ({ papers = [], filters }) => {
           },
         ]}
       />
-    </PageLayout>
+    </Fragment>
   );
 };
 

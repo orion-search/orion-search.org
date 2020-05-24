@@ -1,13 +1,13 @@
-import React from "react";
+import React, { Fragment } from "react";
 
-import { PageLayout, Row, Column } from "../../components/shared/layout";
+import { Row, Column } from "../../components/shared/layout";
 import { Title } from "../../components/shared/layout";
 import { LinkButton } from "../../components/shared/button";
 import { urls } from "../../utils";
 
 const Landing = () => {
   return (
-    <PageLayout>
+    <Fragment>
       <Row>
         <Title>Orion Search Engine</Title>
       </Row>
@@ -47,7 +47,7 @@ const Landing = () => {
 
         <LinkButton to={urls.search.landing}>Search by Abstract</LinkButton>
       </Row>
-    </PageLayout>
+    </Fragment>
   );
 };
 
