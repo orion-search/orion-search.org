@@ -14,7 +14,7 @@ import Search from "./pages/search";
 import { accessors, urls } from "./utils";
 
 function App() {
-  const { stage, diversity, crossfilter, papers } = useOrionData();
+  const { stage, diversity, papers } = useOrionData();
 
   return (
     <Switch>
