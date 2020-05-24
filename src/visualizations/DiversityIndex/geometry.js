@@ -83,7 +83,5 @@ export const scatterplotMesh = (nodes) => {
     transparent: true,
   });
 
-  console.log(geometry, material);
-
   return new Points(geometry, material);
 };

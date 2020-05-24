@@ -7,35 +7,32 @@ import {
   line,
   select,
   curveCatmullRomOpen,
-  scaleLinear
+  scaleLinear,
 } from "d3";
 
 const Histogram = ({
   svg,
   g,
   data,
-  xFunc = d => new Date(d.date),
-  yFunc = d => d["total_citations"],
+  xFunc = (d) => new Date(d.date),
+  yFunc = (d) => d["total_citations"],
   width,
   height,
-  stack = null
+  stack = null,
 }) => {
-  console.log(svg, data);
-
   useEffect(() => {
     const timeGrouped = groupBy(
       data.sort((d1, d2) => new Date(d1.date) - new Date(d2.date)),
       xFunc
     );
     const summedData = Object.keys(timeGrouped)
-      .map(date => {
+      .map((date) => {
         return timeGrouped[date].reduce((acc, d) => ({
           date: d.date,
-          total_citations: acc["total_citations"] + d["total_citations"]
+          total_citations: acc["total_citations"] + d["total_citations"],
         }));
       })
       .sort((d1, d2) => new Date(d1.date) - new Date(d2.date));
-    console.log(summedData);
 
     const y = scaleLinear()
       .domain(extent(summedData, yFunc))
@@ -48,10 +45,10 @@ const Histogram = ({
 
     const area = line()
       .curve(curveCatmullRomOpen)
-      .x(d => {
+      .x((d) => {
         return time(xFunc(d));
       })
-      .y(d => y(yFunc(d)));
+      .y((d) => y(yFunc(d)));
 
     select(g)
       .append("path")

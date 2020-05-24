@@ -9,7 +9,7 @@ import {
   Header,
   Row,
   Column,
-  Flex
+  Flex,
 } from "../../components/shared/layout";
 import Dropdown from "../../components/shared/dropdown";
 import { DIVERSITY_BY_TOPIC, TOP_TOPICS } from "../../queries";
@@ -21,7 +21,7 @@ const TopicProfile = () => {
   // const [topics, setTopics] = useState([]);
 
   let { data } = useQuery(DIVERSITY_BY_TOPIC, {
-    variables: { topic, year }
+    variables: { topic, year },
   });
 
   return (
@@ -37,13 +37,12 @@ const TopicProfile = () => {
           {({ loading, error, data }) => {
             if (loading) return null;
             if (error) return `Error! ${error}`;
-            console.log(data);
 
             return (
               <Dropdown
-                values={data.view_top_topics.map(d => d.topic)}
+                values={data.view_top_topics.map((d) => d.topic)}
                 selected={topic}
-                onChange={e => setTopic(e.target.value)}
+                onChange={(e) => setTopic(e.target.value)}
               />
             );
           }}
@@ -59,7 +58,7 @@ const TopicProfile = () => {
               <Dropdown
                 values={[2019, 2018, 2017, 2016]}
                 selected={year}
-                onChange={e => setYear(e.target.value)}
+                onChange={(e) => setYear(e.target.value)}
               />
             </div>
           </Row>
@@ -70,9 +69,9 @@ const TopicProfile = () => {
           {data && (
             <Scatterplot
               data={data.view_diversity_by_country}
-              y={d => d.female_share}
-              x={d => d.diversity}
-              nodeFunc={d => d.country}
+              y={(d) => d.female_share}
+              x={(d) => d.diversity}
+              nodeFunc={(d) => d.country}
             />
           )}
         </Column>

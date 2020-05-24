@@ -25,40 +25,38 @@ self.addEventListener("message", ({ data }) => {
       case "init":
         idsByDimension = dimensions.map((d, i) => {
           return d.filter.length === 0
-            ? from([...new Set(d.data.flatMap(e => e.ids))]).pipe(toArray())
+            ? from([...new Set(d.data.flatMap((e) => e.ids))]).pipe(toArray())
             : from(d.filter).pipe(
                 reduce(
                   (acc, dimValue) => [
                     ...acc,
-                    ...d.data.find(n => n[d.accessorName] === dimValue).ids
+                    ...d.data.find((n) => n[d.accessorName] === dimValue).ids,
                   ],
                   []
                 )
               );
         });
         self.postMessage({
-          type: "init"
+          type: "init",
         });
 
         break;
       case "compute":
-        forkJoin(...idsByDimension).subscribe(paperIdArrays => {
+        forkJoin(...idsByDimension).subscribe((paperIdArrays) => {
           // compute intersection here
           // @todo chance to optimize?
           var intersect = new Set();
           const setA = new Set(paperIdArrays[0]);
           const setB = new Set(paperIdArrays[1]);
-          console.log(setA, setB);
           if (setA.size < setB.size) {
             for (let x of setA) if (setB.has(x)) intersect.add(x);
           } else {
             for (let x of setB) if (setA.has(x)) intersect.add(x);
           }
-          // console.log(intersect);
 
           self.postMessage({
             type: "compute",
-            data: [...intersect]
+            data: [...intersect],
           });
         });
         break;

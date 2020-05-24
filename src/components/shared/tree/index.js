@@ -7,41 +7,41 @@ const defaultItems = [
     children: [
       {
         id: "A0",
-        children: []
+        children: [],
       },
       {
         id: "A1",
         children: [
           {
             id: "A10",
-            children: []
+            children: [],
           },
           {
             id: "A11",
-            children: []
+            children: [],
           },
           {
             id: "A12",
-            children: []
-          }
-        ]
+            children: [],
+          },
+        ],
       },
       {
         id: "A2",
-        children: []
-      }
-    ]
+        children: [],
+      },
+    ],
   },
   {
     id: "B",
     children: [
       {
         id: "B0",
-        children: []
+        children: [],
       },
       {
         id: "B1",
-        children: []
+        children: [],
       },
       {
         id: "B2",
@@ -51,22 +51,22 @@ const defaultItems = [
             children: [
               {
                 id: "B200",
-                children: []
+                children: [],
               },
               {
                 id: "B201",
-                children: []
-              }
-            ]
+                children: [],
+              },
+            ],
           },
           {
             id: "B21",
-            children: []
-          }
-        ]
-      }
-    ]
-  }
+            children: [],
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 const Leaf = styled("div")`
@@ -102,16 +102,15 @@ const Item = ({ value, onClick }) => {
 // receives an array of arrays with objects as values
 const Tree = ({ items = defaultItems }) => {
   const ui = new Map();
-  items.forEach(c => ui.set(c.id, false));
+  items.forEach((c) => ui.set(c.id, false));
   const [visible, setVisible] = useState(ui);
-  return items.map(item => {
+  return items.map((item) => {
     return (
       <Root key={`item-${item.id}`}>
         {
           <Item
             value={item}
-            onClick={e => {
-              console.log(item.id);
+            onClick={(e) => {
               e.stopPropagation();
               setVisible(new Map(visible.set(item.id, !visible.get(item.id))));
             }}

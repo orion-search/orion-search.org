@@ -19,6 +19,7 @@ export const AbsoluteCanvas = styled.canvas`
   z-index: -100;
 
   user-select: none;
+  outline: none;
 `;
 
 export const HUD = styled.div`
@@ -93,7 +94,6 @@ export const initApp = ({ canvas }) => {
       views[scene].camera.aspect = window.innerWidth / window.innerHeight;
       views[scene].camera.updateProjectionMatrix();
     }
-    console.log("resize", renderer);
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 

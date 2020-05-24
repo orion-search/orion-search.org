@@ -19,7 +19,6 @@ const AnimatedOption = styled(animated.span)`
 
 const Toggle = ({ values, selected, separator = "/", onChange = () => {} }) => {
   // const [active, setActive] = useState(selected);
-  // console.log("selected", active);
   const springs = useSprings(
     values.length,
     values.map((option) => ({

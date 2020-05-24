@@ -16,8 +16,6 @@ function ForceLayout(props) {
   const worker = new Worker();
   const workerS = fromEvent(worker, "message");
 
-  // workerS.subscribe(console.log);
-
   const tickS = workerS.pipe(filter(({ data: { type } }) => type === "tick"));
 
   tickS.subscribe(({ links: newLinks, nodes: newNodes }) => {
@@ -32,28 +30,28 @@ function ForceLayout(props) {
     nodes,
     minWeight,
     width: window.innerWidth,
-    height: window.innerHeight
+    height: window.innerHeight,
   });
 
   return {
     start: () => worker.postMessage("start"),
     stop: () => worker.postMessage("stop"),
     tick: async (iterations = 1) =>
-      new Promise(resolve => {
+      new Promise((resolve) => {
         tickS.subscribe(({ data: { links, nodes } }) => {
           resolve({ links, nodes });
         });
         worker.postMessage({ type: "tick", ticks: iterations });
       }),
     nodes: async () =>
-      new Promise(resolve => {
+      new Promise((resolve) => {
         workerS.subscribe(({ data: { type, nodes } }) => {
           if (type === "nodes") resolve({ nodes });
         });
         worker.postMessage({ type: "nodes" });
       }),
     links: async () =>
-      new Promise(resolve => {
+      new Promise((resolve) => {
         workerS.subscribe(({ data: { type, links } }) => {
           if (type === "links") resolve({ links });
         });
@@ -69,7 +67,7 @@ function ForceLayout(props) {
       }),
     workerS,
     tickS,
-    terminate: () => worker.terminate()
+    terminate: () => worker.terminate(),
   };
 }
 

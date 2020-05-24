@@ -4,11 +4,11 @@ import fetch from "isomorphic-fetch";
 
 export const client = new ApolloClient({
   cache: new InMemoryCache(),
-  defaultOptions: {
-    watchQuery: {
-      fetchPolicy: "cache-and-network"
-    }
-  },
+  // defaultOptions: {
+  //   watchQuery: {
+  //     fetchPolicy: "cache-and-network"
+  //   }
+  // },
   fetch,
-  uri: process.env.REACT_APP_HASURA_GRAPHQL_URL
+  uri: process.env.REACT_APP_HASURA_GRAPHQL_URL,
 });

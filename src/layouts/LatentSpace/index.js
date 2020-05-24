@@ -1,25 +1,31 @@
 /** @jsx jsx */
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
+import { useHistory } from "react-router-dom";
 import { useState, useEffect } from "react";
+import Select from "react-select";
+import styled from "@emotion/styled";
 // import { schemeCategory10 } from "d3";
 
 // import { MultiItemSearch } from "../../components/shared/search";
-import { Button } from "../../components/shared/button";
 import { Row, Column } from "../../components/shared/layout";
-// import { accessors } from "../../utils";
+// import { MultiItemSearch } from "../../components/shared/search";
+import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
+import Explainer from "./Explainer";
 
 // import { ParticleContainerLatentSpace } from "../../visualizations/LatentSpace";
 // import { AbsoluteCanvas } from "../../components/shared/renderer";
 import { PageLayout } from "../../components/shared/layout";
 import { useOrionData } from "../../OrionData.context";
+// import { schemeCategory10 } from "d3";
 
-const LatentSpace = ({ papers = [] }) => {
+const LatentSpace = ({ papers = [], filters }) => {
   const {
     stage: {
       views: { particles },
     },
+    papers: { byCountry, byTopic },
   } = useOrionData();
 
   const [selectedPaperIds, setSelectedPaperIds] = useState(papers);
@@ -40,7 +46,6 @@ const LatentSpace = ({ papers = [] }) => {
   }, [particles.viz, papers]);
 
   // useEffect(() => {
-  //   console.log("FILTERING");
   //   particles.viz.filter(selectedPaperIds);
   // }, [selectedPaperIds, particles.viz]);
 
@@ -80,17 +85,92 @@ const LatentSpace = ({ papers = [] }) => {
             ]}
             onChange={updateVizAttributes}
           /> */}
+
           <Row>
-            <Button onClick={() => particles.viz.resetFilters()}>
-              Reset Filters
-            </Button>
-          </Row>
-          <Row>
-            <Summary paperIds={selectedPaperIds} />
+            {selectedPaperIds.length ? (
+              <Summary
+                paperIds={selectedPaperIds}
+                onFilterReset={() => particles.viz.resetFilters()}
+              />
+            ) : (
+              <Explainer />
+            )}
           </Row>
         </Column>
       </div>
+      <Filters
+        dimensions={[
+          {
+            data: byCountry.map((p) => accessors.types.country(p)),
+            filter: filters.country || [],
+            placeholder: "Search by Country...",
+            selected: filters.country,
+            title: "Country",
+            accessor: "country",
+          },
+          {
+            data: byTopic.map((p) => accessors.types.topic(p)),
+            filter: filters.topic || [],
+            placeholder: "Search by Topic...",
+            selected: filters.topic,
+            title: "Topic",
+            accessor: "topic",
+          },
+        ]}
+      />
     </PageLayout>
+  );
+};
+
+const Filters = ({ dimensions }) => {
+  const Filter = styled(Select)`
+    width: 45%;
+    color: ${(props) => props.theme.colors.black};
+    font-size: ${(props) => props.theme.type.sizes.normal};
+  `;
+
+  const history = useHistory();
+
+  // keep track of filter state
+  const filters = dimensions.map((d) => ({
+    [d.accessor]: d.filter,
+  }));
+
+  return (
+    <Row
+      css={css`
+        position: absolute;
+        top: 80px;
+        left: 40%;
+        width: 50%;
+        justify-content: space-between;
+      `}
+    >
+      {dimensions.map((dimension) => (
+        <Filter
+          closeMenuOnSelect={false}
+          isMulti
+          key={`${dimension.title}-filter`}
+          name={dimension.title}
+          defaultValue={
+            dimension.selected?.length
+              ? dimension.selected.map((d) => ({ value: d, label: d }))
+              : []
+          }
+          onChange={(e) => {
+            history.push(urls.explore, {
+              filters: {
+                ...filters[0],
+                ...filters[1],
+                [dimension.accessor]: e ? e.map((_) => _.value) : [],
+              },
+            });
+          }}
+          options={dimension.data.map((d) => ({ value: d, label: d }))}
+          placeholder={dimension.placeholder}
+        />
+      ))}
+    </Row>
   );
 };
 

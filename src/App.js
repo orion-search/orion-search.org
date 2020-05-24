@@ -1,6 +1,7 @@
 import { hot } from "react-hot-loader/root";
 import React from "react";
 import { Route, Switch } from "react-router-dom";
+import { intersection } from "lodash-es";
 
 import { useOrionData } from "./OrionData.context";
 import Diversity from "./pages/diversity/";
@@ -13,7 +14,7 @@ import Search from "./pages/search";
 import { accessors, urls } from "./utils";
 
 function App() {
-  const { stage, diversity, crossfilter, papers } = useOrionData();
+  const { stage, diversity, papers } = useOrionData();
 
   return (
     <Switch>
@@ -31,13 +32,15 @@ function App() {
         exact
         path={[urls.explore]}
         render={({ location }) => {
-          // const {} = location.state.filters
           console.log(location.state);
+          let filters = { topic: [], country: [] };
           let filteredPaperIds = location?.state?.filters?.ids || [];
+
+          // paper id filtering is disjoint from topic/country/* filtering
           if (location?.state?.filters?.ids) {
             filteredPaperIds = location.state.filters.ids;
           } else if (location?.state?.filters) {
-            const { ids, ...filterDimensions } = location?.state?.filters;
+            const { ids, ...filterDimensions } = location.state.filters;
             const idsByDimension = Object.keys(
               filterDimensions
             ).map((dimension) =>
@@ -53,18 +56,16 @@ function App() {
               filterDimensions,
               idsByDimension
             );
-            filteredPaperIds = idsByDimension[0];
-            // if (idsByDimension.length > 1) {
-            //   crossfilter.dimensions(
-            //     idsByDimension
-            //   );
-            //   crossfilter.compute().then(data => {
-            //     // do something
-            //   })
-            // }
+
+            filters = filterDimensions;
+            filteredPaperIds = intersection(
+              ...idsByDimension.filter(
+                (dimensionIds) => dimensionIds.length > 0
+              )
+            );
           }
           stage.views.particles.viz.show();
-          return <LatentSpace papers={filteredPaperIds} />;
+          return <LatentSpace papers={filteredPaperIds} filters={filters} />;
         }}
       />
       <Route path={urls.profile} component={Profile} />

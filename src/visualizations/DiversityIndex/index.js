@@ -225,7 +225,6 @@ export function DiversityIndex({
   // draw-related =======================
   const draw = () => {
     // EXIT previous
-    console.groupCollapsed("diversity index draw");
     for (var i = groups.points.children.length - 1; i >= 0; i--) {
       groups.points.remove(groups.points.children[i]);
     }
@@ -237,12 +236,10 @@ export function DiversityIndex({
       max: new THREE.Box3().setFromObject(scene).max,
       min: new THREE.Box3().setFromObject(scene).min,
     };
-    console.groupEnd("diversity index draw");
   };
 
   const update = () => {
     raycaster.setFromCamera(mouse, camera);
-    // console.log(intersectedObjects, mouse);
     const intersectedObjects = raycaster.intersectObjects(
       groups.points.children
     );

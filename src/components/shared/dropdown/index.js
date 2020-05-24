@@ -10,7 +10,7 @@ const Select = styled("select")`
   background: transparent;
   text-decoration: underline;
   cursor: pointer;
-  color: ${props => props.theme.colors.white};
+  color: ${(props) => props.theme.colors.white};
   border: none;
 
   font-weight: bolder;
@@ -19,8 +19,8 @@ const Select = styled("select")`
   font-size: inherit;
   text-transform: inherit;
 
-  padding: ${props => props.theme.spacing.small}
-    ${props => props.theme.spacing.normal};
+  padding: ${(props) => props.theme.spacing.small}
+    ${(props) => props.theme.spacing.normal};
 
   &::-ms-expand {
     display: none;
@@ -36,15 +36,11 @@ const Select = styled("select")`
   }
 `;
 
-const Dropdown = ({
-  values,
-  selected,
-  onChange = e => console.log(e.target.value)
-}) => {
+const Dropdown = ({ values, selected, onChange = (e) => {} }) => {
   return (
     <Wrapper>
       <Select onChange={onChange} defaultValue={selected}>
-        {values.map(o => (
+        {values.map((o) => (
           <option key={`dropdown-option-${o ? o : Math.random()}`} value={o}>
             {o}
           </option>
