@@ -5,13 +5,16 @@ import { intersection } from "lodash-es";
 
 import { PageLayout } from "./components/shared/layout";
 import { useOrionData } from "./OrionData.context";
+
+import About from "./pages/about";
 import Diversity from "./pages/diversity/";
+import Profile from "./pages/profile/";
+import Search from "./pages/search";
+
 // import Explore from "./pages/explore/";
 import LatentSpace from "./layouts/LatentSpace";
 // import Landing from "./pages/landing/";
-import Profile from "./pages/profile/";
 // import SearchResults from "./pages/search/results";
-import Search from "./pages/search";
 import { accessors, urls } from "./utils";
 
 function App() {
@@ -21,6 +24,7 @@ function App() {
     <PageLayout>
       <Switch>
         {/* <Route exact path={[urls.root]} component={Landing} /> */}
+        <Route exact path={[urls.about]} component={About} />
         <Route
           exact
           path={[urls.diversity]}

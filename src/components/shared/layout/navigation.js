@@ -47,6 +47,10 @@ const navURLs = [
     to: urls.search.landing,
     name: "Search",
   },
+  {
+    to: urls.about,
+    name: "About Orion",
+  },
 ];
 
 const NavigationBar = () => {
