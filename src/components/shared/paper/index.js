@@ -18,6 +18,13 @@ const Wrapper = styled(animated.div)`
   &:first-of-type {
     padding-top: 0;
   }
+
+  overflow-x: hidden;
+
+  & a {
+    text-decoration: none;
+    color: ${(props) => props.theme.colors.white};
+  }
 `;
 
 const Flex = styled("div")`
@@ -75,7 +82,7 @@ const MAX_TOPICS = 4;
 
 export const PaperReducedDetail = ({ data }) => {
   const wrapperAnimation = useSpring(fadeInUp);
-  const { title, date, citations } = data;
+  const { original_title, date, citations } = data;
   const dateString = formatDate(parseDate(date));
 
   return (
@@ -88,7 +95,7 @@ export const PaperReducedDetail = ({ data }) => {
         }
         size={"normal"}
       >
-        {title}
+        {original_title}
       </Title>
       <Row
         mv={"none"}
@@ -111,7 +118,15 @@ export const PaperReducedDetail = ({ data }) => {
 
 const Paper = ({ data }) => {
   const wrapperAnimation = useSpring(fadeInUp);
-  const { title, date, authors, topics, citations, publisher } = data;
+  const {
+    original_title,
+    date,
+    authors,
+    source,
+    topics,
+    citations,
+    publisher,
+  } = data;
   const dateString = formatDate(parseDate(date));
   return (
     <Wrapper border={2} pv={"huge"} style={wrapperAnimation}>
@@ -141,7 +156,11 @@ const Paper = ({ data }) => {
           )}
         </Authors>
       </Row>
-      <Title size={"huge"}>{title}</Title>
+      <Title size={"huge"}>
+        <a href={source} target="__blank">
+          {original_title}
+        </a>
+      </Title>
       <Row>
         <Topics>
           {topics.map(
