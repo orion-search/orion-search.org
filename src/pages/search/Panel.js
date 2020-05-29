@@ -2,21 +2,47 @@
 /** @jsxFrag Fragment */
 
 import styled from "@emotion/styled";
-import { jsx } from "@emotion/core";
-import { useRef, useLayoutEffect } from "react";
+import { jsx, css } from "@emotion/core";
+import { forwardRef, useRef, useLayoutEffect } from "react";
 
 import { Column } from "../../components/shared/layout";
 // import Toggle from "../../components/shared/toggle";
 import Input from "../../components/shared/input";
+import { Button } from "../../components/shared/button";
 
 // const Option = styled("div")`
 //   margin-top: ${(props) => props.theme.spacing.large};
 // `;
 
-let SearchBar = styled(Input)`
+let SearchBarInput = styled(Input)`
   font-size: ${(props) => `${props.theme.type.sizes.large}`};
   font-family: ${(props) => props.theme.type.fonts.regular};
 `;
+
+const SearchBar = forwardRef(({ onClick = () => {} }, ref) => (
+  <div
+    css={css`
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+    `}
+  >
+    <SearchBarInput
+      ref={ref}
+      css={css`
+        width: 85%;
+      `}
+    />
+    <Button
+      css={css`
+        align-self: center;
+      `}
+      onClick={onClick}
+    >
+      Search
+    </Button>
+  </div>
+));
 
 // const FilterOptions = ({ onChange = () => {} }) => (
 //   <>
@@ -74,6 +100,7 @@ const Panel = ({
         rows={2}
         placeholder={"Search for academic papers..."}
         ref={searchRef}
+        onClick={() => onSearch(searchRef.current.value)}
       />
       {/* {expanded && <FilterOptions />} */}
     </Column>
