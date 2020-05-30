@@ -3,6 +3,7 @@
   "private": true,
   "license": "MIT",
   "scripts": {
+    "analyze": "source-map-explorer 'build/static/js/*.js'",
     "data:static": "./scripts/cache_data.sh src/data/data.json",
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -49,6 +50,7 @@
     "extends": "react-app"
   },
   "devDependencies": {
+    "source-map-explorer": "^2.4.2",
     "workerize-loader": "^1.1.0"
   },
   "resolutions": {

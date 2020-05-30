@@ -14,11 +14,7 @@ export const filterOptions = {
   groupings: [accessors.names.topic, accessors.names.country],
   time: [2019, 2018, 2017, 2016],
   x: [accessors.names.rca, accessors.names.diversity],
-  y: [
-    accessors.names.femaleShare,
-    accessors.names.rca,
-    accessors.names.diversity,
-  ],
+  y: [accessors.names.femaleShare, accessors.names.rca],
 };
 
 // contains all the filters

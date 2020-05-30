@@ -134,7 +134,9 @@ export function ParticleContainerLatentSpace({
     meshSelected.geometry = mesh.geometry.clone();
     meshSelected.geometry.setDrawRange(0, 0);
     meshSelected.name = "Selected_Particles";
-    // meshSelected.position.z += 1;
+
+    mesh.position.x = 0;
+    meshSelected.position.x = 0;
 
     const count = meshSelected.geometry.userData.ids.length;
 
@@ -153,6 +155,8 @@ export function ParticleContainerLatentSpace({
       c[i3 + 1] = 0;
       c[i3 + 2] = 0;
     }
+
+    mesh.geometry.center();
 
     scene.add(meshSelected);
   };

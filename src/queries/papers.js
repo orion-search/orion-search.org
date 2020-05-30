@@ -5,6 +5,8 @@ export const PAPER_METADATA = gql`
     papers: mag_papers(where: { id: { _in: $ids } }) {
       id
       title
+      original_title
+      source
       date
       citations
       authors: mag_paper_authors {
