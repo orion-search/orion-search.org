@@ -6,14 +6,14 @@ import {
   forceX,
   forceY,
   forceCollide,
-  forceManyBody
+  forceManyBody,
 } from "d3";
 
 const link = forceLink();
 const simulation = forceSimulation().on("tick", () => {
   postMessage({
     nodes: simulation.nodes(),
-    links: link.links()
+    links: link.links(),
   });
 });
 
@@ -28,7 +28,7 @@ self.addEventListener("message", ({ data }) => {
         active = { links, nodes };
         if (active.nodes && active.links && minWeight && width && height) {
           link.links(
-            active.links.filter(l => {
+            active.links.filter((l) => {
               if (!l.weight) return true;
               return l.weight >= minWeight;
             })
@@ -76,21 +76,21 @@ self.addEventListener("message", ({ data }) => {
         self.postMessage({
           type: "tick",
           nodes: simulation.nodes(),
-          links: link.links()
+          links: link.links(),
         });
         break;
 
       case "stop":
         simulation.stop();
         self.postMessage({
-          type: "stop"
+          type: "stop",
         });
         break;
 
       case "start":
         simulation.restart();
         self.postMessage({
-          type: "start"
+          type: "start",
         });
         break;
 
@@ -111,13 +111,13 @@ self.addEventListener("message", ({ data }) => {
           } catch (e) {
             self.postMessage({
               type: "set",
-              error: new Error("Invalid setting")
+              error: new Error("Invalid setting"),
             });
           }
         } else {
           self.postMessage({
             type: "set",
-            error: new Error("Invalid setting")
+            error: new Error("Invalid setting"),
           });
         }
         break;

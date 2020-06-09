@@ -6,7 +6,13 @@
  */
 
 import * as THREE from "three";
-import { extent, scaleLinear, scaleOrdinal } from "d3";
+import {
+  extent,
+  scaleLinear,
+  scaleOrdinal,
+  scaleSequential,
+  interpolateSpectral,
+} from "d3";
 
 import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
@@ -46,8 +52,10 @@ export function DiversityIndex({
   let { width, height } = renderer.domElement.getBoundingClientRect();
   let groups = {
     points: new THREE.Group(),
+    highlighted: new THREE.Group(),
   };
   scene.add(groups.points);
+  scene.add(groups.highlighted);
 
   const animate = () => {
     animationId = requestAnimationFrame(animate);
@@ -84,7 +92,8 @@ export function DiversityIndex({
       x: scales.x(dimensions.x(d)),
       y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
       // y: scales.category(dimensions.group(d)),
-      r: Math.random() * 10 + 5,
+      color: scales.color(dimensions.y(d)),
+      r: 10,
     }));
 
     updateForceLayout(nodes);
@@ -140,6 +149,9 @@ export function DiversityIndex({
     // to page layout side padding
     const groups = [...new Set(data.map(dimensions.group))];
     scales = {
+      color: scaleSequential(interpolateSpectral).domain(
+        extent(data, dimensions.y)
+      ),
       x: scaleLinear()
         .domain(extent(data, dimensions.x))
         .range([0, layout.pointSegment.widthRatio * width * 0.97]),
@@ -225,8 +237,12 @@ export function DiversityIndex({
   // draw-related =======================
   const draw = () => {
     // EXIT previous
-    for (var i = groups.points.children.length - 1; i >= 0; i--) {
+    for (let i = groups.points.children.length - 1; i >= 0; i--) {
       groups.points.remove(groups.points.children[i]);
+    }
+
+    for (let i = groups.highlighted.children.length - 1; i >= 0; i--) {
+      groups.highlighted.remove(groups.highlighted.children[i]);
     }
 
     const points = scatterplotMesh(nodes);
@@ -249,7 +265,8 @@ export function DiversityIndex({
         intersectedObjects[0].index !== highlightedNode.index
       ) {
         const bubble = intersectedObjects[0];
-        highlightedNode = bubble;
+        highlightedNode = bubble.object.clone();
+        console.log(bubble);
         onHoverCallback({
           data: data[bubble.index],
           coords: { x: bubble.point.x, y: bubble.point.y - camera.top },

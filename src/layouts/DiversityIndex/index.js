@@ -119,7 +119,7 @@ const DiversityIndex = ({ data }) => {
                 padding-bottom: ${layout.margins.bottom}px;
               `}
             >
-              <div
+              {/* <div
                 css={css`
                   position: relative;
                   border-bottom: 1px solid white;
@@ -128,7 +128,7 @@ const DiversityIndex = ({ data }) => {
                   width: 77vw;
                   left: 17vw;
                 `}
-              ></div>
+              ></div> */}
               <div
                 css={css`
                   max-width: 10vw;
