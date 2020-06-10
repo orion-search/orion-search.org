@@ -6,12 +6,20 @@
  */
 
 import * as THREE from "three";
-import { extent, scaleLinear, scaleOrdinal } from "d3";
+import {
+  extent,
+  scaleLinear,
+  scaleOrdinal,
+  scaleSequential,
+  interpolateSpectral,
+} from "d3";
 
 import { clamp, accessors } from "../../utils";
 import ForceLayout from "../../workers/subscribers/force-layout-links";
 import { filterOptions } from "../../layouts/DiversityIndex/Filters";
 import { scatterplotMesh, layout } from "./geometry";
+
+const DEFAULT_RADIUS = 10;
 
 export function DiversityIndex({
   camera,
@@ -46,8 +54,10 @@ export function DiversityIndex({
   let { width, height } = renderer.domElement.getBoundingClientRect();
   let groups = {
     points: new THREE.Group(),
+    highlighted: new THREE.Group(),
   };
   scene.add(groups.points);
+  scene.add(groups.highlighted);
 
   const animate = () => {
     animationId = requestAnimationFrame(animate);
@@ -84,7 +94,8 @@ export function DiversityIndex({
       x: scales.x(dimensions.x(d)),
       y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
       // y: scales.category(dimensions.group(d)),
-      r: Math.random() * 10 + 5,
+      color: scales.color(dimensions.y(d)),
+      r: DEFAULT_RADIUS,
     }));
 
     updateForceLayout(nodes);
@@ -140,6 +151,9 @@ export function DiversityIndex({
     // to page layout side padding
     const groups = [...new Set(data.map(dimensions.group))];
     scales = {
+      color: scaleSequential(interpolateSpectral).domain(
+        extent(data, dimensions.y)
+      ),
       x: scaleLinear()
         .domain(extent(data, dimensions.x))
         .range([0, layout.pointSegment.widthRatio * width * 0.97]),
@@ -225,13 +239,34 @@ export function DiversityIndex({
   // draw-related =======================
   const draw = () => {
     // EXIT previous
-    for (var i = groups.points.children.length - 1; i >= 0; i--) {
+    for (let i = groups.points.children.length - 1; i >= 0; i--) {
       groups.points.remove(groups.points.children[i]);
+    }
+
+    for (let i = groups.highlighted.children.length - 1; i >= 0; i--) {
+      groups.highlighted.remove(groups.highlighted.children[i]);
     }
 
     const points = scatterplotMesh(nodes);
     groups.points.add(points);
     groups.points.position.x = width * 0.2;
+    groups.highlighted.position.x = width * 0.2;
+
+    // Copy geometry and attributes of points for our highlighted
+    // mesh.
+    // This draws a variable number of white nodes on hover with 3 * radius
+    const highlighted = points.clone();
+    highlighted.geometry = points.geometry.clone();
+    highlighted.geometry.setDrawRange(0, 0);
+    highlighted.geometry.getAttribute("customColor").array[0] = 1;
+    highlighted.geometry.getAttribute("customColor").array[1] = 1;
+    highlighted.geometry.getAttribute("customColor").array[2] = 1;
+    highlighted.geometry.getAttribute("customColor").needsUpdate = true;
+
+    highlighted.geometry.getAttribute("size").array[0] = DEFAULT_RADIUS * 3;
+    highlighted.geometry.getAttribute("size").needsUpdate = true;
+    groups.highlighted.add(highlighted);
+
     bbox = {
       max: new THREE.Box3().setFromObject(scene).max,
       min: new THREE.Box3().setFromObject(scene).min,
@@ -249,7 +284,20 @@ export function DiversityIndex({
         intersectedObjects[0].index !== highlightedNode.index
       ) {
         const bubble = intersectedObjects[0];
-        highlightedNode = bubble;
+        highlightedNode = bubble.object.clone();
+        groups.highlighted.children[0].geometry
+          .getAttribute("position")
+          .copyAt(
+            0,
+            groups.points.children[0].geometry.getAttribute("position"),
+            bubble.index
+          );
+
+        groups.highlighted.children[0].geometry.getAttribute(
+          "position"
+        ).needsUpdate = true;
+        groups.highlighted.children[0].geometry.setDrawRange(0, 1);
+
         onHoverCallback({
           data: data[bubble.index],
           coords: { x: bubble.point.x, y: bubble.point.y - camera.top },
@@ -258,6 +306,7 @@ export function DiversityIndex({
     } else {
       highlightedNode !== null && onHoverCallback({ data: null });
       highlightedNode = null;
+      groups.highlighted.children[0].geometry.setDrawRange(0, 0);
     }
 
     // only run force layout in first 120 ticks

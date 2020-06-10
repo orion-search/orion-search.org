@@ -37,8 +37,9 @@ export const scatterplotMesh = (nodes) => {
   var color = new Color();
 
   for (let i = 0; i < nodes.length; i++) {
-    const { x, y, r } = nodes[i];
-    color.setRGB(1, 1, 1);
+    const { x, y, r, color: c } = nodes[i];
+    // color.setRGB(1, 1, 1);
+    color.setStyle(c);
 
     attributes.position.push(x, y, 0);
     attributes.color.push(color.r, color.g, color.b);
