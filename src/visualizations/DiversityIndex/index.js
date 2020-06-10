@@ -19,6 +19,8 @@ import ForceLayout from "../../workers/subscribers/force-layout-links";
 import { filterOptions } from "../../layouts/DiversityIndex/Filters";
 import { scatterplotMesh, layout } from "./geometry";
 
+const DEFAULT_RADIUS = 10;
+
 export function DiversityIndex({
   camera,
   mouse,
@@ -93,7 +95,7 @@ export function DiversityIndex({
       y: scales.category(dimensions.group(d)) + scales.y(dimensions.y(d)),
       // y: scales.category(dimensions.group(d)),
       color: scales.color(dimensions.y(d)),
-      r: 10,
+      r: DEFAULT_RADIUS,
     }));
 
     updateForceLayout(nodes);
@@ -248,6 +250,23 @@ export function DiversityIndex({
     const points = scatterplotMesh(nodes);
     groups.points.add(points);
     groups.points.position.x = width * 0.2;
+    groups.highlighted.position.x = width * 0.2;
+
+    // Copy geometry and attributes of points for our highlighted
+    // mesh.
+    // This draws a variable number of white nodes on hover with 3 * radius
+    const highlighted = points.clone();
+    highlighted.geometry = points.geometry.clone();
+    highlighted.geometry.setDrawRange(0, 0);
+    highlighted.geometry.getAttribute("customColor").array[0] = 1;
+    highlighted.geometry.getAttribute("customColor").array[1] = 1;
+    highlighted.geometry.getAttribute("customColor").array[2] = 1;
+    highlighted.geometry.getAttribute("customColor").needsUpdate = true;
+
+    highlighted.geometry.getAttribute("size").array[0] = DEFAULT_RADIUS * 3;
+    highlighted.geometry.getAttribute("size").needsUpdate = true;
+    groups.highlighted.add(highlighted);
+
     bbox = {
       max: new THREE.Box3().setFromObject(scene).max,
       min: new THREE.Box3().setFromObject(scene).min,
@@ -266,7 +285,19 @@ export function DiversityIndex({
       ) {
         const bubble = intersectedObjects[0];
         highlightedNode = bubble.object.clone();
-        console.log(bubble);
+        groups.highlighted.children[0].geometry
+          .getAttribute("position")
+          .copyAt(
+            0,
+            groups.points.children[0].geometry.getAttribute("position"),
+            bubble.index
+          );
+
+        groups.highlighted.children[0].geometry.getAttribute(
+          "position"
+        ).needsUpdate = true;
+        groups.highlighted.children[0].geometry.setDrawRange(0, 1);
+
         onHoverCallback({
           data: data[bubble.index],
           coords: { x: bubble.point.x, y: bubble.point.y - camera.top },
@@ -275,6 +306,7 @@ export function DiversityIndex({
     } else {
       highlightedNode !== null && onHoverCallback({ data: null });
       highlightedNode = null;
+      groups.highlighted.children[0].geometry.setDrawRange(0, 0);
     }
 
     // only run force layout in first 120 ticks
