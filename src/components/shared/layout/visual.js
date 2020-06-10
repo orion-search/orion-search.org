@@ -13,7 +13,7 @@ const scrollbars = css`
   }
 `;
 
-export const blurEdges = props => css`
+export const blurEdges = (props) => css`
   mask-image: linear-gradient(
     to bottom,
     ${props.theme.colors.black}00,
@@ -25,7 +25,7 @@ export const blurEdges = props => css`
   ${scrollbars};
 `;
 
-export const yOverflow = props => css`
+export const yOverflow = (props) => css`
   overflow-y: auto;
   overflow-x: hidden;
 `;

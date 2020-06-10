@@ -87,7 +87,7 @@ const NavigationBar = () => {
         css={css`
           margin-left: auto;
         `}
-        width={1 / 4}
+        width={1 / 3}
       >
         {navURLs.map((u) => (
           <NavItem
