@@ -3,7 +3,7 @@ import { action } from "@storybook/addon-actions";
 import Toggle from ".";
 
 export default {
-  title: "Toggle",
+  title: "Design System/Atoms/Toggle",
   component: Toggle,
 };
 
