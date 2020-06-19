@@ -33,7 +33,7 @@ export const TextArea = styled("textarea")`
   outline: none;
 
   box-sizing: border-box;
-  padding-right: 10%;
+  // padding-right: 10%;
   padding-left: 0%;
 
   border: none;
@@ -61,7 +61,8 @@ export const SearchBar = forwardRef(
         css={css`
           position: relative;
           display: flex;
-          align-items: center;
+          width: 100%;
+          // align-items: center;
           flex-direction: column;
         `}
       >
@@ -69,7 +70,9 @@ export const SearchBar = forwardRef(
           ref={ref}
           placeholder={placeholder}
           onInput={autoResize ? resize : () => {}}
-          css={css``}
+          css={css`
+            width: 90%;
+          `}
         />
         <Button
           css={css`
@@ -77,8 +80,8 @@ export const SearchBar = forwardRef(
             position: absolute;
             right: 0px;
             top: -18px;
-            border: none;
-            margin-right: 0;
+            // border: none;
+            padding: 8px 8px;
           `}
           onClick={onClick}
         >
