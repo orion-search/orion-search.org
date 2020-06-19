@@ -1,5 +1,3 @@
-/** @jsx jsx */
-import { css, jsx } from "@emotion/core";
 import React, { useRef } from "react";
 import { TextArea, SearchBar } from ".";
 import { withKnobs, boolean } from "@storybook/addon-knobs";

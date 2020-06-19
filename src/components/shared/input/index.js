@@ -33,7 +33,6 @@ export const TextArea = styled("textarea")`
   outline: none;
 
   box-sizing: border-box;
-  // padding-right: 10%;
   padding-left: 0%;
 
   border: none;
@@ -62,7 +61,6 @@ export const SearchBar = forwardRef(
           position: relative;
           display: flex;
           width: 100%;
-          // align-items: center;
           flex-direction: column;
         `}
       >
@@ -80,7 +78,6 @@ export const SearchBar = forwardRef(
             position: absolute;
             right: 0px;
             top: -18px;
-            // border: none;
             padding: 8px 8px;
           `}
           onClick={onClick}

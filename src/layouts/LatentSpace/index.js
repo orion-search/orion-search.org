@@ -8,6 +8,7 @@ import Select from "react-select";
 import styled from "@emotion/styled";
 
 import { Row, Column } from "../../components/shared/layout";
+import { MultiItemSelect } from "../../components/shared/dropdown";
 import { accessors, urls } from "../../utils";
 import Summary from "./Summary";
 import Explainer from "./Explainer";
@@ -90,9 +91,8 @@ const LatentSpace = ({ papers = [], filters }) => {
 };
 
 const Filters = ({ dimensions }) => {
-  const Filter = styled(Select)`
+  const Filter = styled(MultiItemSelect)`
     width: 45%;
-    color: ${(props) => props.theme.colors.black};
     font-size: ${(props) => props.theme.type.sizes.normal};
   `;
 
