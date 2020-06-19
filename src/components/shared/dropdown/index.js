@@ -65,6 +65,7 @@ const customStyles = {
     border: `none`,
     borderColor: theme.colors.white,
     borderBottom: `2px solid ${theme.colors.white}`,
+    boxShadow: `none`,
   }),
   menu: (provided) => ({
     ...provided,
