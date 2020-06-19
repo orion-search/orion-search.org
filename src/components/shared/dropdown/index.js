@@ -84,12 +84,18 @@ const customStyles = {
       ...provided,
       opacity,
       transition,
-      backgroundColor: theme.colors.white,
+      color: theme.colors.white,
+      backgroundColor: theme.colors.transparent,
+      border: `1px solid ${theme.colors.white}`,
     };
   },
+  multiValueLabel: (provided) => ({
+    ...provided,
+    color: theme.colors.white,
+  }),
   multiValueRemove: (provided, state) => ({
     ...provided,
-    color: theme.colors.black,
+    color: theme.colors.wwhite,
   }),
   valueContainer: (provided) => ({
     ...provided,

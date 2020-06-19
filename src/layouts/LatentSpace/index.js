@@ -4,7 +4,6 @@ import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { useHistory } from "react-router-dom";
 import { Fragment, useState, useEffect } from "react";
-import Select from "react-select";
 import styled from "@emotion/styled";
 
 import { Row, Column } from "../../components/shared/layout";
