@@ -4,7 +4,6 @@
 import { jsx } from "@emotion/core";
 import { useRef, useLayoutEffect } from "react";
 
-import { Column } from "../../components/shared/layout";
 import { SearchBar } from "../../components/shared/input";
 
 // const FilterOptions = ({ onChange = () => {} }) => (
@@ -53,19 +52,11 @@ const Panel = ({
   }, [onSearch]);
 
   return (
-    <Column>
-      {/* <Row>
-        Searching by abstract utilizes word embeddings and fast similarity
-        search (FAISS), to retrieve the most semantically similar abstracts to
-        the one provided.
-      </Row> */}
-      <SearchBar
-        placeholder={"Search for academic papers..."}
-        ref={searchRef}
-        onClick={() => onSearch(searchRef.current.value)}
-      />
-      {/* {expanded && <FilterOptions />} */}
-    </Column>
+    <SearchBar
+      placeholder={"Search for academic papers..."}
+      ref={searchRef}
+      onClick={() => onSearch(searchRef.current.value)}
+    />
   );
 };
 

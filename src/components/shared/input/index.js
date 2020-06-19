@@ -32,6 +32,10 @@ export const TextArea = styled("textarea")`
   background: transparent;
   outline: none;
 
+  box-sizing: border-box;
+  padding-right: 10%;
+  padding-left: 0%;
+
   border: none;
   border-width: 0 0 2px 0;
   border-bottom: 2px solid ${(props) => props.theme.colors.white};
@@ -41,13 +45,10 @@ export const TextArea = styled("textarea")`
   width: 100%;
   height: 26px;
   max-height: 300px;
-
-  margin: ${(props) =>
-    `${props.theme.spacing.small} ${props.theme.spacing.large} ${props.theme.spacing.small} 0px`};
 `;
 
 export const SearchBar = forwardRef(
-  ({ onClick = () => {}, autoResize = true }, ref) => {
+  ({ onClick = () => {}, autoResize = true, placeholder = `` }, ref) => {
     console.log(ref);
     const resize = (e) => {
       console.log(ref.current.scrollHeight);
@@ -58,15 +59,26 @@ export const SearchBar = forwardRef(
     return (
       <div
         css={css`
+          position: relative;
           display: flex;
-          flex-direction: row;
-          justify-content: space-between;
+          align-items: center;
+          flex-direction: column;
         `}
       >
-        <TextArea ref={ref} onInput={autoResize ? resize : () => {}} />
+        <TextArea
+          ref={ref}
+          placeholder={placeholder}
+          onInput={autoResize ? resize : () => {}}
+          css={css``}
+        />
         <Button
           css={css`
             align-self: center;
+            position: absolute;
+            right: 0px;
+            top: -18px;
+            border: none;
+            margin-right: 0;
           `}
           onClick={onClick}
         >

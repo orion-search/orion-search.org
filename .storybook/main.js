@@ -9,6 +9,7 @@ module.exports = {
       loader: require.resolve("babel-loader"),
       options: {
         plugins: ["emotion"],
+        presets: [require.resolve("@emotion/babel-preset-css-prop")],
       },
     });
     config.resolve.extensions.push(".js", ".jsx");
