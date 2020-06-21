@@ -1,48 +1,10 @@
 /** @jsx jsx */
 /** @jsxFrag Fragment */
 
-import styled from "@emotion/styled";
-import { jsx, css } from "@emotion/core";
-import { forwardRef, useRef, useLayoutEffect } from "react";
+import { jsx } from "@emotion/core";
+import { useRef, useLayoutEffect } from "react";
 
-import { Column } from "../../components/shared/layout";
-// import Toggle from "../../components/shared/toggle";
-import Input from "../../components/shared/input";
-import { Button } from "../../components/shared/button";
-
-// const Option = styled("div")`
-//   margin-top: ${(props) => props.theme.spacing.large};
-// `;
-
-let SearchBarInput = styled(Input)`
-  font-size: ${(props) => `${props.theme.type.sizes.large}`};
-  font-family: ${(props) => props.theme.type.fonts.regular};
-`;
-
-const SearchBar = forwardRef(({ onClick = () => {} }, ref) => (
-  <div
-    css={css`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-    `}
-  >
-    <SearchBarInput
-      ref={ref}
-      css={css`
-        width: 85%;
-      `}
-    />
-    <Button
-      css={css`
-        align-self: center;
-      `}
-      onClick={onClick}
-    >
-      Search
-    </Button>
-  </div>
-));
+import { SearchBar } from "../../components/shared/input";
 
 // const FilterOptions = ({ onChange = () => {} }) => (
 //   <>
@@ -90,20 +52,11 @@ const Panel = ({
   }, [onSearch]);
 
   return (
-    <Column>
-      {/* <Row>
-        Searching by abstract utilizes word embeddings and fast similarity
-        search (FAISS), to retrieve the most semantically similar abstracts to
-        the one provided.
-      </Row> */}
-      <SearchBar
-        rows={2}
-        placeholder={"Search for academic papers..."}
-        ref={searchRef}
-        onClick={() => onSearch(searchRef.current.value)}
-      />
-      {/* {expanded && <FilterOptions />} */}
-    </Column>
+    <SearchBar
+      placeholder={"Search for academic papers..."}
+      ref={searchRef}
+      onClick={() => onSearch(searchRef.current.value)}
+    />
   );
 };
 

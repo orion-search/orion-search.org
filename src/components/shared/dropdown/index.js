@@ -1,5 +1,7 @@
 import React from "react";
 import styled from "@emotion/styled";
+import ReactSelect from "react-select";
+import theme from "../../../styles";
 
 const Wrapper = styled("div")`
   display: flex;
@@ -49,5 +51,60 @@ const Dropdown = ({ values, selected, onChange = (e) => {} }) => {
     </Wrapper>
   );
 };
+
+// export const MultiItemSelect = styled(ReactSelect)`
+//   background-color: transparent;
+//   color: ${(props) => props.theme.colors.black};
+// `;
+const customStyles = {
+  control: (provided) => ({
+    ...provided,
+    outline: `0px`,
+    backgroundColor: theme.colors.black,
+    borderRadius: `0`,
+    border: `none`,
+    borderColor: theme.colors.white,
+    borderBottom: `2px solid ${theme.colors.white}`,
+    boxShadow: `none`,
+  }),
+  menu: (provided) => ({
+    ...provided,
+    backgroundColor: `transparent`,
+  }),
+  option: (provided, state) => ({
+    ...provided,
+    backgroundColor: state.isFocused ? theme.colors.white : theme.colors.black,
+    color: state.isFocused ? theme.colors.black : theme.colors.white,
+  }),
+  multiValue: (provided, state) => {
+    const opacity = state.isDisabled ? 0.5 : 1;
+    const transition = "opacity 300ms";
+
+    return {
+      ...provided,
+      opacity,
+      transition,
+      color: theme.colors.white,
+      backgroundColor: theme.colors.transparent,
+      border: `1px solid ${theme.colors.white}`,
+    };
+  },
+  multiValueLabel: (provided) => ({
+    ...provided,
+    color: theme.colors.white,
+  }),
+  multiValueRemove: (provided, state) => ({
+    ...provided,
+    color: theme.colors.wwhite,
+  }),
+  valueContainer: (provided) => ({
+    ...provided,
+    padding: `initial 0px`,
+  }),
+};
+
+export const MultiItemSelect = (props) => (
+  <ReactSelect styles={customStyles} {...props} />
+);
 
 export default Dropdown;
