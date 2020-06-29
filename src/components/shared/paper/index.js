@@ -50,7 +50,7 @@ const Abstract = styled(Flex)`
 
   font-size: ${(props) => `${props.theme.type.sizes.small}`};
   margin: ${(props) =>
-    `${props.theme.spacing.tiny} 0 ${props.theme.spacing.normal} 0`};
+    `${props.theme.spacing.tiny} 0 ${props.theme.spacing.tiny} 0`};
 `;
 
 const Authors = styled(Flex)`
