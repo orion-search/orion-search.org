@@ -35,6 +35,7 @@ export const TextArea = styled("textarea")`
   box-sizing: border-box;
   padding-left: 0%;
 
+  box-sizing: content-box;
   border: none;
   border-width: 0 0 2px 0;
   border-bottom: 2px solid ${(props) => props.theme.colors.white};
@@ -42,7 +43,6 @@ export const TextArea = styled("textarea")`
   resize: none;
 
   width: 100%;
-  height: 26px;
   max-height: 300px;
 `;
 
@@ -62,6 +62,7 @@ export const SearchBar = forwardRef(
           display: flex;
           width: 100%;
           flex-direction: column;
+          overflow: none;
         `}
       >
         <TextArea
