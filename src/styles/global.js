@@ -33,11 +33,13 @@ export default `
   src: url(${MatterHeavy}) format('woff2');
 }
 
+
 body {
   margin: 0;
   background-color: ${theme.colors.black};
   color: ${theme.colors.white};
   font-family: "Matter", "Helvetica Neue", "Helvetica",  sans-serif;
+  overflow-x: hidden;
 }
 
 p {

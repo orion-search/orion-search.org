@@ -46,6 +46,8 @@ const Abstract = styled(Flex)`
   -webkit-line-clamp: 5;
   -webkit-box-orient: vertical;
 
+  max-width: 80ch;
+
   font-size: ${(props) => `${props.theme.type.sizes.small}`};
   margin: ${(props) =>
     `${props.theme.spacing.tiny} 0 ${props.theme.spacing.normal} 0`};
@@ -82,13 +84,13 @@ const Topics = styled(Flex)``;
 const Topic = styled(Flex)`
   cursor: pointer;
   font-size: ${(props) => `${props.theme.type.sizes.small}`};
-  margin-right: ${(props) => `${props.theme.spacing.large}`};
   background-color: ${(props) => `${props.theme.colors.white}`};
   color: ${(props) => `${props.theme.colors.black}`};
   box-sizing: border-box;
   border-radius: 10px;
   padding: ${(props) =>
     `${props.theme.spacing.tiny} ${props.theme.spacing.normal}`};
+  margin-right: ${(props) => `${props.theme.spacing.large}`};
   &:last-child {
     margin-right: 0;
   }
@@ -147,7 +149,7 @@ const Paper = ({ data }) => {
   } = data;
   const dateString = formatDate(parseDate(date));
   return (
-    <Wrapper border={2} pv={"huge"} style={wrapperAnimation}>
+    <Wrapper border={2} pv={"large"} style={wrapperAnimation}>
       <Row
         css={css`
           justify-content: start;

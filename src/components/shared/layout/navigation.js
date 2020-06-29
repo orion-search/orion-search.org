@@ -80,14 +80,14 @@ const NavigationBar = () => {
           line-height: 40px;
         `}
       >
-        Orion Search Engine v0.0.1
+        <strong>Orion Search</strong>
       </div>
 
       <Row
         css={css`
           margin-left: auto;
         `}
-        width={1 / 3}
+        width={1 / 2}
       >
         {navURLs.map((u) => (
           <NavItem
