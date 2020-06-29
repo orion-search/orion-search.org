@@ -4,6 +4,7 @@ export const PAPER_METADATA = gql`
   query papersById($ids: [bigint!]) {
     papers: mag_papers(where: { id: { _in: $ids } }) {
       id
+      abstract
       title
       original_title
       source

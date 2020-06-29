@@ -34,7 +34,21 @@ const Flex = styled("div")`
 const Title = styled(Flex)`
   display: flex;
   font-size: ${(props) => `${props.theme.type.sizes[props.size || "huge"]}`};
-  margin: ${(props) => `${props.theme.type.sizes.normal}`} 0;
+  font-weight: bold;
+  margin-top: ${(props) => `${props.theme.spacing.tiny}`};
+  margin-bottom: ${(props) => `${props.theme.spacing.tiny}`};
+`;
+
+const Abstract = styled(Flex)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
+  margin: ${(props) =>
+    `${props.theme.spacing.tiny} 0 ${props.theme.spacing.normal} 0`};
 `;
 
 const Authors = styled(Flex)`
@@ -44,7 +58,7 @@ const Authors = styled(Flex)`
 `;
 
 const Author = styled("div")`
-  font-weight: bold;
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
   text-decoration: underline;
   cursor: pointer;
   margin-right: ${(props) => `${props.theme.spacing.large}`};
@@ -59,19 +73,22 @@ const Date = styled(Flex)`
 
 const Citations = styled(Flex)``;
 
-const Publisher = styled(Flex)``;
+const Publisher = styled(Flex)`
+  margin-right: ${(props) => `${props.theme.spacing.huge}`};
+`;
 
 const Topics = styled(Flex)``;
 
 const Topic = styled(Flex)`
   cursor: pointer;
-  font-weight: bold;
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
   margin-right: ${(props) => `${props.theme.spacing.large}`};
   background-color: ${(props) => `${props.theme.colors.white}`};
   color: ${(props) => `${props.theme.colors.black}`};
   box-sizing: border-box;
+  border-radius: 10px;
   padding: ${(props) =>
-    `${props.theme.spacing.tiny} ${props.theme.spacing.small}`};
+    `${props.theme.spacing.tiny} ${props.theme.spacing.normal}`};
   &:last-child {
     margin-right: 0;
   }
@@ -121,6 +138,7 @@ const Paper = ({ data }) => {
   const {
     original_title,
     date,
+    abstract,
     authors,
     source,
     topics,
@@ -133,9 +151,11 @@ const Paper = ({ data }) => {
       <Row
         css={css`
           justify-content: start;
+          margin: 0;
         `}
       >
         <Date>{dateString}</Date>
+        <Publisher>{publisher}</Publisher>
         <Citations>
           {citations
             ? citations > 1
@@ -144,6 +164,11 @@ const Paper = ({ data }) => {
             : `Not yet cited`}
         </Citations>
       </Row>
+      <Title size={"large"}>
+        <a href={source} target="__blank">
+          {original_title}
+        </a>
+      </Title>
       <Row>
         <Authors>
           {authors.map(
@@ -156,11 +181,9 @@ const Paper = ({ data }) => {
           )}
         </Authors>
       </Row>
-      <Title size={"huge"}>
-        <a href={source} target="__blank">
-          {original_title}
-        </a>
-      </Title>
+      <Row>
+        <Abstract>{abstract}</Abstract>
+      </Row>
       <Row>
         <Topics>
           {topics.map(
@@ -170,9 +193,6 @@ const Paper = ({ data }) => {
               )
           )}
         </Topics>
-      </Row>
-      <Row>
-        <Publisher>{publisher} ⏎</Publisher>
       </Row>
     </Wrapper>
   );
