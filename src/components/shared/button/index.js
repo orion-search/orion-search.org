@@ -12,10 +12,18 @@ const Wrapper = styled("div")`
 `;
 
 export const Button = styled("button")`
-  background: transparent;
-  border: ${(props) => `2px solid ${props.theme.colors.white}`};
+  background: ${(props) =>
+    props.nofill ? `transparent` : `${props.theme.gradients.red}`};
+  border: ${(props) => (props.nofill ? `2px solid` : `none`)};
+  border-radius: 4px;
+  box-sizing: border-box;
+  border-color: ${(props) =>
+    props.nofill ? `${props.theme.colors.orange}` : `initial`};
 
-  color: ${(props) => `${props.theme.colors.white}`};
+  color: ${(props) =>
+    props.nofill
+      ? `${props.theme.colors.white}`
+      : `${props.theme.colors.white}`};
   cursor: pointer;
 
   display: flex;
@@ -36,8 +44,10 @@ export const Button = styled("button")`
   user-select: none;
 
   &:hover {
-    background: ${(props) => props.theme.colors.white};
-    color: ${(props) => props.theme.colors.black};
+    background: ${(props) =>
+      props.nofill ? props.theme.gradients.red : props.theme.colors.white};
+    color: ${(props) =>
+      props.nofill ? props.theme.colors.white : props.theme.colors.black};
     mix-blend-mode: multiply;
   }
 
@@ -53,6 +63,8 @@ export const SmallButton = styled(Button)`
   border-right: none;
   border-top: none;
   border-bottom: none;
+  border-radius: ${(props) => (props.nofill ? `0px` : `4px`)};
+  border-color: ${(props) => props.theme.colors.red};
   pointer-events: initial;
 `;
 
@@ -60,8 +72,8 @@ export const MediumButton = styled(Button)`
   padding: ${(props) => `calc(${props.theme.spacing.small})`}
     ${(props) => props.theme.spacing.small};
   font-size: ${(props) => props.theme.type.sizes.small};
-  border-right: none;
-  border-left: none;
+  // border-right: none;
+  // border-left: none;
   pointer-events: initial;
 `;
 

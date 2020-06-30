@@ -32,17 +32,29 @@ export const TextArea = styled("textarea")`
   background: transparent;
   outline: none;
 
-  box-sizing: border-box;
   padding-left: 0%;
 
+  box-sizing: content-box;
   border: none;
   border-width: 0 0 2px 0;
   border-bottom: 2px solid ${(props) => props.theme.colors.white};
 
+  padding-right: 90px;
+  padding-bottom: 20px;
+  box-sizing: border-box;
+
+  /* hide scrollbars */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   resize: none;
 
+  height: calc(${(props) => props.theme.type.sizes.huge} + 20px);
+
   width: 100%;
-  height: 26px;
   max-height: 300px;
 `;
 
@@ -57,11 +69,13 @@ export const SearchBar = forwardRef(
 
     return (
       <div
-        css={css`
+        css={(theme) => css`
           position: relative;
           display: flex;
           width: 100%;
+          max-width: ${theme.breakpoints.width.max};
           flex-direction: column;
+          overflow: none;
         `}
       >
         <TextArea
@@ -69,15 +83,15 @@ export const SearchBar = forwardRef(
           placeholder={placeholder}
           onInput={autoResize ? resize : () => {}}
           css={css`
-            width: 90%;
+            width: 100%;
           `}
         />
         <Button
-          css={css`
+          css={(theme) => css`
             align-self: center;
             position: absolute;
             right: 0px;
-            top: -18px;
+            top: -${theme.type.sizes.tiny};
             padding: 8px 8px;
           `}
           onClick={onClick}

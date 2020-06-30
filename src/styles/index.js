@@ -1,5 +1,4 @@
 import { css } from "@emotion/core";
-import facepaint from "facepaint";
 
 const typeUnit = "rem";
 const typeBaseSize = 1;
@@ -36,19 +35,37 @@ const typeStyle = {
 
 const colors = {
   black: `#0c0c0c`,
+  purple: `#bc40e1`,
+  gray: `#9c9e9f`,
+  blue: `#3d82df`,
+  orange: `#fe7c38`,
+  red: `#ff3c61`,
   white: `#ffffff`,
 };
 
-const breakpoints = [576, 992, 1200];
+const gradients = {
+  red: `linear-gradient(270deg, ${colors.orange} 0%, ${colors.red} 100%);`,
+  blue: `linear-gradient(270deg, ${colors.purple} 0%, ${colors.blue} 100%);`,
+};
+
+// const breakpoints = [576, 992, 1200];
+const breakpoints = {
+  width: {
+    max: `1024px`,
+  },
+};
 
 // media queries
-const mq = facepaint(breakpoints.map((bp) => `@media (min-width: ${bp}px)`));
+// const mq = facepaint(breakpoints.map((bp) => `@media (min-width: ${bp}px)`));
 
 export default {
   breakpoints,
-  mq,
+  // mq,
   colors: {
     ...colors,
+  },
+  gradients: {
+    ...gradients,
   },
 
   type: {

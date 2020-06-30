@@ -14,6 +14,7 @@ const Wrapper = styled(animated.div)`
   flex-wrap: wrap;
   padding: ${(props) => `${props.theme.spacing[props.pv || "none"]}`} 0;
   box-sizing: border-box;
+  max-width: ${(props) => props.theme.breakpoints.width.max};
 
   &:first-of-type {
     padding-top: 0;
@@ -23,7 +24,6 @@ const Wrapper = styled(animated.div)`
 
   & a {
     text-decoration: none;
-    color: ${(props) => props.theme.colors.white};
   }
 `;
 
@@ -34,17 +34,41 @@ const Flex = styled("div")`
 const Title = styled(Flex)`
   display: flex;
   font-size: ${(props) => `${props.theme.type.sizes[props.size || "huge"]}`};
-  margin: ${(props) => `${props.theme.type.sizes.normal}`} 0;
+  font-weight: bold;
+  margin-top: ${(props) => `${props.theme.spacing.tiny}`};
+  margin-bottom: ${(props) => `${props.theme.spacing.tiny}`};
+
+  color: ${(props) =>
+    props.compact ? props.theme.colors.white : props.theme.colors.orange};
+  & a {
+    color: ${(props) =>
+      props.compact ? props.theme.colors.white : props.theme.colors.orange};
+  }
+`;
+
+const Abstract = styled(Flex)`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+
+  max-width: 80ch;
+
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
+  margin: ${(props) =>
+    `${props.theme.spacing.tiny} 0 ${props.theme.spacing.tiny} 0`};
 `;
 
 const Authors = styled(Flex)`
   display: flex;
   flex-wrap: wrap;
+  color: ${(props) => props.theme.colors.gray};
   font-size: ${(props) => `${props.theme.type.sizes.normal}`};
 `;
 
 const Author = styled("div")`
-  font-weight: bold;
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
   text-decoration: underline;
   cursor: pointer;
   margin-right: ${(props) => `${props.theme.spacing.large}`};
@@ -59,19 +83,23 @@ const Date = styled(Flex)`
 
 const Citations = styled(Flex)``;
 
-const Publisher = styled(Flex)``;
+const Publisher = styled(Flex)`
+  margin-right: ${(props) => `${props.theme.spacing.huge}`};
+`;
 
 const Topics = styled(Flex)``;
 
 const Topic = styled(Flex)`
   cursor: pointer;
-  font-weight: bold;
-  margin-right: ${(props) => `${props.theme.spacing.large}`};
-  background-color: ${(props) => `${props.theme.colors.white}`};
-  color: ${(props) => `${props.theme.colors.black}`};
+  font-size: ${(props) => `${props.theme.type.sizes.small}`};
+  line-height: ${(props) => `${props.theme.type.sizes.small}`};
+  background: ${(props) => props.theme.gradients.red};
+  color: ${(props) => `${props.theme.colors.white}`};
   box-sizing: border-box;
+  border-radius: 6px;
   padding: ${(props) =>
-    `${props.theme.spacing.tiny} ${props.theme.spacing.small}`};
+    `${props.theme.spacing.tiny} ${props.theme.spacing.normal}`};
+  margin-right: ${(props) => `${props.theme.spacing.large}`};
   &:last-child {
     margin-right: 0;
   }
@@ -86,8 +114,18 @@ export const PaperReducedDetail = ({ data }) => {
   const dateString = formatDate(parseDate(date));
 
   return (
-    <Wrapper border={1} pv={"small"} style={wrapperAnimation}>
+    <Wrapper
+      css={(theme) =>
+        css`
+          border-color: ${theme.colors.red};
+        `
+      }
+      border={1}
+      pv={"small"}
+      style={wrapperAnimation}
+    >
       <Title
+        compact
         css={(props) =>
           css`
             margin: ${props.spacing.tiny} 0;
@@ -121,6 +159,7 @@ const Paper = ({ data }) => {
   const {
     original_title,
     date,
+    abstract,
     authors,
     source,
     topics,
@@ -129,21 +168,12 @@ const Paper = ({ data }) => {
   } = data;
   const dateString = formatDate(parseDate(date));
   return (
-    <Wrapper border={2} pv={"huge"} style={wrapperAnimation}>
-      <Row
-        css={css`
-          justify-content: start;
-        `}
-      >
-        <Date>{dateString}</Date>
-        <Citations>
-          {citations
-            ? citations > 1
-              ? `${citations} citations`
-              : `${citations} citation`
-            : `Not yet cited`}
-        </Citations>
-      </Row>
+    <Wrapper border={2} pv={"large"} style={wrapperAnimation}>
+      <Title size={"large"}>
+        <a href={source} target="__blank">
+          {original_title}
+        </a>
+      </Title>
       <Row>
         <Authors>
           {authors.map(
@@ -156,11 +186,25 @@ const Paper = ({ data }) => {
           )}
         </Authors>
       </Row>
-      <Title size={"huge"}>
-        <a href={source} target="__blank">
-          {original_title}
-        </a>
-      </Title>
+      <Row
+        css={css`
+          justify-content: start;
+          margin: 0;
+        `}
+      >
+        <Date>{dateString}</Date>
+        <Publisher>{publisher}</Publisher>
+        <Citations>
+          {citations
+            ? citations > 1
+              ? `${citations} citations`
+              : `${citations} citation`
+            : `Not yet cited`}
+        </Citations>
+      </Row>
+      <Row>
+        <Abstract>{abstract}</Abstract>
+      </Row>
       <Row>
         <Topics>
           {topics.map(
@@ -170,9 +214,6 @@ const Paper = ({ data }) => {
               )
           )}
         </Topics>
-      </Row>
-      <Row>
-        <Publisher>{publisher} ⏎</Publisher>
       </Row>
     </Wrapper>
   );

@@ -30,8 +30,10 @@ const NavBarWrapper = styled("div")`
 `;
 
 const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
-  text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
-  color: ${(props) => props.theme.colors.white};
+  // text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
+  color: ${(props) =>
+    props.highlighted ? props.theme.colors.orange : props.theme.colors.white};
+    font-weight: ${(props) => (props.highlighted ? `bold` : `normal`)};
 `;
 
 const navURLs = [
@@ -80,14 +82,15 @@ const NavigationBar = () => {
           line-height: 40px;
         `}
       >
-        Orion Search Engine v0.0.1
+        <strong>Orion Search</strong>
       </div>
 
       <Row
         css={css`
           margin-left: auto;
+          max-width: 800px;
         `}
-        width={1 / 3}
+        width={1 / 2}
       >
         {navURLs.map((u) => (
           <NavItem

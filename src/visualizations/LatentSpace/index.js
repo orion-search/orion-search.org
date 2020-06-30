@@ -40,9 +40,10 @@ export function ParticleContainerLatentSpace({
   });
 
   camera.far = farClippingPlane * 20;
-  camera.position.z = 15000;
+  camera.position.z = 30000;
   camera.updateProjectionMatrix();
 
+  // themes.colors.black
   renderer.setClearColor(new THREE.Color(0x0c0c0c), 0);
 
   const navigation = new Navigation({
@@ -107,10 +108,12 @@ export function ParticleContainerLatentSpace({
     const height =
       mesh.geometry.boundingBox.max.y - mesh.geometry.boundingBox.min.y;
 
-    let gridHelperX = new THREE.GridHelper(width, 10, 0xff0000, 0xffffff);
+    // themes.colors.orange
+    let gridHelperX = new THREE.GridHelper(width, 10, 0xfe7c38, 0xffffff);
     gridHelperX.position.y = mesh.geometry.boundingBox.min.y;
 
-    let gridHelperY = new THREE.GridHelper(height, 10, 0xff0000, 0xffffff);
+    // themes.colors.orange
+    let gridHelperY = new THREE.GridHelper(height, 10, 0xfe7c38, 0xffffff);
     gridHelperY.rotateX(Math.PI / 2);
     gridHelperY.position.z = mesh.geometry.boundingBox.min.z;
     gridHelperY.depthTest = true;
@@ -151,9 +154,10 @@ export function ParticleContainerLatentSpace({
       o[i] = 1;
 
       // add default selected color
+      // theme.colors.orange
       c[i3] = 1;
-      c[i3 + 1] = 0;
-      c[i3 + 2] = 0;
+      c[i3 + 1] = 0.48;
+      c[i3 + 2] = 0.22;
     }
 
     mesh.geometry.center();

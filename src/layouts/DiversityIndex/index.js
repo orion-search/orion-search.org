@@ -142,6 +142,7 @@ const DiversityIndex = ({ data }) => {
               </div> */}
               <SmallButton
                 data-filter-link={category}
+                nofill
                 onClick={(e) =>
                   handleEvent({
                     type: "visitCluster",

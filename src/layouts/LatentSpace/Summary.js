@@ -3,15 +3,15 @@
 import { Fragment } from "react";
 import { css, jsx } from "@emotion/core";
 import { Query } from "@apollo/react-components";
-import { scaleLog, extent } from "d3";
 import { Link } from "react-router-dom";
 
 import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
-import { Flex, Row } from "../../components/shared/layout";
-import { MediumButton } from "../../components/shared/button";
+import { Row } from "../../components/shared/layout";
+import { MediumButton, SmallButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
+import { WordCloud } from "../../components/visualizations";
 
 const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
   // const [topTopics, setTopTopics] = useState(topTopics);
@@ -38,15 +38,19 @@ const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
         return (
           <Fragment>
             <div>
-              <Row>
-                <div>{`Showing ${showPapers} of ${p} papers -> `}</div>
-              </Row>
-              <Row>
-                {sortedPapers.length ? (
-                  <MediumButton onClick={onFilterReset}>
-                    Reset Filters
-                  </MediumButton>
-                ) : null}
+              <Row
+                css={css`
+                  align-items: center;
+                  width: max-content;
+                  // flex-direction: row;
+                `}
+              >
+                {/* <div> */}
+                <div
+                  css={css`
+                    padding-right: 10px;
+                  `}
+                >{`Showing ${showPapers} of ${p} papers -> `}</div>
                 <Link
                   to={{
                     pathname: urls.search.results,
@@ -55,8 +59,16 @@ const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
                     },
                   }}
                 >
-                  <MediumButton>Explore Cluster</MediumButton>
+                  <SmallButton>Explore Cluster</SmallButton>
                 </Link>
+                {/* </div> */}
+              </Row>
+              <Row>
+                {sortedPapers.length ? (
+                  <MediumButton nofill onClick={onFilterReset}>
+                    Reset Filters
+                  </MediumButton>
+                ) : null}
               </Row>
               <TopTopics papers={data.papers} />
             </div>
@@ -101,36 +113,6 @@ const TopTopics = ({ papers, maxTopics = 10 }) => {
     <div>
       <WordCloud histogram={[...topTopics]} />
     </div>
-  );
-};
-
-const WordCloud = ({ histogram, numEntries = 10 }) => {
-  const data = histogram.slice(0, numEntries);
-  const size = scaleLog()
-    .domain(extent(data, (d) => d[1]))
-    .range([14, 32]);
-
-  return (
-    <Flex
-      css={(props) => css`
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: baseline;
-        pointer-events: none;
-        margin: ${props.spacing.large} 0;
-      `}
-    >
-      {data.map(([topic, count], i) => {
-        return (
-          <div
-            key={`top-topics-${i}-${count}`}
-            style={{ fontSize: `${size(count)}px` }}
-          >
-            {topic}
-          </div>
-        );
-      })}
-    </Flex>
   );
 };
 

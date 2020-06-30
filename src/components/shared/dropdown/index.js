@@ -60,11 +60,11 @@ const customStyles = {
   control: (provided) => ({
     ...provided,
     outline: `0px`,
-    backgroundColor: theme.colors.black,
+    background: theme.colors.black,
     borderRadius: `0`,
     border: `none`,
-    borderColor: theme.colors.white,
-    borderBottom: `2px solid ${theme.colors.white}`,
+    borderColor: theme.colors.orange,
+    borderBottom: `2px solid ${theme.colors.orange}`,
     boxShadow: `none`,
   }),
   menu: (provided) => ({
@@ -73,7 +73,7 @@ const customStyles = {
   }),
   option: (provided, state) => ({
     ...provided,
-    backgroundColor: state.isFocused ? theme.colors.white : theme.colors.black,
+    background: state.isFocused ? theme.gradients.red : theme.colors.black,
     color: state.isFocused ? theme.colors.black : theme.colors.white,
   }),
   multiValue: (provided, state) => {
@@ -86,7 +86,7 @@ const customStyles = {
       transition,
       color: theme.colors.white,
       backgroundColor: theme.colors.transparent,
-      border: `1px solid ${theme.colors.white}`,
+      border: `1px solid ${theme.colors.orange}`,
     };
   },
   multiValueLabel: (provided) => ({
@@ -95,7 +95,7 @@ const customStyles = {
   }),
   multiValueRemove: (provided, state) => ({
     ...provided,
-    color: theme.colors.wwhite,
+    color: theme.colors.white,
   }),
   valueContainer: (provided) => ({
     ...provided,
