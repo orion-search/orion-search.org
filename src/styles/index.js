@@ -36,9 +36,9 @@ const typeStyle = {
 
 const colors = {
   black: `#0c0c0c`,
-  blue: `#bc40e1`,
+  purple: `#bc40e1`,
   gray: `#9c9e9f`,
-  purple: `#3d82df`,
+  blue: `#3d82df`,
   orange: `#fe7c38`,
   red: `#ff3c61`,
   white: `#ffffff`,

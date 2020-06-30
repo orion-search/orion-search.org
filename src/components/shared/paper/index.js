@@ -37,8 +37,11 @@ const Title = styled(Flex)`
   margin-top: ${(props) => `${props.theme.spacing.tiny}`};
   margin-bottom: ${(props) => `${props.theme.spacing.tiny}`};
 
+  color: ${(props) =>
+    props.compact ? props.theme.colors.white : props.theme.colors.orange};
   & a {
-    color: ${(props) => props.theme.colors.orange};
+    color: ${(props) =>
+      props.compact ? props.theme.colors.white : props.theme.colors.orange};
   }
 `;
 
@@ -110,8 +113,18 @@ export const PaperReducedDetail = ({ data }) => {
   const dateString = formatDate(parseDate(date));
 
   return (
-    <Wrapper border={1} pv={"small"} style={wrapperAnimation}>
+    <Wrapper
+      css={(theme) =>
+        css`
+          border-color: ${theme.colors.red};
+        `
+      }
+      border={1}
+      pv={"small"}
+      style={wrapperAnimation}
+    >
       <Title
+        compact
         css={(props) =>
           css`
             margin: ${props.spacing.tiny} 0;
