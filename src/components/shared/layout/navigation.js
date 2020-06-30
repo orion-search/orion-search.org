@@ -88,6 +88,7 @@ const NavigationBar = () => {
       <Row
         css={css`
           margin-left: auto;
+          max-width: 800px;
         `}
         width={1 / 2}
       >

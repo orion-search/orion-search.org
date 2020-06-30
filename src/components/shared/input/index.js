@@ -40,9 +40,10 @@ export const TextArea = styled("textarea")`
   border-bottom: 2px solid ${(props) => props.theme.colors.white};
 
   padding-right: 90px;
+  padding-bottom: 20px;
   box-sizing: border-box;
 
-  // hide scrollbars
+  /* hide scrollbars */
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
   &::-webkit-scrollbar {
@@ -50,6 +51,8 @@ export const TextArea = styled("textarea")`
   }
 
   resize: none;
+
+  height: calc(${(props) => props.theme.type.sizes.huge} + 20px);
 
   width: 100%;
   max-height: 300px;
