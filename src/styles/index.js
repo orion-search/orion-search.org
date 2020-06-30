@@ -36,7 +36,16 @@ const typeStyle = {
 
 const colors = {
   black: `#0c0c0c`,
+  blue: `#bc40e1`,
+  purple: `#3d82df`,
+  orange: `#fe7c38`,
+  red: `#ff3c61`,
   white: `#ffffff`,
+};
+
+const gradients = {
+  red: `linear-gradient(270deg, ${colors.orange} 0%, ${colors.red} 100%);`,
+  blue: `linear-gradient(270deg, ${colors.purple} 0%, ${colors.blue} 100%);`,
 };
 
 const breakpoints = [576, 992, 1200];
@@ -49,6 +58,9 @@ export default {
   mq,
   colors: {
     ...colors,
+  },
+  gradients: {
+    ...gradients,
   },
 
   type: {

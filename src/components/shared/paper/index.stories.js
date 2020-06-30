@@ -1,5 +1,4 @@
-import React, { useRef } from "react";
-import { gql } from "apollo-boost";
+import React from "react";
 
 import Paper, { PaperReducedDetail } from ".";
 
