@@ -18,48 +18,18 @@ export const Typography = () => {
         }
       `}
     >
-      <div
-        css={(theme) =>
-          css`
-            ${theme.type.style.huge};
-          `
-        }
-      >
-        H1 - {placeholderTitleText}
-      </div>
-      <div
-        css={(theme) =>
-          css`
-            ${theme.type.style.large};
-          `
-        }
-      >
-        H2 - {placeholderTitleText}
-      </div>
-      <div
-        css={(theme) =>
-          css`
-            ${theme.type.style.normal};
-          `
-        }
-      >
-        H3 - {placeholderTitleText}
-      </div>
-      <div
-        css={(theme) => css`
-          ${theme.type.style.small};
-        `}
-      >
-        H4 - {placeholderTitleText}
-      </div>
+      <h1>H1 - {placeholderTitleText}</h1>
+      <h2>H2 - {placeholderTitleText}</h2>
+      <h3>H3 - {placeholderTitleText}</h3>
+      <h4>H4 - {placeholderTitleText}</h4>
 
-      <div>{placeholderText}</div>
+      <div>Normal text — {placeholderText}</div>
       <div
         css={(theme) => css`
           ${theme.type.style.small};
         `}
       >
-        {placeholderText}
+        Small text — {placeholderText}
       </div>
     </div>
   );

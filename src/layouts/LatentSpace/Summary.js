@@ -10,7 +10,7 @@ import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
 import { Flex, Row } from "../../components/shared/layout";
-import { MediumButton } from "../../components/shared/button";
+import { MediumButton, SmallButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
 
 const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
@@ -38,15 +38,19 @@ const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
         return (
           <Fragment>
             <div>
-              <Row>
-                <div>{`Showing ${showPapers} of ${p} papers -> `}</div>
-              </Row>
-              <Row>
-                {sortedPapers.length ? (
-                  <MediumButton onClick={onFilterReset}>
-                    Reset Filters
-                  </MediumButton>
-                ) : null}
+              <Row
+                css={css`
+                  align-items: center;
+                  width: max-content;
+                  // flex-direction: row;
+                `}
+              >
+                {/* <div> */}
+                <div
+                  css={css`
+                    padding-right: 10px;
+                  `}
+                >{`Showing ${showPapers} of ${p} papers -> `}</div>
                 <Link
                   to={{
                     pathname: urls.search.results,
@@ -55,8 +59,16 @@ const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
                     },
                   }}
                 >
-                  <MediumButton>Explore Cluster</MediumButton>
+                  <SmallButton>Explore Cluster</SmallButton>
                 </Link>
+                {/* </div> */}
+              </Row>
+              <Row>
+                {sortedPapers.length ? (
+                  <MediumButton nofill onClick={onFilterReset}>
+                    Reset Filters
+                  </MediumButton>
+                ) : null}
               </Row>
               <TopTopics papers={data.papers} />
             </div>
