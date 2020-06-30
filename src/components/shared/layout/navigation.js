@@ -30,8 +30,10 @@ const NavBarWrapper = styled("div")`
 `;
 
 const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
-  text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
-  color: ${(props) => props.theme.colors.white};
+  // text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
+  color: ${(props) =>
+    props.highlighted ? props.theme.colors.orange : props.theme.colors.white};
+    font-weight: ${(props) => (props.highlighted ? `bold` : `normal`)};
 `;
 
 const navURLs = [

@@ -12,6 +12,7 @@ import { PAPER_METADATA } from "../../queries";
 import { Flex, Row } from "../../components/shared/layout";
 import { MediumButton, SmallButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
+import { WordCloud } from "../../components/visualizations";
 
 const Summary = ({ onFilterReset = () => {}, paperIds, showPapers = 5 }) => {
   // const [topTopics, setTopTopics] = useState(topTopics);
@@ -113,36 +114,6 @@ const TopTopics = ({ papers, maxTopics = 10 }) => {
     <div>
       <WordCloud histogram={[...topTopics]} />
     </div>
-  );
-};
-
-const WordCloud = ({ histogram, numEntries = 10 }) => {
-  const data = histogram.slice(0, numEntries);
-  const size = scaleLog()
-    .domain(extent(data, (d) => d[1]))
-    .range([14, 32]);
-
-  return (
-    <Flex
-      css={(props) => css`
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-items: baseline;
-        pointer-events: none;
-        margin: ${props.spacing.large} 0;
-      `}
-    >
-      {data.map(([topic, count], i) => {
-        return (
-          <div
-            key={`top-topics-${i}-${count}`}
-            style={{ fontSize: `${size(count)}px` }}
-          >
-            {topic}
-          </div>
-        );
-      })}
-    </Flex>
   );
 };
 

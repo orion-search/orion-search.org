@@ -92,6 +92,7 @@ const LatentSpace = ({ papers = [], filters }) => {
 const Filters = ({ dimensions }) => {
   const Filter = styled(MultiItemSelect)`
     width: 45%;
+    max-width: 300px;
     font-size: ${(props) => props.theme.type.sizes.normal};
   `;
 
@@ -106,7 +107,7 @@ const Filters = ({ dimensions }) => {
     <Row
       css={css`
         position: absolute;
-        top: 80px;
+        top: 64px;
         left: 40%;
         width: 50%;
         justify-content: space-between;
