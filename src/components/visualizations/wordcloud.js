@@ -23,6 +23,7 @@ export const WordCloud = ({ histogram, numEntries = 10 }) => {
         align-items: baseline;
         pointer-events: none;
         margin: ${props.spacing.large} 0;
+        max-width: 500px;
       `}
     >
       {data.map(([topic, count], i) => {
