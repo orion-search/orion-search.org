@@ -25,7 +25,7 @@ const Tile = styled("div")`
 
 const Bar = styled(`Tile`)`
   border-radius: 20px;
-  height: 5px;
+  height: 8px;
   width: 80%;
   background: ${(props) => props.background || "fff"};
 `;
@@ -33,6 +33,7 @@ const Bar = styled(`Tile`)`
 export const Gradients = () => {
   return (
     <>
+      <h2>Primary Interface Gradients</h2>
       <Wrapper>
         <Tile background={theme.colors.red} />
         <Bar background={theme.gradients.red} />
@@ -43,6 +44,8 @@ export const Gradients = () => {
         <Bar background={theme.gradients.blue} />
         <Tile background={theme.colors.purple} />
       </Wrapper>
+      <h2>Data Visualization Color Scales</h2>
+      <h3>To be filled in</h3>
     </>
   );
 };
