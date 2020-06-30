@@ -3,13 +3,12 @@
 import { Fragment } from "react";
 import { css, jsx } from "@emotion/core";
 import { Query } from "@apollo/react-components";
-import { scaleLog, extent } from "d3";
 import { Link } from "react-router-dom";
 
 import { formatThousands, sortCitationsDesc, urls } from "../../utils";
 import { PAPER_METADATA } from "../../queries";
 
-import { Flex, Row } from "../../components/shared/layout";
+import { Row } from "../../components/shared/layout";
 import { MediumButton, SmallButton } from "../../components/shared/button";
 import { PaperReducedDetail } from "../../components/shared/paper";
 import { WordCloud } from "../../components/visualizations";

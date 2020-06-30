@@ -1,5 +1,4 @@
 import { css } from "@emotion/core";
-import facepaint from "facepaint";
 
 const typeUnit = "rem";
 const typeBaseSize = 1;
