@@ -23,7 +23,6 @@ const Wrapper = styled(animated.div)`
 
   & a {
     text-decoration: none;
-    // color: ${(props) => props.theme.colors.white};
   }
 `;
 
@@ -35,7 +34,6 @@ const Title = styled(Flex)`
   display: flex;
   font-size: ${(props) => `${props.theme.type.sizes[props.size || "huge"]}`};
   font-weight: bold;
-  color: ${(props) => props.theme.colors.orange};
   margin-top: ${(props) => `${props.theme.spacing.tiny}`};
   margin-bottom: ${(props) => `${props.theme.spacing.tiny}`};
 
@@ -61,6 +59,7 @@ const Abstract = styled(Flex)`
 const Authors = styled(Flex)`
   display: flex;
   flex-wrap: wrap;
+  color: ${(props) => props.theme.colors.gray};
   font-size: ${(props) => `${props.theme.type.sizes.normal}`};
 `;
 
@@ -89,10 +88,11 @@ const Topics = styled(Flex)``;
 const Topic = styled(Flex)`
   cursor: pointer;
   font-size: ${(props) => `${props.theme.type.sizes.small}`};
+  line-height: ${(props) => `${props.theme.type.sizes.small}`};
   background: ${(props) => props.theme.gradients.red};
   color: ${(props) => `${props.theme.colors.white}`};
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 6px;
   padding: ${(props) =>
     `${props.theme.spacing.tiny} ${props.theme.spacing.normal}`};
   margin-right: ${(props) => `${props.theme.spacing.large}`};
@@ -155,22 +155,6 @@ const Paper = ({ data }) => {
   const dateString = formatDate(parseDate(date));
   return (
     <Wrapper border={2} pv={"large"} style={wrapperAnimation}>
-      <Row
-        css={css`
-          justify-content: start;
-          margin: 0;
-        `}
-      >
-        <Date>{dateString}</Date>
-        <Publisher>{publisher}</Publisher>
-        <Citations>
-          {citations
-            ? citations > 1
-              ? `${citations} citations`
-              : `${citations} citation`
-            : `Not yet cited`}
-        </Citations>
-      </Row>
       <Title size={"large"}>
         <a href={source} target="__blank">
           {original_title}
@@ -187,6 +171,22 @@ const Paper = ({ data }) => {
               )
           )}
         </Authors>
+      </Row>
+      <Row
+        css={css`
+          justify-content: start;
+          margin: 0;
+        `}
+      >
+        <Date>{dateString}</Date>
+        <Publisher>{publisher}</Publisher>
+        <Citations>
+          {citations
+            ? citations > 1
+              ? `${citations} citations`
+              : `${citations} citation`
+            : `Not yet cited`}
+        </Citations>
       </Row>
       <Row>
         <Abstract>{abstract}</Abstract>
