@@ -23,7 +23,7 @@ const Wrapper = styled(animated.div)`
 
   & a {
     text-decoration: none;
-    color: ${(props) => props.theme.colors.white};
+    // color: ${(props) => props.theme.colors.white};
   }
 `;
 
@@ -35,8 +35,13 @@ const Title = styled(Flex)`
   display: flex;
   font-size: ${(props) => `${props.theme.type.sizes[props.size || "huge"]}`};
   font-weight: bold;
+  color: ${(props) => props.theme.colors.orange};
   margin-top: ${(props) => `${props.theme.spacing.tiny}`};
   margin-bottom: ${(props) => `${props.theme.spacing.tiny}`};
+
+  & a {
+    color: ${(props) => props.theme.colors.orange};
+  }
 `;
 
 const Abstract = styled(Flex)`
@@ -84,8 +89,8 @@ const Topics = styled(Flex)``;
 const Topic = styled(Flex)`
   cursor: pointer;
   font-size: ${(props) => `${props.theme.type.sizes.small}`};
-  background-color: ${(props) => `${props.theme.colors.white}`};
-  color: ${(props) => `${props.theme.colors.black}`};
+  background: ${(props) => props.theme.gradients.red};
+  color: ${(props) => `${props.theme.colors.white}`};
   box-sizing: border-box;
   border-radius: 10px;
   padding: ${(props) =>
