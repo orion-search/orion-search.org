@@ -49,14 +49,19 @@ const gradients = {
   blue: `linear-gradient(270deg, ${colors.purple} 0%, ${colors.blue} 100%);`,
 };
 
-const breakpoints = [576, 992, 1200];
+// const breakpoints = [576, 992, 1200];
+const breakpoints = {
+  width: {
+    max: `1024px`,
+  },
+};
 
 // media queries
-const mq = facepaint(breakpoints.map((bp) => `@media (min-width: ${bp}px)`));
+// const mq = facepaint(breakpoints.map((bp) => `@media (min-width: ${bp}px)`));
 
 export default {
   breakpoints,
-  mq,
+  // mq,
   colors: {
     ...colors,
   },

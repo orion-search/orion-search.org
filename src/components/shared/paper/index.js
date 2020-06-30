@@ -14,6 +14,7 @@ const Wrapper = styled(animated.div)`
   flex-wrap: wrap;
   padding: ${(props) => `${props.theme.spacing[props.pv || "none"]}`} 0;
   box-sizing: border-box;
+  max-width: ${(props) => props.theme.breakpoints.width.max};
 
   &:first-of-type {
     padding-top: 0;
