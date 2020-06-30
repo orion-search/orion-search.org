@@ -40,7 +40,7 @@ export function ParticleContainerLatentSpace({
   });
 
   camera.far = farClippingPlane * 20;
-  camera.position.z = 15000;
+  camera.position.z = 30000;
   camera.updateProjectionMatrix();
 
   // themes.colors.black

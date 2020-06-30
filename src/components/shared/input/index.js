@@ -87,11 +87,11 @@ export const SearchBar = forwardRef(
           `}
         />
         <Button
-          css={css`
+          css={(theme) => css`
             align-self: center;
             position: absolute;
             right: 0px;
-            top: -18px;
+            top: -${theme.type.sizes.tiny};
             padding: 8px 8px;
           `}
           onClick={onClick}
