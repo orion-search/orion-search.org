@@ -46,9 +46,12 @@ const Landing = () => {
           }
         />
       </Row>
-      <Row>
+      <Row />
+      <Row />
+      <Row />
+      {/* <Row>
         <h2>Why Orion?</h2>
-      </Row>
+      </Row> */}
       <Card
         image={svgProgress}
         title={"Measure progress in science"}
