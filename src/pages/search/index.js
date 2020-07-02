@@ -6,6 +6,8 @@ import { Title } from "../../components/shared/layout";
 import Toggle from "../../components/shared/toggle";
 import Panel from "./Panel";
 import Results from "./Results";
+import Landing from "./Landing";
+
 import { PAPER_METADATA } from "../../queries";
 import { urls, accessors } from "../../utils";
 
@@ -68,7 +70,11 @@ export default ({ papers }) => {
         type={searchMode}
       />
       <Switch>
-        <Route exact path={[urls.search.landing]} render={() => null} />
+        <Route
+          exact
+          path={[urls.root, urls.search.landing]}
+          render={() => <Landing />}
+        />
         <Route
           exact
           path={[urls.search.results]}

@@ -51,7 +51,7 @@ const gradients = {
 // const breakpoints = [576, 992, 1200];
 const breakpoints = {
   width: {
-    max: `1024px`,
+    max: `1440px`,
   },
 };
 
