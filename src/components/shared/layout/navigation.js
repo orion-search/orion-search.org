@@ -33,7 +33,8 @@ const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
   // text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
   color: ${(props) =>
     props.highlighted ? props.theme.colors.orange : props.theme.colors.white};
-    font-weight: ${(props) => (props.highlighted ? `bold` : `normal`)};
+    font-weight: ${(props) => (props.highlighted ? `normal` : `normal`)};
+  margin-right: ${(props) => props.theme.spacing.large};
 `;
 
 const navURLs = [
@@ -55,7 +56,7 @@ const navURLs = [
   },
 ];
 
-const NavigationBar = () => {
+export const NavigationBar = () => {
   const location = useLocation().pathname;
 
   return (
@@ -77,33 +78,37 @@ const NavigationBar = () => {
         </Link>
       </div>
       <div
-        css={css`
+        css={(theme) => css`
           margin-right: 1rem;
           line-height: 40px;
+
+          font-style: heavy;
+          text-transform: uppercase;
+
+          line-height: ${theme.type.sizes.normal};
+          margin-right: ${theme.spacing.huge};
         `}
       >
-        <strong>Orion Search</strong>
+        <strong>Orion Search /</strong>
       </div>
 
-      <Row
+      {/* <Row
         css={css`
           margin-left: auto;
           max-width: 800px;
         `}
         width={1 / 2}
-      >
-        {navURLs.map((u) => (
-          <NavItem
-            key={`nav-item-to-${u.to}`}
-            to={u.to}
-            highlighted={location === u.to}
-          >
-            {u.name}
-          </NavItem>
-        ))}
-      </Row>
+      > */}
+      {navURLs.map((u) => (
+        <NavItem
+          key={`nav-item-to-${u.to}`}
+          to={u.to}
+          highlighted={location === u.to}
+        >
+          {u.name}
+        </NavItem>
+      ))}
+      {/* </Row> */}
     </NavBarWrapper>
   );
 };
-
-export default NavigationBar;

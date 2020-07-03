@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import { useSpring, animated } from "react-spring";
 
 import svgChevron from "../../../assets/img/chevron.svg";
-import { Flex, Row, Column } from "../layout";
+import { Row, Column } from "../layout";
 import { fadeIn } from "../../../utils";
 
 const Wrapper = animated(Column);

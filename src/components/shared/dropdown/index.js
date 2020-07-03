@@ -63,7 +63,7 @@ const customStyles = {
     background: theme.colors.black,
     borderRadius: `0`,
     border: `none`,
-    borderColor: theme.colors.orange,
+    borderColor: `${theme.colors.orange} !important`,
     borderBottom: `2px solid ${theme.colors.orange}`,
     boxShadow: `none`,
   }),

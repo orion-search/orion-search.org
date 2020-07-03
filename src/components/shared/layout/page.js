@@ -3,7 +3,7 @@ import { jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 // import { Link } from "react-router-dom";
 
-import NavigationBar from "./navigation";
+import { NavigationBar } from "./navigation";
 
 const PageLayoutWrapper = styled("main")`
   width: 100%;
