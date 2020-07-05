@@ -9,9 +9,6 @@ import { NavigationBar } from "./navigation";
 
 const PageLayoutWrapper = styled("main")`
   width: 100%;
-  // position: relative;
-  // display: flex;
-  // flex-direction: column;
   padding: ${(props) => `0 ${props.theme.layout.page.side}`};
   box-sizing: border-box;
 `;
