@@ -12,6 +12,8 @@ const typeSize = {
   normal: `${typeBaseSize}${typeUnit}`,
   large: `${typeBaseSize * 1.125}${typeUnit}`,
   huge: `${typeBaseSize * 1.75}${typeUnit}`,
+  huge2: `${typeBaseSize * 2.25}${typeUnit}`,
+  huge3: `${typeBaseSize * 2.75}${typeUnit}`,
 };
 
 const typeStyle = {
@@ -51,6 +53,7 @@ const gradients = {
 // const breakpoints = [576, 992, 1200];
 const breakpoints = {
   width: {
+    tablet: `768px`,
     max: `1440px`,
   },
 };

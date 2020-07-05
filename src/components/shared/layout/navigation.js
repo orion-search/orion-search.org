@@ -6,7 +6,7 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
-import { Row } from "./flex";
+// import { Row } from "./flex";
 import { urls } from "../../../utils";
 
 const NavBarWrapper = styled("div")`
@@ -39,19 +39,19 @@ const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
 
 const navURLs = [
   {
-    to: urls.diversity,
+    to: [urls.diversity],
     name: "Metrics",
   },
   {
-    to: urls.explore,
+    to: [urls.explore],
     name: "Explore Papers",
   },
   {
-    to: urls.search.landing,
+    to: [urls.root, urls.search.landing, urls.search.results],
     name: "Search",
   },
   {
-    to: urls.about,
+    to: [urls.about.index, urls.about.faq],
     name: "About Orion",
   },
 ];
@@ -102,8 +102,8 @@ export const NavigationBar = () => {
       {navURLs.map((u) => (
         <NavItem
           key={`nav-item-to-${u.to}`}
-          to={u.to}
-          highlighted={location === u.to}
+          to={u.to[0]}
+          highlighted={u.to.indexOf(location) > -1}
         >
           {u.name}
         </NavItem>
