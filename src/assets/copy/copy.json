@@ -1,0 +1,69 @@
+{
+  "intro": {
+    "short": [
+      "Academic knowledge and meta-knowledge are fragmented across databases, making it difficult to spot gaps and opportunities in research, track interesting topics and read the most relevant literature. Orion changes that by combining machine learning with data visualisation to analyse academic publications and enable interactive searches.",
+      "Orion is supported by funding from [Mozilla](https://foundation.mozilla.org/en/).",
+      "Orion is open-source and available on GitHub. If you plan to reuse Orion in your projects, let us know what you're up to!"
+    ],
+    "medium": [
+      "Knowledge and meta-knowledge are fragmented across databases, making it difficult to spot gaps and opportunities in research, track interesting topics and read the most relevant literature. Orion changes that by combining data visualisation with machine learning to analyse academic publications and enable interactive searches.",
+      "Orion is a research measurement and discovery tool that enables you to visually explore the scientific landscape and interactively search for relevant publications.",
+      "Orion was supported by funding from [Mozilla](https://foundation.mozilla.org/en/)."
+    ]
+  },
+  "features": {
+    "flexible": {
+      "title": "It's flexible",
+      "content": [
+        "Orion indexes bioRxiv papers but it can be deployed for any field of study, journal or conference."
+      ]
+    },
+    "information-rich": {
+      "title": "Information-rich, domain-specific explorations",
+      "content": [
+        "Orion combines data from a variety of sources and was designed for visual exploration and discovery."
+      ]
+    },
+    "progress": {
+      "title": "Measure Progress in Science",
+      "content": [
+        "Orion creates indicators showing dimensions of scientific progress.  "
+      ]
+    },
+    "search": {
+      "title": "ML-Powered Search",
+      "content": [
+        "Orion indexes bioRxiv papers but it can be deployed for any field of study, journal or conference."
+      ]
+    }
+  },
+  "team": [
+    {
+      "name": "Kostas Stathoulopoulos",
+      "link": "",
+      "photo": "",
+      "bio": {
+        "short": "Mozilla Open Science Fellow and Data Scientist",
+        "long": ""
+      }
+    },
+    {
+      "name": "Zac Ioannidis",
+      "link": "",
+      "photo": "",
+      "bio": {
+        "short": "Creative technologist & data visualisation engineer",
+        "long": ""
+      }
+    },
+    {
+      "name": "Lilia Villafuerte",
+      "link": "",
+      "photo": "",
+      "bio": {
+        "short": "HCI researcher, interface designer and digital artist",
+        "long": ""
+      }
+    }
+  ]
+}
