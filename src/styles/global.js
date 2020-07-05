@@ -38,8 +38,17 @@ body {
   margin: 0;
   background-color: ${theme.colors.black};
   color: ${theme.colors.white};
-  font-family: "Matter", "Helvetica Neue", "Helvetica",  sans-serif;
+  font-family: "Matter", "Helvetica Neue", "Helvetica", sans-serif;
   overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 2px;
+  border-radius: 2px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: ${theme.colors.white};
 }
 
 p {
