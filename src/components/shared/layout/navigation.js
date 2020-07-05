@@ -10,6 +10,9 @@ import logo from "../../../assets/img/logo.svg";
 import { urls } from "../../../utils";
 
 const NavBarWrapper = styled("div")`
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 60px;
   margin-bottom: ${(props) => props.theme.spacing.medium};

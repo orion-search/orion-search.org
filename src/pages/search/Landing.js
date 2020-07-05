@@ -22,7 +22,17 @@ const Landing = () => {
         `
       }
     >
-      <Row>
+      <Row
+        css={(theme) =>
+          css`
+            margin: ${theme.spacing.none};
+
+            & h2 {
+              margin: ${theme.spacing.none};
+            }
+          `
+        }
+      >
         <h2>What is Orion Search?</h2>
       </Row>
       <Row
@@ -37,6 +47,7 @@ const Landing = () => {
             max-width: 800px;
             text-align: left;
             align-items: start;
+            margin-top: ${theme.spacing.none};
             margin-left: 0;
             margin-bottom: ${theme.spacing.huge};
           `}

@@ -18,7 +18,7 @@ const Wrapper = styled("div")`
     100vw - ${(props) => props.theme.layout.page.side} -
       ${(props) => props.theme.layout.page.side}
   );
-  height: 100%;
+  // height: 100%;
 
   a {
     color: ${(props) => props.theme.colors.white};
