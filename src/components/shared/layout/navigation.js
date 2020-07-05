@@ -85,14 +85,24 @@ export const NavigationBar = () => {
           margin-right: 1rem;
           line-height: 40px;
 
-          font-style: heavy;
+          // font-weight: bold;
           text-transform: uppercase;
 
           line-height: ${theme.type.sizes.normal};
           margin-right: ${theme.spacing.huge};
         `}
       >
-        <strong>Orion Search /</strong>
+        <span
+          css={(theme) =>
+            css`
+              font-weight: bold;
+              color: ${theme.colors.orange};
+            `
+          }
+        >
+          Orion Search
+        </span>{" "}
+        /
       </div>
 
       {/* <Row
