@@ -77,10 +77,16 @@ export const MediumButton = styled(Button)`
   pointer-events: initial;
 `;
 
-export const LinkButton = ({ children, to, onMouseDown, inactive }) => (
+export const LinkButton = ({
+  children,
+  to,
+  onMouseDown,
+  inactive,
+  ...props
+}) => (
   <Wrapper inactive={inactive}>
     <Link to={to} onMouseDown={onMouseDown}>
-      <Button>{children}</Button>
+      <Button {...props}>{children}</Button>
     </Link>
   </Wrapper>
 );

@@ -28,7 +28,7 @@ export const Accordion = ({ title, content }) => {
 
     margin-right: ${(props) => props.theme.spacing.small};
 
-    background-position-x: center;
+    background-position-x: left;
     background-position-y: center;
     background-repeat: no-repeat;
     background-image: url(${svgChevron});
@@ -53,8 +53,17 @@ export const Accordion = ({ title, content }) => {
   return (
     <Wrapper>
       <Row
-        css={css`
+        css={(theme) => css`
           cursor: pointer;
+          flex-wrap: nowrap;
+
+          & h3 {
+            margin: calc(${theme.spacing.normal} / 2) 0;
+          }
+
+          & a {
+            color: ${theme.colors.orange};
+          }
         `}
         mv={"none"}
         onClick={() => toggle(!open)}

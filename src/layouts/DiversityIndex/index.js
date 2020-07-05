@@ -110,11 +110,11 @@ const DiversityIndex = ({ data }) => {
           return (
             <div
               key={`category-label-${category}`}
-              css={css`
+              css={(theme) => css`
                 position: absolute;
                 top: ${offsetTop - layout.pointSegment.height / 2}px;
 
-                left: 3vw;
+                left: ${theme.layout.page.side};
                 color: white;
                 padding-bottom: ${layout.margins.bottom}px;
               `}

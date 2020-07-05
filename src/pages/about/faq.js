@@ -1,9 +1,12 @@
 /** @jsx jsx */
-import { jsx } from "@emotion/core";
+import { jsx, css } from "@emotion/core";
 import { compiler } from "markdown-to-jsx";
 import React, { useState, useEffect } from "react";
 
+import { urls } from "../../utils";
 import { Accordion } from "../../components/shared/accordion";
+import { LinkButton } from "../../components/shared/button";
+import { Row } from "../../components/shared/layout";
 
 const data = [
   {
@@ -15,8 +18,6 @@ const FAQPage = () => {
   const [questions, setQuestions] = useState([]);
   const accordions = [];
 
-  questions.length &&
-    console.log(React.Children.toArray(questions[0].props.children));
   if (questions.length) {
     const faqElements = React.Children.toArray(questions[0].props.children);
 
@@ -53,7 +54,22 @@ const FAQPage = () => {
     })();
   }, []);
 
-  return <div>{accordions.map((a) => a)}</div>;
+  return (
+    <div css={(theme) => css``}>
+      <LinkButton to={urls.about.index} nofill>
+        About Orion
+      </LinkButton>
+      {accordions.map((a) => (
+        <Row
+          css={css`
+            width: 90%;
+          `}
+        >
+          {a}
+        </Row>
+      ))}
+    </div>
+  );
 };
 
 export default FAQPage;
