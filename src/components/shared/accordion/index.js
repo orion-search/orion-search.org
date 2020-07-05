@@ -11,7 +11,7 @@ import { fadeIn } from "../../../utils";
 const Wrapper = animated(Column);
 const Content = animated(
   styled(Row)`
-    padding-left: ${(props) => props.theme.spacing.huge};
+    padding-left: calc(20px + ${(props) => props.theme.spacing.small});
     margin: 0;
   `
 );
