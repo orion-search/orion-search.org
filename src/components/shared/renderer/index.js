@@ -44,6 +44,7 @@ export const initApp = ({ canvas }) => {
 
   const renderer = new WebGLRenderer({
     canvas,
+    antialias: true,
     alpha: true,
   });
   renderer.setClearColor(theme.colors.black);
@@ -76,7 +77,7 @@ export const initApp = ({ canvas }) => {
       views[scene].camera.aspect = window.innerWidth / window.innerHeight;
       views[scene].camera.updateProjectionMatrix();
     }
-    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setSize(window.innerWidth * 2, window.innerHeight * 2);
   });
 
   renderer.domElement.addEventListener("mousemove", (event) => {

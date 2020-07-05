@@ -44,3 +44,6 @@ export const Card = ({ text, title, image, ...props }) => {
     </Wrapper>
   );
 };
+
+// @todo
+export const PhotoCard = () => null;
