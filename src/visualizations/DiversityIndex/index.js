@@ -263,7 +263,8 @@ export function DiversityIndex({
     highlighted.geometry.getAttribute("customColor").array[2] = 1;
     highlighted.geometry.getAttribute("customColor").needsUpdate = true;
 
-    highlighted.geometry.getAttribute("size").array[0] = DEFAULT_RADIUS * 3;
+    highlighted.geometry.getAttribute("size").array[0] =
+      DEFAULT_RADIUS * 3 * window.devicePixelRatio * 1.5;
     highlighted.geometry.getAttribute("size").needsUpdate = true;
     groups.highlighted.add(highlighted);
 
