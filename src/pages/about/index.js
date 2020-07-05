@@ -59,7 +59,7 @@ const AboutPage = () => {
             <Column
               css={(theme) => css`
                 max-width: ${theme.breakpoints.width.tablet};
-                margin: ${theme.spacing.large} 0;
+                margin: ${theme.spacing.normal} 0;
               `}
             >
               <Switch location={location}>
