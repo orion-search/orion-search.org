@@ -164,11 +164,13 @@ const DiversityIndex = ({ data }) => {
 const Tooltip = ({ data, coords }) => {
   const Wrapper = styled(animated.div)`
     pointer-events: none;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.75);
     position: absolute;
-    top: ${coords.y + 20}px;
+    top: ${coords.y + (coords.y > window.innerHeight / 2 ? -100 : 10)}px;
     left: ${coords.x + (coords.x > window.innerWidth / 2 ? -100 : 10)}px;
     padding: ${(props) => `${props.theme.spacing.small}`};
+    border: 1px solid ${(props) => props.theme.colors.orange};
+    border-radius: 4px;
   `;
 
   // const wrapperAnimation = useSpring(fadeIn);
