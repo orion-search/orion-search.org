@@ -35,6 +35,7 @@
     "history": "^4.10.1",
     "isomorphic-fetch": "^2.2.1",
     "lodash-es": "^4.17.15",
+    "markdown-to-jsx": "^6.11.4",
     "mdx.macro": "^0.2.9",
     "prop-types": "^15.7.2",
     "react": "^16.12.0",
@@ -45,6 +46,7 @@
     "react-select": "^3.1.0",
     "react-spring": "^8.0.27",
     "react-use-dimensions": "^1.2.1",
+    "resize-observer-polyfill": "^1.5.1",
     "rxjs": "^6.5.2",
     "three": "^0.112.1"
   },

@@ -44,11 +44,12 @@ export const initApp = ({ canvas }) => {
 
   const renderer = new WebGLRenderer({
     canvas,
+    antialias: true,
     alpha: true,
   });
   renderer.setClearColor(theme.colors.black);
   renderer.setSize(width, height);
-  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setPixelRatio(window.devicePixelRatio * 1.5);
 
   let aspectRatio = window.innerWidth / window.innerHeight;
   let mouse = new Vector2();
@@ -77,11 +78,12 @@ export const initApp = ({ canvas }) => {
       views[scene].camera.updateProjectionMatrix();
     }
     renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setPixelRatio(window.devicePixelRatio * 1.5);
   });
 
   renderer.domElement.addEventListener("mousemove", (event) => {
     event.preventDefault();
-
+    renderer.setPixelRatio(window.devicePixelRatio * 1.5);
     mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
     mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
   });

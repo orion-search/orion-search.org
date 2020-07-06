@@ -20,6 +20,10 @@ const Wrapper = styled(animated.div)`
     padding-top: 0;
   }
 
+  &:last-of-type {
+    border-bottom: none;
+  }
+
   overflow-x: hidden;
 
   & a {

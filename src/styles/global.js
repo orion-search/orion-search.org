@@ -38,13 +38,28 @@ body {
   margin: 0;
   background-color: ${theme.colors.black};
   color: ${theme.colors.white};
-  font-family: "Matter", "Helvetica Neue", "Helvetica",  sans-serif;
+  font-family: "Matter", "Helvetica Neue", "Helvetica", sans-serif;
   overflow-x: hidden;
+}
+
+body::-webkit-scrollbar {
+  width: 2px;
+  border-radius: 2px;
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: ${theme.colors.white};
 }
 
 p {
   font-size: ${theme.type.sizes.normal};
   line-height: 1.35rem;
+
+  margin: calc(${theme.spacing.normal} / 2) 0;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  color: ${theme.colors.orange};
 }
 
 @keyframes fadeIn {
@@ -58,5 +73,6 @@ p {
 
 a {
   text-decoration: none;
+  color: initial;
 }
 `;

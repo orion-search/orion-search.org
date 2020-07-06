@@ -24,7 +24,7 @@ function App() {
     <PageLayout>
       <Switch>
         {/* <Route exact path={[urls.root]} component={Landing} /> */}
-        <Route exact path={[urls.about]} component={About} />
+        <Route path={[urls.about.index]} component={About} />
         <Route
           exact
           path={[urls.diversity]}

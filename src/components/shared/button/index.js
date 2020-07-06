@@ -72,15 +72,19 @@ export const MediumButton = styled(Button)`
   padding: ${(props) => `calc(${props.theme.spacing.small})`}
     ${(props) => props.theme.spacing.small};
   font-size: ${(props) => props.theme.type.sizes.small};
-  // border-right: none;
-  // border-left: none;
   pointer-events: initial;
 `;
 
-export const LinkButton = ({ children, to, onMouseDown, inactive }) => (
+export const LinkButton = ({
+  children,
+  to,
+  onMouseDown,
+  inactive,
+  ...props
+}) => (
   <Wrapper inactive={inactive}>
     <Link to={to} onMouseDown={onMouseDown}>
-      <Button>{children}</Button>
+      <Button {...props}>{children}</Button>
     </Link>
   </Wrapper>
 );

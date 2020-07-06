@@ -6,10 +6,13 @@ import { useLocation } from "react-router";
 import { Link } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
-import { Row } from "./flex";
+// import { Row } from "./flex";
 import { urls } from "../../../utils";
 
 const NavBarWrapper = styled("div")`
+  position: absolute;
+  left: 0;
+  top: 0;
   width: 100vw;
   height: 60px;
   margin-bottom: ${(props) => props.theme.spacing.medium};
@@ -33,29 +36,30 @@ const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
   // text-decoration: ${(props) => (props.highlighted ? `underline` : `none`)};
   color: ${(props) =>
     props.highlighted ? props.theme.colors.orange : props.theme.colors.white};
-    font-weight: ${(props) => (props.highlighted ? `bold` : `normal`)};
+    font-weight: ${(props) => (props.highlighted ? `normal` : `normal`)};
+  margin-right: ${(props) => props.theme.spacing.large};
 `;
 
 const navURLs = [
   {
-    to: urls.diversity,
-    name: "Metrics",
-  },
-  {
-    to: urls.explore,
-    name: "Explore Papers",
-  },
-  {
-    to: urls.search.landing,
+    to: [urls.root, urls.search.landing, urls.search.results],
     name: "Search",
   },
   {
-    to: urls.about,
-    name: "About Orion",
+    to: [urls.explore],
+    name: "Explore Papers",
+  },
+  {
+    to: [urls.diversity],
+    name: "Metrics",
+  },
+  {
+    to: [urls.about.index, urls.about.faq],
+    name: "About",
   },
 ];
 
-const NavigationBar = () => {
+export const NavigationBar = () => {
   const location = useLocation().pathname;
 
   return (
@@ -77,33 +81,47 @@ const NavigationBar = () => {
         </Link>
       </div>
       <div
-        css={css`
+        css={(theme) => css`
           margin-right: 1rem;
           line-height: 40px;
+
+          // font-weight: bold;
+          text-transform: uppercase;
+
+          line-height: ${theme.type.sizes.normal};
+          margin-right: ${theme.spacing.huge};
         `}
       >
-        <strong>Orion Search</strong>
+        <span
+          css={(theme) =>
+            css`
+              font-weight: 800;
+              color: ${theme.colors.orange};
+            `
+          }
+        >
+          Orion
+        </span>{" "}
+        /
       </div>
 
-      <Row
+      {/* <Row
         css={css`
           margin-left: auto;
           max-width: 800px;
         `}
         width={1 / 2}
-      >
-        {navURLs.map((u) => (
-          <NavItem
-            key={`nav-item-to-${u.to}`}
-            to={u.to}
-            highlighted={location === u.to}
-          >
-            {u.name}
-          </NavItem>
-        ))}
-      </Row>
+      > */}
+      {navURLs.map((u) => (
+        <NavItem
+          key={`nav-item-to-${u.to}`}
+          to={u.to[0]}
+          highlighted={u.to.indexOf(location) > -1}
+        >
+          {u.name}
+        </NavItem>
+      ))}
+      {/* </Row> */}
     </NavBarWrapper>
   );
 };
-
-export default NavigationBar;

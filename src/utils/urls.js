@@ -1,5 +1,8 @@
 export const urls = {
-  about: "/about",
+  about: {
+    index: "/about",
+    faq: "/about/faq",
+  },
   diversity: "/metrics",
   explore: "/explore",
   faq: "/faq",

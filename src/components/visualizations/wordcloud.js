@@ -19,7 +19,7 @@ export const WordCloud = ({ histogram, numEntries = 10 }) => {
     <Flex
       css={(props) => css`
         flex-wrap: wrap;
-        justify-content: space-between;
+        justify-content: flex-start;
         align-items: baseline;
         pointer-events: none;
         margin: ${props.spacing.large} 0;

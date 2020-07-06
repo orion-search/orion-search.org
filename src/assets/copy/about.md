@@ -1,6 +1,12 @@
-# About
+## About Orion Search
 
-Knowledge and meta-knowledge are fragmented across databases, making it difficult to spot gaps and opportunities in research, track interesting topics and read the most relevant literature. Orion changes that by combining data visualisation with machine learning to analyse academic publications and enable interactive searches.
+<div className="text-huge">
+  Knowledge and meta-knowledge are fragmented across databases, making it
+  difficult to spot gaps and opportunities in research, track interesting topics
+  and read the most relevant literature. Orion changes that by combining data
+  visualisation with machine learning to analyse academic publications and
+  enable interactive searches.
+</div>
 
 Orion is a research measurement and discovery tool that enables you to visually explore the scientific landscape and interactively search for relevant publications.
 

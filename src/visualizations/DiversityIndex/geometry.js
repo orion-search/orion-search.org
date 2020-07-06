@@ -43,7 +43,7 @@ export const scatterplotMesh = (nodes) => {
 
     attributes.position.push(x, y, 0);
     attributes.color.push(color.r, color.g, color.b);
-    attributes.size.push(2 * r);
+    attributes.size.push(2 * r * window.devicePixelRatio * 1.5);
     attributes.opacity.push(1);
   }
 
