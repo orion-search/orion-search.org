@@ -38,8 +38,10 @@ function App() {
           exact
           path={[urls.explore]}
           render={({ location }) => {
-            console.log(location.state);
-            let filters = { topic: [], country: [] };
+            let filters = {
+              [accessors.names.topic]: [],
+              [accessors.names.country]: [],
+            };
             let filteredPaperIds = location?.state?.filters?.ids || [];
 
             // paper id filtering is disjoint from topic/country/* filtering
@@ -56,11 +58,6 @@ function App() {
                       (p) => p[accessors.names[dimension]] === filterValue
                     )[accessors.names.ids]
                 )
-              );
-              console.log(
-                "Filtering on dimensions",
-                filterDimensions,
-                idsByDimension
               );
 
               filters = filterDimensions;

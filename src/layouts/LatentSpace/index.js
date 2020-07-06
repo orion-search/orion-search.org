@@ -3,7 +3,7 @@
 import { css, jsx } from "@emotion/core";
 import { cold } from "react-hot-loader";
 import { useHistory } from "react-router-dom";
-import { Fragment, useState, useEffect } from "react";
+import { Fragment, useEffect } from "react";
 import styled from "@emotion/styled";
 
 import { Row, Column } from "../../components/shared/layout";
@@ -22,14 +22,29 @@ const LatentSpace = ({ papers = [], filters }) => {
     papers: { byCountry, byTopic },
   } = useOrionData();
 
-  const [selectedPaperIds, setSelectedPaperIds] = useState(papers);
+  const history = useHistory();
 
-  const updateSelectedPapers = (ids) => {
-    // particles.viz.filter([]);
-    setSelectedPaperIds(ids);
+  const resetFilters = () => {
+    particles.viz.resetFilters();
+    history.push(urls.explore, {
+      filters: {
+        [accessors.names.country]: [],
+        [accessors.names.topic]: [],
+      },
+    });
   };
 
   useEffect(() => {
+    const updateSelectedPapers = (ids) => {
+      // particles.viz.filter([]);
+      // setSelectedPaperIds(ids);
+      history.push(urls.explore, {
+        filters: {
+          ids,
+        },
+      });
+    };
+
     particles.viz.show();
     particles.viz.setParticleSelectionCallback(updateSelectedPapers);
     particles.viz.filter(papers);
@@ -37,7 +52,7 @@ const LatentSpace = ({ papers = [], filters }) => {
     return function cleanup() {
       particles.viz.hide();
     };
-  }, [particles.viz, papers]);
+  }, [particles.viz, papers, history]);
 
   // useEffect(() => {
   //   particles.viz.filter(selectedPaperIds);
@@ -54,11 +69,8 @@ const LatentSpace = ({ papers = [], filters }) => {
       >
         <Column>
           <Row>
-            {selectedPaperIds.length ? (
-              <Summary
-                paperIds={selectedPaperIds}
-                onFilterReset={() => particles.viz.resetFilters()}
-              />
+            {papers.length ? (
+              <Summary paperIds={papers} onFilterReset={() => resetFilters()} />
             ) : (
               <Explainer />
             )}

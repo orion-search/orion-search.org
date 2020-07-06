@@ -196,7 +196,7 @@ export function ParticleContainerLatentSpace({
     } else {
       // Enter filtered state
       // Fade out unselected particles
-      opacities.forEach((val, key, map) => map.set(key, 0.03));
+      opacities.forEach((val, key, map) => map.set(key, 0.01));
 
       // Selected particles get their original opacity
       ids.forEach((id) => {
