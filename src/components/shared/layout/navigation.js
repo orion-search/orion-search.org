@@ -42,20 +42,20 @@ const NavItem = styled(({ highlighted, ...props }) => <Link {...props} />)`
 
 const navURLs = [
   {
-    to: [urls.diversity],
-    name: "Metrics",
+    to: [urls.root, urls.search.landing, urls.search.results],
+    name: "Search",
   },
   {
     to: [urls.explore],
     name: "Explore Papers",
   },
   {
-    to: [urls.root, urls.search.landing, urls.search.results],
-    name: "Search",
+    to: [urls.diversity],
+    name: "Metrics",
   },
   {
     to: [urls.about.index, urls.about.faq],
-    name: "About Orion",
+    name: "About",
   },
 ];
 
@@ -95,12 +95,12 @@ export const NavigationBar = () => {
         <span
           css={(theme) =>
             css`
-              font-weight: bold;
+              font-weight: 800;
               color: ${theme.colors.orange};
             `
           }
         >
-          Orion Search
+          Orion
         </span>{" "}
         /
       </div>

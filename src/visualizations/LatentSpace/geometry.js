@@ -35,7 +35,9 @@ export function nodes({ data, colorMap, opacityMap, visibilityMap }) {
     attributes.opacity.push(opacityMap.get(id));
     attributes.visible.push(1);
 
-    attributes.size.push(120 + Math.random() * 50);
+    attributes.size.push(
+      120 + Math.random() * 50 * window.devicePixelRatio * 1.5
+    );
   }
 
   // @todo using Float32 for ids causes precision loss.
