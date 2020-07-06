@@ -185,7 +185,7 @@ const XAxis = ({ metric = `` }) => {
     // padding-left: 20vw;
     // padding-right: ${(props) => props.theme.layout.page.side};
     box-sizing: border-box;
-    background: ${(props) => props.theme.gradients.blue};
+    background: ${(props) => props.theme.gradients.white};
     height: 2px;
     border-radius: 2px;
     // width: ${layout.pointSegment.widthRatio * 100}%;

@@ -48,6 +48,7 @@ const colors = {
 const gradients = {
   red: `linear-gradient(270deg, ${colors.orange} 0%, ${colors.red} 100%);`,
   blue: `linear-gradient(270deg, ${colors.purple} 0%, ${colors.blue} 100%);`,
+  white: `linear-gradient(90deg, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 1) 100%);`,
 };
 
 // const breakpoints = [576, 992, 1200];
