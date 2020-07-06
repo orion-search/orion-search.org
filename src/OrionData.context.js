@@ -78,9 +78,9 @@ const LoadingOrChildren = ({ ready, children, data }) => {
           const [x, y, z] = accessors.types.vector3d(item);
           const id = accessors.types.id(item);
           return {
-            x: x * 1000,
-            y: y * 1000,
-            z: z * 1000,
+            x: x * 4000,
+            y: y * 4000,
+            z: z * 4000,
             id,
           };
         }),
