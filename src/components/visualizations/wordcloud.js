@@ -30,9 +30,14 @@ export const WordCloud = ({ histogram, numEntries = 10 }) => {
         return (
           <div
             key={`top-topics-${i}-${count}`}
+            css={(theme) =>
+              css`
+                margin-right: ${theme.spacing.small};
+              `
+            }
             style={{ fontSize: `${size(count)}px`, color: `${color(count)}` }}
           >
-            {topic}
+            {topic} /
           </div>
         );
       })}

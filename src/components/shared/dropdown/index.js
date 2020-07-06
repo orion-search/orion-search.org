@@ -97,6 +97,10 @@ const customStyles = {
     ...provided,
     color: theme.colors.white,
   }),
+  input: (provided) => ({
+    ...provided,
+    color: theme.colors.white,
+  }),
   valueContainer: (provided) => ({
     ...provided,
     padding: `initial 0px`,

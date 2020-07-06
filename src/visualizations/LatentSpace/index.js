@@ -30,6 +30,8 @@ export function ParticleContainerLatentSpace({
 
   // maps for O(1) property access
   let opacityMap = new Map();
+  let colorMap = new Map();
+  const defaultColor = new THREE.Color(0xffffff);
 
   const [, farClippingPlane] = extent(layout.nodes, (d) => d.z);
 
@@ -37,6 +39,7 @@ export function ParticleContainerLatentSpace({
   layout.nodes.forEach((n) => {
     // @todo this should be parameterized (citations?)
     opacityMap.set(n.id, 0.2);
+    colorMap.set(n.id, defaultColor);
   });
 
   camera.far = farClippingPlane * 20;
@@ -176,28 +179,40 @@ export function ParticleContainerLatentSpace({
   };
 
   const filter = (ids) => {
+    // cloning default colors / opacities
     const opacities = new Map(opacityMap);
+    const colors = new Map(colorMap);
+
+    const selectedColor = new THREE.Color(0xfe7c38);
 
     if (!ids.length) {
       // Exit filtered state
       mesh.geometry.getAttribute("opacity").array = Float32Array.from(
         opacities.values()
       );
+      mesh.geometry.getAttribute("customColor").array = Float32Array.from(
+        [...colors.values()].flatMap((c) => [c.r, c.g, c.b])
+      );
     } else {
       // Enter filtered state
       // Fade out unselected particles
-      opacities.forEach((val, key, map) => map.set(key, 0.03));
+      opacities.forEach((val, key, map) => map.set(key, 0.01));
 
       // Selected particles get their original opacity
       ids.forEach((id) => {
         opacities.has(id) && opacities.set(id, 1);
+        colors.has(id) && colors.set(id, selectedColor);
       });
       mesh.geometry.getAttribute("opacity").array = Float32Array.from(
         opacities.values()
       );
+      mesh.geometry.getAttribute("customColor").array = Float32Array.from(
+        [...colors.values()].flatMap((c) => [c.r, c.g, c.b])
+      );
     }
 
     mesh.geometry.getAttribute("opacity").needsUpdate = true;
+    mesh.geometry.getAttribute("customColor").needsUpdate = true;
   };
 
   const render = () => {
