@@ -156,7 +156,7 @@ export function DiversityIndex({
       ),
       x: scaleLinear()
         .domain(extent(data, dimensions.x))
-        .range([0, layout.pointSegment.widthRatio * width * 0.97]),
+        .range([0, layout.pointSegment.widthRatio * width * 0.95]),
       y: scaleLinear()
         .domain(extent(data, dimensions.y))
         .range([
@@ -172,6 +172,10 @@ export function DiversityIndex({
       xFunc: dimensions.x,
       yFunc: dimensions.y,
     };
+  };
+
+  const getScales = () => {
+    return scales;
   };
   // ====================================
 
@@ -343,6 +347,7 @@ export function DiversityIndex({
     hide,
     HUD,
     categories,
+    getScales,
     show,
     x,
     y,
