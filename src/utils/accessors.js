@@ -16,10 +16,12 @@ const schema = [
   {
     name: "diversity",
     type: number,
+    ui: "research diversity",
   },
   {
     name: "femaleShare",
     type: number,
+    ui: "female share",
   },
   {
     name: "id",
@@ -32,6 +34,7 @@ const schema = [
   {
     name: "rca",
     type: number,
+    ui: "revealed comparative advantage",
   },
   {
     name: "topic",
@@ -53,6 +56,7 @@ const zipObj = (xs) => (ys) =>
 export const accessors = {
   names: zipObj(schema.map((s) => s.name))(schema.map((s) => s.name)),
   types: zipObj(schema.map((s) => s.name))(schema.map((s) => s.type(s.name))),
+  ui: zipObj(schema.map((s) => s.name))(schema.map((s) => s.ui || s.name)),
   filters: {
     country: "byCountry",
     topic: "byTopic",

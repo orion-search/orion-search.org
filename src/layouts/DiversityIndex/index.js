@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import React, { useRef, useEffect, useState, useLayoutEffect } from "react"; // eslint-disable-line no-unused-vars
 
 import Filters, { filterOptions } from "./Filters";
+import { XAxis, YAxis } from "./Axes";
 import { accessors, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
@@ -31,6 +32,8 @@ const DiversityIndex = ({ data }) => {
     },
   } = useOrionData();
   const [categories, setCategories] = useState(diversity.viz.categories());
+  const [currentScales, setCurrentScales] = useState(diversity.viz.getScales());
+
   const history = useHistory();
 
   const handleEvent = ({ type, data }, e) => {
@@ -71,10 +74,12 @@ const DiversityIndex = ({ data }) => {
 
   useEffect(() => {
     diversity.viz.x((d) => accessors.types[xAccessor](d));
+    setCurrentScales(diversity.viz.getScales());
   }, [diversity.viz, xAccessor]);
 
   useEffect(() => {
     diversity.viz.y((d) => accessors.types[yAccessor](d));
+    setCurrentScales(diversity.viz.getScales());
   }, [diversity.viz, yAccessor]);
 
   useEffect(() => {
@@ -157,6 +162,17 @@ const DiversityIndex = ({ data }) => {
         })}
       </HUD>
       {tooltip && <Tooltip data={tooltip.data} coords={tooltip.coords} />}
+      <XAxis
+        min={currentScales.x.domain()[0]}
+        max={currentScales.x.domain()[1]}
+        metric={accessors.ui[xAccessor]}
+      />
+      <YAxis
+        min={currentScales.y.domain()[0]}
+        max={currentScales.y.domain()[1]}
+        colorScale={currentScales.color}
+        metric={accessors.ui[yAccessor]}
+      />
     </Fragment>
   );
 };
