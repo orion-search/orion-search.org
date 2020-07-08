@@ -22,7 +22,7 @@ void main() {
   }
 
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.);
-  gl_PointSize = noDepth ? size : size * (1000.0 / -mvPosition.z);
+  gl_PointSize = noDepth ? size : size * (1500.0 / -mvPosition.z);
   gl_Position = projectionMatrix * mvPosition;
 }
 `;
@@ -44,7 +44,7 @@ void main() {
   vOpacity = opacity;
 
   vec4 mvPosition = modelViewMatrix * vec4(position, 1.);
-  gl_PointSize = noDepth ? size : size * (20000.0 / -mvPosition.z);
+  gl_PointSize = noDepth ? size : size * (1000.0 / -mvPosition.z);
   gl_Position = projectionMatrix * mvPosition;
 }
 `;
