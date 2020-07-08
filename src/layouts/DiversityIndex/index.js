@@ -32,6 +32,7 @@ const DiversityIndex = ({ data }) => {
     },
   } = useOrionData();
   const [categories, setCategories] = useState(diversity.viz.categories());
+  const [currentScales, setCurrentScales] = useState(diversity.viz.getScales());
 
   const history = useHistory();
 
@@ -73,10 +74,12 @@ const DiversityIndex = ({ data }) => {
 
   useEffect(() => {
     diversity.viz.x((d) => accessors.types[xAccessor](d));
+    setCurrentScales(diversity.viz.getScales());
   }, [diversity.viz, xAccessor]);
 
   useEffect(() => {
     diversity.viz.y((d) => accessors.types[yAccessor](d));
+    setCurrentScales(diversity.viz.getScales());
   }, [diversity.viz, yAccessor]);
 
   useEffect(() => {
@@ -160,14 +163,14 @@ const DiversityIndex = ({ data }) => {
       </HUD>
       {tooltip && <Tooltip data={tooltip.data} coords={tooltip.coords} />}
       <XAxis
-        min={diversity.viz.getScales().x.domain()[0]}
-        max={diversity.viz.getScales().x.domain()[1]}
+        min={currentScales.x.domain()[0]}
+        max={currentScales.x.domain()[1]}
         metric={accessors.ui[xAccessor]}
       />
       <YAxis
-        min={diversity.viz.getScales().y.domain()[0]}
-        max={diversity.viz.getScales().y.domain()[1]}
-        colorScale={diversity.viz.getScales().color}
+        min={currentScales.y.domain()[0]}
+        max={currentScales.y.domain()[1]}
+        colorScale={currentScales.color}
         metric={accessors.ui[yAccessor]}
       />
     </Fragment>
