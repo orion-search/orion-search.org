@@ -8,6 +8,7 @@ import { useHistory } from "react-router-dom";
 import React, { useRef, useEffect, useState, useLayoutEffect } from "react"; // eslint-disable-line no-unused-vars
 
 import Filters, { filterOptions } from "./Filters";
+import { XAxis, YAxis } from "./Axes";
 import { accessors, formatPercentage, urls } from "../../utils";
 import { useOrionData } from "../../OrionData.context";
 import { HUD } from "../../components/shared/renderer";
@@ -31,6 +32,7 @@ const DiversityIndex = ({ data }) => {
     },
   } = useOrionData();
   const [categories, setCategories] = useState(diversity.viz.categories());
+
   const history = useHistory();
 
   const handleEvent = ({ type, data }, e) => {
@@ -157,57 +159,18 @@ const DiversityIndex = ({ data }) => {
         })}
       </HUD>
       {tooltip && <Tooltip data={tooltip.data} coords={tooltip.coords} />}
-      <XAxis metric={xAccessor} />
+      <XAxis
+        min={diversity.viz.getScales().x.domain()[0]}
+        max={diversity.viz.getScales().x.domain()[1]}
+        metric={accessors.ui[xAccessor]}
+      />
+      <YAxis
+        min={diversity.viz.getScales().y.domain()[0]}
+        max={diversity.viz.getScales().y.domain()[1]}
+        colorScale={diversity.viz.getScales().color}
+        metric={accessors.ui[yAccessor]}
+      />
     </Fragment>
-  );
-};
-
-const XAxis = ({ metric = `` }) => {
-  const Wrapper = styled(animated.div)`
-    pointer-events: none;
-    bottom: 0;
-    left: 0;
-    display: flex;
-    flex-wrap: wrap;
-    // width: 100%;
-    width: calc(${layout.pointSegment.widthRatio * 100}% - ${(props) =>
-    props.theme.layout.page.side});
-    height: 5vh;
-    flex-direction: column;
-    // background-color: rgba(0, 0, 0, 0.75);
-    position: absolute;
-    margin-left: ${100 - layout.pointSegment.widthRatio * 100}%;
-    // padding-right: ${(props) => props.theme.layout.page.side};
-  `;
-
-  const AxisWrapper = styled(animated.div)`
-    display: flex;
-    // padding-left: 20vw;
-    // padding-right: ${(props) => props.theme.layout.page.side};
-    box-sizing: border-box;
-    background: ${(props) => props.theme.gradients.white};
-    height: 4px;
-    z-index: -100;
-    border-radius: 2px;
-    // width: ${layout.pointSegment.widthRatio * 100}%;
-    // width: 100%;
-    justify-content: flex-end;
-  `;
-
-  const Label = styled(animated.div)`
-    display: flex;
-    // width: 100%;
-    align-self: center;
-    justify-content: space-around;
-    text-transform: uppercase;
-    margin-top: ${(props) => props.theme.spacing.small};
-  `;
-
-  return (
-    <Wrapper>
-      <AxisWrapper />
-      <Label>{metric}</Label>
-    </Wrapper>
   );
 };
 
