@@ -54,8 +54,12 @@ const navURLs = [
     name: "Metrics",
   },
   {
-    to: [urls.about.index, urls.about.faq],
+    to: [urls.about.index],
     name: "About",
+  },
+  {
+    to: [urls.about.faq],
+    name: "FAQ",
   },
 ];
 
