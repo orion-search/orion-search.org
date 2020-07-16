@@ -2,9 +2,10 @@ import React from "react";
 import { render } from "react-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
 import { createBrowserHistory } from "history";
-import { Router } from "react-router";
+import { Router } from "react-router-dom";
 
 import { client } from "./utils/apollo";
+import GA from "./utils/analytics";
 import { ThemeProvider } from "emotion-theming";
 import { Global, css } from "@emotion/core";
 
@@ -26,6 +27,7 @@ export const history = createBrowserHistory();
         />
         <OrionDataProvider>
           <Router history={history}>
+            {GA.init() && <GA.RouteTracker />}
             <App />
           </Router>
         </OrionDataProvider>

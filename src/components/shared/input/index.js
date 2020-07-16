@@ -60,9 +60,7 @@ export const TextArea = styled("textarea")`
 
 export const SearchBar = forwardRef(
   ({ onClick = () => {}, autoResize = true, placeholder = `` }, ref) => {
-    console.log(ref);
     const resize = (e) => {
-      console.log(ref.current.scrollHeight);
       ref.current.style.height = 0;
       ref.current.style.height = `${ref.current.scrollHeight}px`;
     };

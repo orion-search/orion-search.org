@@ -2,8 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
 // import { Row } from "./flex";
