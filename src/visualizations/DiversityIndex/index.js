@@ -85,7 +85,13 @@ export function DiversityIndex({
   // setters ============================
   const setData = (_) => {
     // Setting data updates the scales as well
-    unfilteredData = _;
+
+    unfilteredData = _.sort((a, b) =>
+      dimensions
+        .group(a)
+        .toUpperCase()
+        .localeCompare(dimensions.group(b).toUpperCase())
+    );
     data = unfilteredData.filter(dimensions.filter);
 
     setScales();
