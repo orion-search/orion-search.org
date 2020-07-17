@@ -4,6 +4,7 @@ import styled from "@emotion/styled";
 import { animated } from "react-spring";
 import { range } from "d3";
 
+import { formatTwoDecimalPoints } from "../../utils";
 import { layout } from "../../visualizations/DiversityIndex/geometry";
 
 const Wrapper = styled(animated.div)`
@@ -54,12 +55,12 @@ export const XAxis = ({ metric = ``, min, max }) => {
     <Container>
       <Axis />
       <Labels>
-        <div>{min}</div>
+        <div>{formatTwoDecimalPoints(min)}</div>
         <div>
           {metric}
           {` `}[?]
         </div>
-        <div>{parseFloat(max).toFixed(2)}</div>
+        <div>{formatTwoDecimalPoints(max)}</div>
       </Labels>
     </Container>
   );
@@ -99,12 +100,12 @@ export const YAxis = ({ metric = ``, min, max, colorScale }) => {
     <Container>
       <Axis>{/* <GradientSVG ref={svgRef} /> */}</Axis>
       <Labels>
-        <div>{min}</div>
+        <div>{formatTwoDecimalPoints(min)}</div>
         <div>
           {metric}
           {` `}[?]
         </div>
-        <div>{parseFloat(max).toFixed(2)}</div>
+        <div>{formatTwoDecimalPoints(max)}</div>
       </Labels>
     </Container>
   );
