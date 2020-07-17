@@ -5,21 +5,29 @@ const Wrapper = styled("div")`
   position: relative;
   box-sizing: border-box;
   overflow: hidden;
+  filter: grayscale(1) contrast(1.3);
+  border-radius: 4px;
 `;
 
 const Image = styled("img")`
   object-fit: cover;
-  width: auto;
-  height: 100%;
-  max-height: 250px;
-
-  filter: grayscale(1) contrast(1.3);
+  background-size: cover;
+  max-width: 100%;
+  height: auto;
+  ${(props) =>
+    props.square
+      ? `
+  width: 200px;
+  height: 200px;
+  `
+      : `max-width: 100%;
+  height: auto;`}
 `;
 
-export const Photograph = ({ src = `` }) => {
+export const Photograph = ({ src = ``, square = false }) => {
   return (
     <Wrapper>
-      <Image src={src} />
+      <Image square src={src} />
     </Wrapper>
   );
 };

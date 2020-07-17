@@ -1,0 +1,77 @@
+import theme from "../../styles";
+import { Photograph } from "../../components/shared/photograph";
+import { Row, Column } from "../../components/shared/layout";
+
+import photoKostas from "../img/photo-kostas.jpg";
+import photoZac from "../img/photo-zac.jpg";
+import photoLilia from "../img/photo-lilia.jpg";
+
+## About Orion Search
+
+Knowledge and meta-knowledge are fragmented across databases, making it
+difficult to spot gaps and opportunities in research, track interesting topics
+and read the most relevant literature. Orion changes that by combining data
+visualisation with machine learning to analyse academic publications and
+enable interactive searches.
+Orion is a research measurement and discovery tool that enables you to visually explore the scientific landscape and interactively search for relevant publications.
+
+Orion was supported by funding from [Mozilla](https://foundation.mozilla.org/en/).
+
+### Information-rich, domain-specific explorations
+
+Orion combines data from a variety of sources and was designed for visual exploration and discovery.
+
+### Search
+
+Orion combines a semantic search model with a traditional keyword search engine. Users can query Orion with anything from a keyword or phrase to entire paragraphs of text and Orion's ML-powered search engine will find semantically similar academic publications.
+
+### It's flexible
+
+Orion indexes [bioRxiv](https://www.biorxiv.org/) papers but it can be deployed for any field of study, journal or conference.
+
+### It's open-source
+
+Orion's code is available on [GitHub](https://github.com/orion-search). If you plan to reuse Orion in your projects, let us know what you're up to!
+
+## Team
+
+<Row style={{justifyContent: 'space-around',marginBottom: `${theme.spacing.huge}`}}>
+  <Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+    <Photograph square src={photoKostas} />
+    <h3>Kostas Stathoulopoulos</h3>
+    <p>Mozilla Open Science Fellow and data scientist</p>
+    <p>
+      w/ <a href="https://kstathou.github.com" target="_blank">kstathou.github.com</a>
+      <br/>
+      t/ <a href='https://twitter.com/kstathou
+      ' target='_blank'>@kstathou</a>
+    </p>
+  </Column>
+  <Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+
+  <Photograph square src={photoZac} />
+  <h3>Zac Ioannidis</h3>
+  <p>Creative technologist and data visualization engineer</p>
+  <p>
+    w/ <a href="https://izac.us" target="_blank">izac.us</a>
+    <br/>
+    t/ <a href='https://twitter.com/zacoppotamus
+' target='_blank'>@zacoppotamus</a>
+    <br />
+
+  </p>
+</Column>
+<Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+  <Photograph square src={photoLilia} />
+  <h3>Lilia Villafuerte</h3>
+  <p>HCI researcher, interface designer and digital artist</p>
+  <p>
+    w/ <a href='https://www.villafuerte.info/' target='_blank'>
+  villafuerte.info</a>
+  <br/>
+    t/ <a href='https://twitter.com/lilia_bcn
+' target='_blank'>@lilia_bcn</a>
+  </p>
+
+</Column>
+</Row>

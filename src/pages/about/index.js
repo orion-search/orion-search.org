@@ -4,13 +4,15 @@ import { jsx, css } from "@emotion/core";
 import styled from "@emotion/styled";
 import { Route, Switch, useLocation } from "react-router-dom";
 import { animated, useTransition } from "react-spring";
-import { importMDX } from "mdx.macro";
 
 import { LinkButton } from "../../components/shared/button";
 import { Column } from "../../components/shared/layout";
 import FAQPage from "./faq";
 import { urls } from "../../utils";
-const Content = lazy(() => importMDX("../../assets/copy/about.md"));
+// const Content = lazy(() => importMDX("../../assets/copy/about.md"));
+const Content = lazy(() =>
+  import("!babel-loader!mdx-loader!../../assets/copy/about.mdx")
+);
 
 const Wrapper = styled("div")`
   position: absolute;
