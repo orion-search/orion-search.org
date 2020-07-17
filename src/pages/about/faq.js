@@ -59,8 +59,9 @@ const FAQPage = () => {
       <LinkButton to={urls.about.index} nofill>
         About Orion
       </LinkButton>
-      {accordions.map((a) => (
+      {accordions.map((a, i) => (
         <Row
+          key={`faq-accordion-${i}`}
           css={css`
             width: 90%;
           `}

@@ -2,8 +2,7 @@
 import { css, jsx } from "@emotion/core";
 import styled from "@emotion/styled";
 
-import { useLocation } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import logo from "../../../assets/img/logo.svg";
 // import { Row } from "./flex";
@@ -54,8 +53,12 @@ const navURLs = [
     name: "Metrics",
   },
   {
-    to: [urls.about.index, urls.about.faq],
+    to: [urls.about.index],
     name: "About",
+  },
+  {
+    to: [urls.about.faq],
+    name: "FAQ",
   },
 ];
 

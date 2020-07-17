@@ -1,4 +1,5 @@
 export * from "./accessors";
+export * from "./analytics";
 export * from "./apollo";
 export * from "./format";
 export * from "./hooks";

@@ -68,7 +68,7 @@ export const XAxis = ({ metric = ``, min, max }) => {
 export const YAxis = ({ metric = ``, min, max, colorScale }) => {
   const Container = styled(Wrapper)`
     flex-direction: row;
-    right: ${(props) => props.theme.layout.page.side};
+    right: 45px;
     top: 20vh;
     height: fit-content;
     width: 60vh;

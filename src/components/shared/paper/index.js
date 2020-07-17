@@ -103,7 +103,8 @@ const Topic = styled(Flex)`
   border-radius: 6px;
   padding: ${(props) =>
     `${props.theme.spacing.tiny} ${props.theme.spacing.normal}`};
-  margin-right: ${(props) => `${props.theme.spacing.large}`};
+  margin-right: ${(props) => `${props.theme.spacing.small}`};
+  margin-top: ${(props) => `${props.theme.spacing.normal}`};
   &:last-child {
     margin-right: 0;
   }
