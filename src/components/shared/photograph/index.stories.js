@@ -1,5 +1,6 @@
 import React from "react";
 import { Photograph } from ".";
+import { Row } from "../layout";
 import src from "../../../assets/img/photo-zac.jpg";
 
 export default {
@@ -8,5 +9,9 @@ export default {
 };
 
 export const Default = () => {
-  return <Photograph src={src} />;
+  return (
+    <Row width={1 / 3}>
+      <Photograph square src={src} />
+    </Row>
+  );
 };

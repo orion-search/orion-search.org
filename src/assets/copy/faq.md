@@ -2,7 +2,7 @@
 
 Orion is a research measurement and discovery tool that enables you to monitor progress in science, visually explore the scientific landscape and search for relevant publications.
 
-With Orion, you can find a country with an interesting research profile in the [Metrics](/metrics) page, explore and filter your selection of publications in the [Explore papers](/explore) page and learn more about them on the [Search](/search) page.
+With Orion, you can find a country with an interesting research profile in the **Metrics** page, explore and filter your selection of publications in the **Explore Papers** page and learn more about them on the **Search** page.
 
 ### Who is Orion for?
 
@@ -46,19 +46,19 @@ This flexibility can be powerful; researchers can query Orion with an abstract o
 
 ### What are the points in the Explore papers page?
 
-The [Explore papers](/explore) page provides a helicopter view of all the academic publications indexed in this deployment of Orion. Every particle is a paper and the distance between them signifies their semantic similarity; the closer two particles are, the more semantically similar.
+The **Explore Papers** page provides a helicopter view of all the academic publications indexed in this deployment of Orion. Every particle is a paper and the distance between them signifies their semantic similarity; the closer two particles are, the more semantically similar.
 
 To create this visualisation, we inferred a 768-dimensional vector for each paper using a [sentence-level DistilBERT](https://github.com/UKPLab/sentence-transformers) model and then used [UMAP](https://umap-learn.readthedocs.io/en/latest/), a dimensionality reduction method, to project them to 3D.
 
-### How can I use the [Explore papers](/explore) page?
+### How can I use the Explore papers page?
 
-Orion’s [Explore papers](/explore) page was designed for visual exploration and discovery. Users are exposed to the full body of knowledge and can interactively modify their search by filtering the three dimensional space by country, topic and time period. Then, they can select a subset of papers and learn more about them. This exploratory process might lead to dead ends, papers that are not exactly what they needed. That’s fine, users can always revert back to the Explore papers page and further refine their search.
+Orion’s **Explore Papers** page was designed for visual exploration and discovery. Users are exposed to the full body of knowledge and can interactively modify their search by filtering the three dimensional space by country, topic and time period. Then, they can select a subset of papers and learn more about them. This exploratory process might lead to dead ends, papers that are not exactly what they needed. That’s fine, users can always revert back to the Explore papers page and further refine their search.
 
 ### How can I use the Metrics page?
 
-Orion's [Metrics](/metrics) page enables you to compare how countries perform on particular topics or examine a country's research profile. It currently shows three metrics; research diversity, gender diversity and countries' comparative advantage. Using the Metrics page, users can answer questions such as _how interdisciplinary was research in 2019 in Sweden in the topics with the highest share of papers with female co-authors?_
+Orion's **Metrics** page enables you to compare how countries perform on particular topics or examine a country's research profile. It currently shows three metrics; research diversity, gender diversity and countries' comparative advantage. Using the Metrics page, users can answer questions such as _how interdisciplinary was research in 2019 in Sweden in the topics with the highest share of papers with female co-authors?_
 
-After spotting interesting countries, topics and years, you can explore that setting in the [Explore papers](/explore) page.
+After spotting interesting countries, topics and years, you can explore that setting in the **Explore Papers** page.
 
 ### What is the comparative advantage and how do you measure it?
 
@@ -78,7 +78,7 @@ In academic and policy-oriented discourse, research diversity (also called inter
 
 We display country-level metrics mainly for two reasons:
 
-- This deployment of Orion indexes bioRxiv papers and doing an author or affiliation-level longitudinal analysis to produce the [metrics](/metrics) was not possible due to small sample sizes.
+- This deployment of Orion indexes bioRxiv papers and doing an author or affiliation-level longitudinal analysis to produce the **Metrics** was not possible due to small sample sizes.
 - Working with country-level indicators enables us to provide more contextual information in the future such as official, country-level indicators on research, education and the economy from the World Bank.
 
 ### How did you create the topics?
@@ -87,10 +87,10 @@ We leveraged [MAG’s six-level hierarchy of Fields of Study](http://export.arxi
 
 ### Can I contribute to Orion?
 
-We would love to work with you! Orion is still in beta and you can help us improve it by reporting things that are not working properly or by suggesting new features. For example, are you familiar with a data source or an indicator that would make Orion better? Send us an email at (ADD EMAIL).
+We would love to work with you! Orion is still in beta and you can help us improve it by reporting things that are not working properly or by suggesting new features. For example, are you familiar with a data source or an indicator that would make Orion better? Send us an [email](mailto:kostas@mozillafoundation.org)!
 
 For those who would like to become contributors, Orion is open-source and we would be happy to work with you. Get in touch!
 
 ### What’s next?
 
-(add a roadmap)
+Roadmap upcoming!
