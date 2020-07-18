@@ -1,0 +1,50 @@
+import theme from "../../styles";
+import { Photograph } from "../../components/shared/photograph";
+import { Row, Column } from "../../components/shared/layout";
+
+import photoKostas from "../img/photo-kostas.jpg";
+import photoZac from "../img/photo-zac.jpg";
+import photoLilia from "../img/photo-lilia.jpg";
+
+## Team
+
+<Row style={{justifyContent: 'space-around',marginBottom: `${theme.spacing.huge}`}}>
+  <Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+    <Photograph square src={photoKostas} />
+    <h3>Kostas Stathoulopoulos</h3>
+    <p>Mozilla Open Science Fellow and data scientist</p>
+    <p>
+      w/ <a href="https://kstathou.github.com" target="_blank">kstathou.github.com</a>
+      <br/>
+      t/ <a href='https://twitter.com/kstathou
+      ' target='_blank'>@kstathou</a>
+    </p>
+  </Column>
+  <Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+
+  <Photograph square src={photoZac} />
+  <h3>Zac Ioannidis</h3>
+  <p>Creative technologist and data visualization engineer</p>
+  <p>
+    w/ <a href="https://portfolio.izac.us" target="_blank">izac.us</a>
+    <br/>
+    t/ <a href='https://twitter.com/zacoppotamus
+' target='_blank'>@zacoppotamus</a>
+    <br />
+
+  </p>
+</Column>
+<Column style={{paddingRight: `${theme.spacing.large}`, boxSizing: `border-box`}} width={1/3}>
+  <Photograph square src={photoLilia} />
+  <h3>Lilia Villafuerte</h3>
+  <p>HCI researcher, interface designer and digital artist</p>
+  <p>
+    w/ <a href='https://www.villafuerte.info/' target='_blank'>
+  villafuerte.info</a>
+  <br/>
+    t/ <a href='https://twitter.com/lilia_bcn
+' target='_blank'>@lilia_bcn</a>
+  </p>
+
+</Column>
+</Row>

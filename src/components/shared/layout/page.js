@@ -13,11 +13,11 @@ const PageLayoutWrapper = styled("main")`
   box-sizing: border-box;
 `;
 
-export const PageLayout = ({ children, match, ...props }) => {
+export const PageLayout = ({ noNav = false, children, match, ...props }) => {
   // const location = useLocation().pathname;
   return (
     <>
-      <NavigationBar />
+      {!noNav && <NavigationBar />}
       <PageLayoutWrapper {...props}>{children}</PageLayoutWrapper>
     </>
   );
