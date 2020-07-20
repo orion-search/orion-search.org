@@ -13,6 +13,9 @@ import { urls } from "../../utils";
 const Content = lazy(() =>
   import("!babel-loader!mdx-loader!../../assets/copy/about.mdx")
 );
+const Team = lazy(() =>
+  import("!babel-loader!mdx-loader!../../assets/copy/team.mdx")
+);
 
 const Wrapper = styled("div")`
   position: absolute;
@@ -71,6 +74,7 @@ const AboutPage = () => {
                     <Suspense fallback={<div>Loading...</div>}>
                       <Content />
                       {/* <Link to={urls.about.faq}>to FAQ</Link> */}
+                      <Team />
                       <LinkButton to={urls.about.faq} nofill>
                         Frequently Asked Questions
                       </LinkButton>

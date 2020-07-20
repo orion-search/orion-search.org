@@ -6,17 +6,19 @@ import React, {
   useState,
   useContext,
   useLayoutEffect,
+  useEffect,
   createContext,
 } from "react";
 import { useQuery } from "@apollo/react-hooks";
 import { AbsoluteCanvas, initApp } from "./components/shared/renderer";
+import { isMobile } from "react-device-detect";
 
+import MobileLayout from "./pages/mobile";
 import { accessors } from "../src/utils";
 import LoadingBar from "./components/shared/loading-bar";
 import { SEED_DATA } from "./queries";
 import { ParticleContainerLatentSpace } from "./visualizations/LatentSpace";
 import { DiversityIndex } from "./visualizations/DiversityIndex";
-import { useEffect } from "react";
 
 const OrionDataContext = createContext({});
 
@@ -149,12 +151,17 @@ const FetchOffline = ({ children }) => {
 export const OrionDataProvider = ({ children }) => {
   return (
     <>
-      {process.env.NODE_ENV === "development" && (
-        // <FetchOnline>{children}</FetchOnline>
-        <FetchOffline>{children}</FetchOffline>
-      )}
-      {process.env.NODE_ENV === "production" && (
-        <FetchOnline>{children}</FetchOnline>
+      {isMobile && <MobileLayout />}
+      {!isMobile && (
+        <>
+          {process.env.NODE_ENV === "development" && (
+            // <FetchOnline>{children}</FetchOnline>
+            <FetchOffline>{children}</FetchOffline>
+          )}
+          {process.env.NODE_ENV === "production" && (
+            <FetchOnline>{children}</FetchOnline>
+          )}
+        </>
       )}
     </>
   );
