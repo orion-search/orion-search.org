@@ -26,9 +26,9 @@ Orion can collect academic documents by querying MAG with conferences, journals 
 
 We follow Microsoft Academic Graph’s update cycles. This means that Orion’s database, metrics and visualisations are updated fortnightly.
 
-### How many papers are in Orion?
+<!-- ### How many papers are in Orion?
 
-This deployment of Orion indexes bioRxiv which currently amounts to 79,984 papers.
+This deployment of Orion indexes bioRxiv which currently amounts to 79,984 papers. -->
 
 ### What do you mean by _this deployment of Orion_?
 
