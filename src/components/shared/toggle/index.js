@@ -27,8 +27,9 @@ const Toggle = ({ values, selected, separator = "/", onChange = () => {} }) => {
   );
 
   const onToggleChange = useCallback(
-    (option) => {
-      onChange(option);
+    (option, index) => {
+      console.log(index);
+      onChange(option, index);
       // setActive(option);
     },
     [onChange]
@@ -40,7 +41,7 @@ const Toggle = ({ values, selected, separator = "/", onChange = () => {} }) => {
         <Fragment key={`toggle-${values[i]}`}>
           <AnimatedOption
             style={props}
-            onClick={() => onToggleChange(values[i])}
+            onClick={() => onToggleChange(values[i], i)}
           >
             {`${values[i]} `}
           </AnimatedOption>

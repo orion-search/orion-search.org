@@ -103,11 +103,11 @@ const DiversityIndex = ({ data }) => {
       <Filters
         groupingAccessor={groupingAccessor}
         onChangeGrouping={(e) => setGroupingAccessor(e)}
-        onChangeX={(e) => setXAccessor(e)}
-        onChangeY={(e) => setYAccessor(e)}
+        onChangeX={(e, i) => setXAccessor(filterOptions.x[i])}
+        onChangeY={(e, i) => setYAccessor(filterOptions.y[i])}
         onChangeYear={(e) => setYear(+e)}
-        x={xAccessor}
-        y={yAccessor}
+        x={accessors.ui[xAccessor]}
+        y={accessors.ui[yAccessor]}
         year={year}
       />
       <HUD ref={canvasHUDRef}>

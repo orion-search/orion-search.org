@@ -21,7 +21,7 @@ const schema = [
   {
     name: "femaleShare",
     type: number,
-    ui: "female share",
+    ui: "gender diversity",
   },
   {
     name: "id",
@@ -34,7 +34,7 @@ const schema = [
   {
     name: "rca",
     type: number,
-    ui: "revealed comparative advantage",
+    ui: "research specialization",
   },
   {
     name: "topic",

@@ -56,10 +56,7 @@ export const XAxis = ({ metric = ``, min, max }) => {
       <Axis />
       <Labels>
         <div>{formatTwoDecimalPoints(min)}</div>
-        <div>
-          {metric}
-          {` `}[?]
-        </div>
+        <div>{metric}</div>
         <div>{formatTwoDecimalPoints(max)}</div>
       </Labels>
     </Container>
@@ -101,10 +98,7 @@ export const YAxis = ({ metric = ``, min, max, colorScale }) => {
       <Axis>{/* <GradientSVG ref={svgRef} /> */}</Axis>
       <Labels>
         <div>{formatTwoDecimalPoints(min)}</div>
-        <div>
-          {metric}
-          {` `}[?]
-        </div>
+        <div>{metric}</div>
         <div>{formatTwoDecimalPoints(max)}</div>
       </Labels>
     </Container>

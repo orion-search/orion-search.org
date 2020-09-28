@@ -62,12 +62,20 @@ const Filters = ({
       <Column width={0.25}>
         <div>
           {`x-axis: (`}
-          <Toggle values={filterOptions.x} selected={x} onChange={onChangeX} />
+          <Toggle
+            values={filterOptions.x.map((name) => accessors.ui[name])}
+            selected={x}
+            onChange={onChangeX}
+          />
           {`)`}
         </div>
         <div>
           {`y-axis: (`}
-          <Toggle values={filterOptions.y} selected={y} onChange={onChangeY} />
+          <Toggle
+            values={filterOptions.y.map((name) => accessors.ui[name])}
+            selected={y}
+            onChange={onChangeY}
+          />
           {`)`}
         </div>
       </Column>
